@@ -261,7 +261,7 @@ export const IslandModal = () => {
   const content = CONTENT_MAP[islandId];
 
   return (
-    <div style={{
+    <div className="island-modal-wrapper" style={{
       position: "absolute",
       top: 0,
       left: 0,
@@ -274,7 +274,7 @@ export const IslandModal = () => {
       pointerEvents: "none", // Laisse passer les clics autour
       zIndex: 50,
     }}>
-      <div style={{
+      <div className="island-modal-content" style={{
         width: "500px",
         background: "var(--glass-bg)",
         backdropFilter: "blur(24px)",

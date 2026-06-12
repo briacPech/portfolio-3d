@@ -57,3 +57,39 @@ h1, h2, h3, h4, .premium-title {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-5px); } /* Flottement très subtil */
 }
+
+/* RESPONSIVE DESIGN MOBILE */
+@media (max-width: 768px) {
+  /* Menu de navigation mobile */
+  .nav-menu-container {
+    bottom: 20px !important;
+    padding: 10px 15px !important;
+    gap: 10px !important;
+    width: 95% !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+  }
+  .nav-btn-premium {
+    font-size: 10px !important;
+    padding: 4px 5px !important;
+  }
+
+  /* Modale des îles (CV) mobile */
+  .island-modal-wrapper {
+    padding: 20px !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .island-modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 30px 20px !important;
+    max-height: 75vh !important;
+    overflow-y: auto !important;
+    border-left: 2px solid var(--premium-gold) !important;
+  }
+  .premium-title {
+    font-size: 26px !important;
+    margin-bottom: 20px !important;
+  }
+}

@@ -54,7 +54,7 @@ export function FloatingChat({
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Ouvrir l'assistant IA"
-        className="fixed bottom-8 left-8 z-50 flex h-16 items-center gap-3 rounded-full border border-[rgba(216,175,58,0.5)] bg-[#0E1B2E]/95 px-6 text-[#F0C674] shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-md transition-all hover:scale-105 hover:border-[rgba(216,175,58,0.8)] hover:bg-[#0E1B2E] animate-bounce-slow"
+        className="fixed max-md:top-4 max-md:right-4 md:bottom-8 md:left-8 z-50 flex h-14 md:h-16 items-center gap-3 rounded-full border border-[rgba(216,175,58,0.5)] bg-[#0E1B2E]/95 px-4 md:px-6 text-[#F0C674] shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-md transition-all hover:scale-105 hover:border-[rgba(216,175,58,0.8)] hover:bg-[#0E1B2E] animate-bounce-slow"
         style={{ animation: 'pulse 3s infinite' }}
       >
         <Sparkles className="h-5 w-5 text-[#F0C674]" strokeWidth={2} />
@@ -65,7 +65,7 @@ export function FloatingChat({
 
   return (
     <div
-      className="fixed bottom-8 left-8 z-50 flex h-[40rem] w-[min(28rem,calc(100vw-4rem))] flex-col overflow-hidden rounded-2xl border border-[rgba(216,175,58,0.3)] bg-[#0E1B2E]/75 shadow-[0_16px_48px_rgba(0,0,0,0.5)] backdrop-blur-2xl"
+      className="fixed max-md:top-20 max-md:right-4 max-md:left-4 max-md:h-[70vh] md:bottom-8 md:left-8 z-50 flex h-[40rem] w-[min(28rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[rgba(216,175,58,0.3)] bg-[#0E1B2E]/75 shadow-[0_16px_48px_rgba(0,0,0,0.5)] backdrop-blur-2xl"
       role="dialog"
       aria-label="Le Capitaine"
     >
