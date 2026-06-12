@@ -17,7 +17,6 @@ import "./App.css";
 
 // Lazy loading des interfaces 2D lourdes
 const FloatingChat = lazy(() => import("./ui/FloatingChat").then(module => ({ default: module.FloatingChat })));
-const MobileOverlay = lazy(() => import("./ui/MobileOverlay").then(module => ({ default: module.MobileOverlay })));
 const NavigationMenu = lazy(() => import("./ui/NavigationMenu").then(module => ({ default: module.NavigationMenu })));
 const IslandModal = lazy(() => import("./ui/IslandModal").then(module => ({ default: module.IslandModal })));
 // Lazy loading de la scène 3D pour éviter de bloquer le thread principal au chargement
@@ -70,7 +69,6 @@ const App = () => {
         <Loader {...LOADER_CONFIG} />
       </div>
       <Suspense fallback={null}>
-        <MobileOverlay />
         <FloatingChat />
       </Suspense>
       <Leva hidden={!isDebugMode} />

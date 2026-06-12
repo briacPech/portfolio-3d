@@ -93,7 +93,7 @@ export const NavigationMenu = () => {
       ))}
 
       {/* Séparateur */}
-      <div style={{ width: "1px", height: "20px", background: "rgba(216,175,58,0.3)" }} />
+      <div className="nav-separator" style={{ width: "1px", height: "20px", background: "rgba(216,175,58,0.3)" }} />
 
       {/* Bouton Contact */}
       <button

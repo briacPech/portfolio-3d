@@ -54,11 +54,11 @@ export function FloatingChat({
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Ouvrir l'assistant IA"
-        className="fixed max-md:top-4 max-md:right-4 md:bottom-8 md:left-8 z-50 flex h-14 md:h-16 items-center gap-3 rounded-full border border-[rgba(216,175,58,0.5)] bg-[#0E1B2E]/95 px-4 md:px-6 text-[#F0C674] shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-md transition-all hover:scale-105 hover:border-[rgba(216,175,58,0.8)] hover:bg-[#0E1B2E] animate-bounce-slow"
+        className="fixed max-md:top-4 max-md:right-4 md:bottom-8 md:left-8 z-50 flex max-md:h-12 max-md:w-12 max-md:justify-center md:h-16 items-center md:gap-3 rounded-full border border-[rgba(216,175,58,0.5)] bg-[#0E1B2E]/95 md:px-6 text-[#F0C674] shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-md transition-all hover:scale-105 hover:border-[rgba(216,175,58,0.8)] hover:bg-[#0E1B2E] animate-bounce-slow"
         style={{ animation: 'pulse 3s infinite' }}
       >
         <Sparkles className="h-5 w-5 text-[#F0C674]" strokeWidth={2} />
-        <span className="font-semibold" style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontSize: "1.1rem" }}>Le Capitaine</span>
+        <span className="max-md:hidden font-semibold" style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontSize: "1.1rem" }}>Le Capitaine</span>
       </button>
     )
   }
