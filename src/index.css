@@ -75,25 +75,21 @@ h1, h2, h3, h4, .premium-title {
 
 /* RESPONSIVE DESIGN MOBILE */
 @media (max-width: 768px) {
-  /* Menu de navigation mobile : scrollable au doigt horizontalement */
+  /* Menu de navigation mobile : tout sur une ligne */
   .nav-menu-container {
-    bottom: 25px !important;
-    padding: 12px 20px !important;
-    gap: 20px !important;
-    width: 90% !important;
-    justify-content: flex-start !important;
+    bottom: 15px !important;
+    padding: 10px 5px !important;
+    gap: 4px !important;
+    width: 98% !important;
+    justify-content: space-evenly !important;
     flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-  }
-  .nav-menu-container::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+    overflow-x: hidden !important;
   }
   .nav-btn-premium {
-    font-size: 11px !important;
-    padding: 6px 4px !important;
+    font-size: 9px !important;
+    padding: 6px 2px !important;
     white-space: nowrap !important;
+    letter-spacing: 0.05em !important;
   }
   .nav-separator {
     display: none !important;
