@@ -58,6 +58,21 @@ h1, h2, h3, h4, .premium-title {
   50% { transform: translateY(-5px); } /* Flottement très subtil */
 }
 
+/* CUSTOM SCROLLBAR (DESKTOP) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(216, 175, 58, 0.3); /* Premium gold très léger */
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(216, 175, 58, 0.6);
+}
+
 /* RESPONSIVE DESIGN MOBILE */
 @media (max-width: 768px) {
   /* Menu de navigation mobile */

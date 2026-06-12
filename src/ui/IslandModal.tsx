@@ -276,6 +276,8 @@ export const IslandModal = () => {
     }}>
       <div className="island-modal-content" style={{
         width: "500px",
+        maxHeight: "85vh",
+        overflowY: "auto",
         background: "var(--glass-bg)",
         backdropFilter: "blur(24px)",
         WebkitBackdropFilter: "blur(24px)",
