@@ -40,8 +40,11 @@ const App = () => {
             <Canvas
               dpr={dpr as [number, number]}
               style={{
-                height: "95vh",
+                height: "100vh",
                 width: "100vw",
+                position: "absolute",
+                top: 0,
+                left: 0,
               }}
               camera={{ fov: 55, near: 0.1, far: 1000, position: [0, 20, 35] }}
               gl={{ antialias: false, powerPreference: "high-performance" }}
