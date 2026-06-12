@@ -1,3 +1,5 @@
 {
-  "name": "portfolio-briac"
+  "name": "portfolio-briac",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build"
 }
