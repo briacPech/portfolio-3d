@@ -1,17 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Palette Luxury Yachting */
+  --premium-bg: #071326;
+  --premium-panel: #0E1B2E;
+  --premium-shadow: #050B14;
+  --premium-text: #F5EFE1;
+  --premium-text-muted: #C9C2B6;
+  --premium-gold: #D8AF3A;
+  --premium-gold-light: #F0C674;
+  --premium-border: #B99A5A;
+  
+  --glass-bg: rgba(14, 27, 46, 0.65); /* #0E1B2E avec transparence */
+  --glass-border: rgba(185, 154, 90, 0.25); /* #B99A5A subtil */
+  
+  /* Typographie */
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
 * {
   margin: 0;
+  box-sizing: border-box;
 }
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: var(--font-sans);
+  color: var(--premium-text);
+  background-color: var(--premium-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+/* Utilitaires Premium */
+h1, h2, h3, h4, .premium-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+/* Animations UI Premium */
+@keyframes islandBadgeFade {
+  0% { transform: translateY(15px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes islandBadgeFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); } /* Flottement très subtil */
 }

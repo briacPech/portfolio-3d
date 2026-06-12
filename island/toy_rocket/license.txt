@@ -1,0 +1,8 @@
+Model Information:
+* title:	Toy Rocket (free standard)
+* source:	https://sketchfab.com/3d-models/toy-rocket-free-standard-61adb893370648f5b9ccff1d92b370e6
+* author:	Marceli (https://sketchfab.com/Marceli)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

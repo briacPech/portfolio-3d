@@ -16,11 +16,17 @@
     "jsx": "react-jsx",
     "sourceMap": false,
     "declaration": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "incremental": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["vite/client", "vite-plugin-svgr/client"]
+    "types": ["vite/client", "vite-plugin-svgr/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
   },
   "include": ["**/*.ts", "**/*.tsx", "vite.config.ts"],
   "exclude": ["node_modules", "build"]

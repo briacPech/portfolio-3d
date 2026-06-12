@@ -1,21 +1,27 @@
 export const LOADER_CONFIG = {
   containerStyles: {
-    background:
-      "radial-gradient(circle farthest-corner at center top,#071021,#19324a)",
+    background: "#071326", // Fond principal de la charte
   },
   innerStyles: {
-    backgroundColor: "salmon",
-    width: "50vw",
+    backgroundColor: "#050B14", // Ombres profondes
+    width: "300px",
+    height: "2px",
+    borderRadius: "2px",
   },
   barStyles: {
-    backgroundColor: "lightgreen",
+    backgroundColor: "#D8AF3A", // Accent or vif
+    height: "2px",
+    borderRadius: "2px",
   },
-  dataInterpolation: (p: number) => `Loading ${Math.round(p)}%`,
+  dataInterpolation: (p: number) => `Préparation du navire... ${Math.round(p)}%`,
   initialState: (active: boolean) => active,
   dataStyles: {
-    color: "#fafafa",
-    fontSize: "25px",
-    fontFamily: "Raleway",
-    fontWeight: "500",
+    color: "#F0C674", // Or doux
+    fontSize: "14px",
+    fontFamily: "Inter, sans-serif",
+    fontWeight: "300",
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+    marginTop: "20px",
   },
 };

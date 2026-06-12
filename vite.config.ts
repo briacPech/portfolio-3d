@@ -3,20 +3,23 @@ import react from "@vitejs/plugin-react";
 import viteTsconfigPaths from "vite-tsconfig-paths";
 import svgrPlugin from "vite-plugin-svgr";
 import { visualizer } from "rollup-plugin-visualizer";
+import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   return {
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
+    },
     plugins: [
       react(),
       viteTsconfigPaths(),
       svgrPlugin(),
       visualizer({ open: process.env.ANALYZE === "true" }),
     ],
-    define: {
-      "process.env": process.env,
-    },
     server: {
       port: 3000,
     },

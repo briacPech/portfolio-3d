@@ -1,0 +1,271 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 13177,
+      "max": [
+        0.15983721613883972,
+        0.29503312706947327,
+        0.16524089872837067
+      ],
+      "min": [
+        -0.16527701914310455,
+        -0.26066333055496216,
+        -0.16057218611240387
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 158124,
+      "componentType": 5126,
+      "count": 13177,
+      "max": [
+        0.9999988079071045,
+        0.9976654648780823,
+        0.9999995827674866
+      ],
+      "min": [
+        -0.9999994039535522,
+        -0.9989765286445618,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 13177,
+      "max": [
+        0.9990386962890625,
+        0.9626858830451965
+      ],
+      "min": [
+        0.0009612800786271691,
+        0.0009612491121515632
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 105416,
+      "componentType": 5126,
+      "count": 13177,
+      "max": [
+        0.9990386962890625,
+        0.9626858830451965
+      ],
+      "min": [
+        0.0009612800786271691,
+        0.0009612491121515632
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 210832,
+      "componentType": 5126,
+      "count": 13177,
+      "max": [
+        0.9990386962890625,
+        0.9626858830451965
+      ],
+      "min": [
+        0.0009612800786271691,
+        0.0009612491121515632
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 66438,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "Marceli (https://sketchfab.com/Marceli)",
+      "license": "SKETCHFAB Standard (https://sketchfab.com/licenses)",
+      "source": "https://sketchfab.com/3d-models/toy-rocket-free-standard-61adb893370648f5b9ccff1d92b370e6",
+      "title": "Toy Rocket (free standard)"
+    },
+    "generator": "Sketchfab-15.66.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 265752,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 316248,
+      "byteOffset": 265752,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 316248,
+      "byteOffset": 582000,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 898248,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/base_material_baseColor.jpeg"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "base_material",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.8211145618000169
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "mesh_base_material_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2,
+            "TEXCOORD_1": 3,
+            "TEXCOORD_2": 4
+          },
+          "indices": 5,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        0.009999999776482582,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.009999999776482582,
+        0.0,
+        0.0,
+        -0.009999999776482582,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "ed4d2bee9e27_space_rocket__carto.fbx"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4
+      ],
+      "matrix": [
+        179.42681884765625,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        179.42681884765608,
+        7.842994710251974e-06,
+        0.0,
+        0.0,
+        -7.842994710251974e-06,
+        179.42681884765608,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "mesh"
+    },
+    {
+      "mesh": 0,
+      "name": "mesh_base_material_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    }
+  ]
+}
