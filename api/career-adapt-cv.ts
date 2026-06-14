@@ -19,15 +19,15 @@ export default async function handler(req: Request) {
     const prompt = `Tu es un expert CV pour le marché français, spécialisé dans les profils No-Code / IA / Automatisation.
 
 PROFIL CANDIDAT
-Poste ciblé : \${profile.targetRole}
-Secteur : \${profile.sector}
-Localisation : \${profile.location}
+Poste ciblé : ${profile.targetRole}
+Secteur : ${profile.sector}
+Localisation : ${profile.location}
 
 CV d'origine (Markdown construit depuis la base de données) :
-\${profile.cvText}
+${profile.cvText}
 
 Voici l'offre d'emploi ciblée :
-\${jobTextOrUrl}
+${jobTextOrUrl}
 
 MISSION
 Adapte le CV du candidat à l'offre d'emploi.
@@ -39,7 +39,7 @@ Retourne un JSON strict : adaptedCvMarkdown, adjustmentsSummary, isPureDevDetect
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: \`\${CAREER_OPS_SYSTEM}\\n\\n---\\n\\n\${prompt}\`,
+      contents: `${CAREER_OPS_SYSTEM}\n\n---\n\n${prompt}`,
       config: { responseMimeType: "application/json" }
     });
 

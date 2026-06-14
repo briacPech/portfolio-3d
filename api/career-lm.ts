@@ -17,16 +17,16 @@ export default async function handler(req: Request) {
     const profile = await getCandidateProfile();
 
     const prompt = `Rédige une lettre de motivation française hautement professionnelle et adaptée au profil d'un expert "No-Code / IA / Product Builder" pour :
-Entreprise : \${companyName}
-Poste : \${role}
+Entreprise : ${companyName}
+Poste : ${role}
 
 Description du poste :
-\${jobText || "Poste d'expert dans le domaine de compétences du candidat."}
+${jobText || "Poste d'expert dans le domaine de compétences du candidat."}
 
 Profil du candidat :
-Poste cible : \${profile.targetRole}
+Poste cible : ${profile.targetRole}
 Compétences et CV (depuis la base de données) :
-\${profile.cvText}
+${profile.cvText}
 
 Règles de génération expertes Career-FR pour éviter le style robotique d'IA :
 - PAS d'expressions clichées ou ampoulées comme "Je vous écris ce jour pour exprimer mon enthousiasme débordant", "titulaire d'un master, dynamique, motivé et rigoureux".
@@ -41,7 +41,7 @@ Retourne un JSON strict : { "letterMarkdown": "..." }`;
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: \`\${CAREER_OPS_SYSTEM}\\n\\n---\\n\\n\${prompt}\`,
+      contents: `${CAREER_OPS_SYSTEM}\n\n---\n\n${prompt}`,
       config: { responseMimeType: "application/json" }
     });
 

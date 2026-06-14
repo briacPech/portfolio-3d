@@ -46,18 +46,18 @@ Garde tes réponses concises, naturelles et aérées. Ne réponds jamais par de 
 Voici toutes les informations que tu dois connaître sur Briac, issues directement de sa base de données à jour :
 
 --- INFORMATIONS PERSONNELLES ---
-- NOM : \${profile?.full_name || 'Briac Pécheur'}
-- BIO : \${profile?.bio || 'Non précisée'}
-- DESCRIPTION COURTE : \${profile?.short_description || 'Non précisée'}
+- NOM : ${profile?.full_name || 'Briac Pécheur'}
+- BIO : ${profile?.bio || 'Non précisée'}
+- DESCRIPTION COURTE : ${profile?.short_description || 'Non précisée'}
 
 --- EXPÉRIENCES PROFESSIONNELLES ---
-\${experiences?.map((exp: any) => `- \${exp.job_title} chez \${exp.company_name} (\${exp.duration}) : \${exp.description}`).join('\n') || 'Aucune expérience enregistrée.'}
+${experiences?.map((exp: any) => `- ${exp.job_title} chez ${exp.company_name} (${exp.duration}) : ${exp.description}`).join('\n') || 'Aucune expérience enregistrée.'}
 
 --- PROJETS RÉALISÉS ---
-\${projects?.map((proj: any) => `- \${proj.name} : \${proj.short_description}`).join('\n') || 'Aucun projet enregistré.'}
+${projects?.map((proj: any) => `- ${proj.name} : ${proj.short_description}`).join('\n') || 'Aucun projet enregistré.'}
 
 --- COMPÉTENCES ---
-\${skills?.map((skill: any) => `- \${skill.name} (Niveau \${skill.level || 'Non précisé'} / Catégorie: \${skill.category || 'Non précisée'})`).join('\n') || 'Aucune compétence enregistrée.'}
+${skills?.map((skill: any) => `- ${skill.name} (Niveau ${skill.level || 'Non précisé'} / Catégorie: ${skill.category || 'Non précisée'})`).join('\n') || 'Aucune compétence enregistrée.'}
 
 Si on te demande comment contacter Briac, dis d'utiliser le bouton "Contact" dans le menu de navigation (en bas de l'écran) ou d'utiliser le mail briac.pech@gmail.com.`;
 
