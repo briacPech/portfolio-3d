@@ -59,23 +59,26 @@ export const NavigationMenu = () => {
   return (
     <>
     <div className="nav-menu-container" style={{
-      position: "absolute",
-      bottom: "40px",
-      left: "50%",
-      transform: "translateX(-50%)",
-      display: "flex",
-      alignItems: "center",
-      gap: "30px",
-      zIndex: 100,
-      pointerEvents: "auto",
-      background: "var(--glass-bg)",
-      padding: "15px 40px",
-      borderRadius: "4px", // Bords plus droits, moins ronds pour faire chic
-      backdropFilter: "blur(24px)",
-      WebkitBackdropFilter: "blur(24px)",
-      border: "1px solid var(--glass-border)",
-      boxShadow: "0 20px 40px rgba(0, 0, 0, 0.6)",
-    }}>
+        position: "absolute",
+        bottom: "20px", // Plus bas pour dégager la vue
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "95%", // Prend (presque) toute la largeur
+        maxWidth: "1400px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-around", // Étale les liens sur la largeur
+        gap: "10px", // Gap minimum, le space-around gère l'espacement
+        zIndex: 100,
+        pointerEvents: "auto",
+        background: "var(--glass-bg)",
+        padding: "10px 20px", // Beaucoup plus fin (moins de hauteur)
+        borderRadius: "8px", 
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+        border: "1px solid var(--glass-border)",
+        boxShadow: "0 10px 30px rgba(0, 0, 0, 0.4)",
+      }}>
       {/* On supprime la boussole Emoji */}
       
       {islandsList.map((island) => (
