@@ -28,6 +28,6 @@
       ]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "vite.config.ts"],
-  "exclude": ["node_modules", "build"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],
+  "exclude": ["node_modules", "build", "api", "scratch"]
 }
