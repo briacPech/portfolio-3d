@@ -32,10 +32,10 @@ export const NavigationMenu = () => {
   // Fallback de sécurité si Supabase ne répond pas ou que les variables d'environnement manquent
   if (islandsList.length === 0) {
     islandsList = [
-      { id: "profil", title: "Profil", pos: { x: 15, z: -20 } },
-      { id: "skills", title: "Compétences", pos: { x: -20, z: -25 } },
-      { id: "projects", title: "Projets", pos: { x: 25, z: 15 } },
-      { id: "experience", title: "Expérience", pos: { x: -15, z: 20 } },
+      { id: "profil", title: "Mon Profil", pos: { x: 15, z: -20 } },
+      { id: "skills", title: "Mes Compétences", pos: { x: -20, z: -25 } },
+      { id: "projects", title: "Mes Projets", pos: { x: 25, z: 15 } },
+      { id: "experience", title: "Mon Expérience", pos: { x: -15, z: 20 } },
     ];
   }
 
