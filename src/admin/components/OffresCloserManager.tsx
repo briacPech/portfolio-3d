@@ -106,18 +106,31 @@ export function OffresCloserManager({ onSendToCareerOps }: Props) {
 
   const handleScore = async () => {
     setScoring(true);
+    let totalScored = 0;
+    let totalAlerts = 0;
+    
     try {
-      const res = await fetch('/api/jobs/score', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Erreur scoring');
-      await fetchJobs();
-      alert(`✅ ${data.scored} offre(s) scorée(s) ! ${data.highScore} alerte(s) envoyée(s).`);
+      while (true) {
+        const res = await fetch('/api/jobs/score', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Erreur scoring');
+        
+        if (data.scored === 0) {
+          break; // Plus rien à scorer
+        }
+        
+        totalScored += data.scored;
+        totalAlerts += data.highScore;
+        await fetchJobs(); // Mettre à jour l'UI à chaque itération
+      }
+      
+      alert(`✅ Terminé : ${totalScored} offre(s) scorée(s) ! ${totalAlerts} alerte(s) envoyée(s).`);
     } catch (err: any) {
-      alert('Erreur scoring : ' + err.message);
+      alert('Erreur scoring (partiel) : ' + err.message);
     }
     setScoring(false);
   };

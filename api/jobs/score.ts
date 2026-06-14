@@ -15,12 +15,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Fetch unscored jobs
+    // Fetch only 1 unscored job at a time to avoid Vercel 10s timeout limits
     const { data: jobs, error } = await supabase
       .from('scraped_jobs')
       .select('*')
       .is('score', null)
-      .limit(10);
+      .limit(1);
 
     if (error) throw new Error(error.message);
     if (!jobs || jobs.length === 0) return res.status(200).json({ message: 'Aucune offre à scorer', scored: 0 });
