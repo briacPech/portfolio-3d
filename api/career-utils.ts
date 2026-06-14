@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Lazy initialization to prevent Vercel Serverless crashes if env vars are missing at boot
 let supabaseInstance: ReturnType<typeof createClient> | null = null;
 
 export function getSupabase() {
@@ -13,49 +12,37 @@ export function getSupabase() {
   return supabaseInstance;
 }
 
-export const CAREER_OPS_SYSTEM = `Tu es l'agent IA "Career Ops" intégré au dashboard administrateur d'un expert tech/business.
-Tu agis comme un conseiller carrière hyper-rationnel, orienté produit et business.
-Tes analyses doivent être incisives, sans langue de bois, et toujours justifiées.`;
+export const CAREER_OPS_SYSTEM = `Tu es l'assistant Career-Ops pour la recherche d'emploi en France. Profil cible : expert hybride Commercial + No-Code / IA / Automatisation (Maestro), projet phare Festival Connect. Réponds en français.`;
 
 export async function getCandidateProfile() {
   const supabase = getSupabase();
-  const [profileRes, projectsRes, skillsRes] = await Promise.all([
-    supabase.from('profile').select('*').limit(1).single(),
-    supabase.from('projects').select('*').order('display_order', { ascending: true }),
-    supabase.from('skills').select('*').order('display_order', { ascending: true })
-  ]);
-  
-  const profile = profileRes.data as any;
-  const projects = projectsRes.data as any;
-  const skills = skillsRes.data as any;
+  const { data, error } = await supabase
+    .from('career_profile')
+    .select('*')
+    .limit(1)
+    .single();
 
-  const targetRole = profile?.short_description || "Product Builder / Ops No-Code";
-  const sector = "Digital / Tech / Ops";
-  const location = "France / Télétravail";
-  const salaryExpectation = "À discuter selon profil et impact généré";
-  const absolutelyAvoid = "Développement pur (backend lourd, C++, mobile natif), ESN très classiques";
-  
-  // Format HTML/text cleanly
-  const cleanHtml = (html: string) => (html || '').replace(/<[^>]*>?/gm, '');
-
-  const cvText = `
-### Briac Pécheur - ${targetRole}
-${cleanHtml(profile?.bio)}
-
-### Compétences
-${skills?.map((s: any) => `- ${s.name} (${s.category})`).join('\n') || ''}
-
-### Projets Phares
-${projects?.map((p: any) => `#### ${p.name}\n${cleanHtml(p.short_description)}\n`).join('\n') || ''}
-  `.trim();
+  if (error || !data) {
+    console.error('career_profile fetch error:', error);
+    return {
+      targetRole: 'Product Builder / Ops No-Code',
+      sector: 'Digital / Tech / Ops',
+      location: 'France / Télétravail',
+      salaryExpectation: 'À discuter selon profil et impact généré',
+      absolutelyAvoid: 'Développement pur (backend lourd, C++, mobile natif), ESN très classiques',
+      responseTone: 'Professionnel, direct, orienté impact business et technique.',
+      cvText: ''
+    };
+  }
 
   return {
-    targetRole,
-    sector,
-    location,
-    salaryExpectation,
-    absolutelyAvoid,
-    cvText,
-    responseTone: "Professionnel, direct, orienté impact business et technique."
+    targetRole: data.target_role || 'Product Builder / Ops No-Code',
+    sector: data.sector || 'Digital / Tech / Ops',
+    location: data.location || 'France / Télétravail',
+    salaryExpectation: data.salary_expectation || 'À discuter',
+    absolutelyAvoid: data.absolutely_avoid || '',
+    responseTone: data.response_tone || 'Professionnel, direct.',
+    cvText: data.cv_text || ''
   };
 }
+

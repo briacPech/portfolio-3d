@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Briefcase, FileText, Mail, Save, Loader2, Zap, X } from 'lucide-react';
+import { Briefcase, FileText, Mail, Save, Loader2, Zap, X, User } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
 export function CareerOpsManager() {
@@ -20,9 +20,35 @@ export function CareerOpsManager() {
   const [roleName, setRoleName] = useState('');
   const [lmResult, setLmResult] = useState<any>(null);
 
+  // States for Profil
+  const [profileData, setProfileData] = useState<any>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileSaved, setProfileSaved] = useState(false);
+
   useEffect(() => {
     fetchJobs();
+    fetchCareerProfile();
   }, []);
+
+  const fetchCareerProfile = async () => {
+    const { data } = await supabase.from('career_profile').select('*').limit(1).single();
+    if (data) setProfileData(data);
+    else setProfileData({ target_role: '', sector: 'Digital / Tech / Ops', location: 'France / Télétravail', salary_expectation: '', absolutely_avoid: '', response_tone: 'Professionnel, direct.', cv_text: '' });
+  };
+
+  const saveCareerProfile = async () => {
+    setProfileLoading(true);
+    setProfileSaved(false);
+    if (profileData.id) {
+      await supabase.from('career_profile').update({ ...profileData, updated_at: new Date().toISOString() }).eq('id', profileData.id);
+    } else {
+      const { data } = await supabase.from('career_profile').insert(profileData).select().single();
+      if (data) setProfileData(data);
+    }
+    setProfileLoading(false);
+    setProfileSaved(true);
+    setTimeout(() => setProfileSaved(false), 3000);
+  };
 
   const fetchJobs = async () => {
     const { data, error } = await supabase.from('job_applications').select('*').order('created_at', { ascending: false });
@@ -128,21 +154,25 @@ export function CareerOpsManager() {
     <div className="bg-[#0E1B2E] border border-[#B99A5A]/20 rounded-xl overflow-hidden text-[#C9C2B6]">
       {/* HEADER TABS */}
       <div className="flex border-b border-[#B99A5A]/20 bg-[#0A1424]">
-        <button onClick={() => setActiveTab('tracker')} className={"flex-1 p-4 font-medium transition-colors " + (activeTab === 'tracker' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
-          <Briefcase className="w-5 h-5 mx-auto mb-1" />
+        <button onClick={() => setActiveTab('tracker')} className={"flex-1 p-3 text-sm font-medium transition-colors " + (activeTab === 'tracker' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
+          <Briefcase className="w-4 h-4 mx-auto mb-1" />
           Tracker
         </button>
-        <button onClick={() => setActiveTab('evaluate')} className={"flex-1 p-4 font-medium transition-colors " + (activeTab === 'evaluate' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
-          <Zap className="w-5 h-5 mx-auto mb-1" />
+        <button onClick={() => setActiveTab('evaluate')} className={"flex-1 p-3 text-sm font-medium transition-colors " + (activeTab === 'evaluate' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
+          <Zap className="w-4 h-4 mx-auto mb-1" />
           Évaluation
         </button>
-        <button onClick={() => setActiveTab('cv')} className={"flex-1 p-4 font-medium transition-colors " + (activeTab === 'cv' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
-          <FileText className="w-5 h-5 mx-auto mb-1" />
-          Adapter CV
+        <button onClick={() => setActiveTab('cv')} className={"flex-1 p-3 text-sm font-medium transition-colors " + (activeTab === 'cv' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
+          <FileText className="w-4 h-4 mx-auto mb-1" />
+          CV
         </button>
-        <button onClick={() => setActiveTab('lm')} className={"flex-1 p-4 font-medium transition-colors " + (activeTab === 'lm' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
-          <Mail className="w-5 h-5 mx-auto mb-1" />
-          Lettre Motiv'
+        <button onClick={() => setActiveTab('lm')} className={"flex-1 p-3 text-sm font-medium transition-colors " + (activeTab === 'lm' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
+          <Mail className="w-4 h-4 mx-auto mb-1" />
+          LM
+        </button>
+        <button onClick={() => setActiveTab('profil')} className={"flex-1 p-3 text-sm font-medium transition-colors " + (activeTab === 'profil' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
+          <User className="w-4 h-4 mx-auto mb-1" />
+          Profil
         </button>
       </div>
 
@@ -272,6 +302,58 @@ export function CareerOpsManager() {
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {/* TAB 5: PROFIL */}
+        {activeTab === 'profil' && profileData && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-serif text-[#F0C674]">Profil Career Ops</h2>
+            <p className="text-sm text-[#C9C2B6]/70">Ces informations sont utilisées par l'IA pour scorer et adapter votre candidature.</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs text-[#D8AF3A] mb-1">Poste visé</label>
+                <input type="text" value={profileData.target_role || ''} onChange={e => setProfileData({...profileData, target_role: e.target.value})} className="w-full bg-[#0A1424] border border-[#B99A5A]/30 rounded p-2 text-[#F5EFE1] outline-none focus:border-[#D8AF3A]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#D8AF3A] mb-1">Secteur</label>
+                <input type="text" value={profileData.sector || ''} onChange={e => setProfileData({...profileData, sector: e.target.value})} className="w-full bg-[#0A1424] border border-[#B99A5A]/30 rounded p-2 text-[#F5EFE1] outline-none focus:border-[#D8AF3A]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#D8AF3A] mb-1">Localisation idéale</label>
+                <input type="text" value={profileData.location || ''} onChange={e => setProfileData({...profileData, location: e.target.value})} className="w-full bg-[#0A1424] border border-[#B99A5A]/30 rounded p-2 text-[#F5EFE1] outline-none focus:border-[#D8AF3A]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#D8AF3A] mb-1">Attentes salariales</label>
+                <input type="text" value={profileData.salary_expectation || ''} onChange={e => setProfileData({...profileData, salary_expectation: e.target.value})} className="w-full bg-[#0A1424] border border-[#B99A5A]/30 rounded p-2 text-[#F5EFE1] outline-none focus:border-[#D8AF3A]" />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs text-[#D8AF3A] mb-1">À éviter absolument</label>
+              <input type="text" value={profileData.absolutely_avoid || ''} onChange={e => setProfileData({...profileData, absolutely_avoid: e.target.value})} className="w-full bg-[#0A1424] border border-[#B99A5A]/30 rounded p-2 text-[#F5EFE1] outline-none focus:border-[#D8AF3A]" />
+            </div>
+
+            <div>
+              <label className="block text-xs text-[#D8AF3A] mb-1">Ton souhaité dans les réponses IA</label>
+              <input type="text" value={profileData.response_tone || ''} onChange={e => setProfileData({...profileData, response_tone: e.target.value})} className="w-full bg-[#0A1424] border border-[#B99A5A]/30 rounded p-2 text-[#F5EFE1] outline-none focus:border-[#D8AF3A]" />
+            </div>
+
+            <div>
+              <label className="block text-xs text-[#D8AF3A] mb-1">CV complet (Markdown) — utilisé par l'IA pour personnaliser les analyses</label>
+              <textarea
+                className="w-full h-64 bg-[#0A1424] border border-[#B99A5A]/30 rounded p-3 text-[#F5EFE1] outline-none focus:border-[#D8AF3A] font-mono text-sm"
+                placeholder="Collez ici votre CV complet en texte brut ou Markdown..."
+                value={profileData.cv_text || ''}
+                onChange={e => setProfileData({...profileData, cv_text: e.target.value})}
+              />
+            </div>
+
+            <button onClick={saveCareerProfile} disabled={profileLoading} className="bg-[#D8AF3A] hover:bg-[#F0C674] text-[#050B14] font-bold py-2 px-6 rounded transition-colors flex items-center gap-2">
+              {profileLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+              {profileSaved ? '✅ Sauvegardé !' : 'Sauvegarder le profil'}
+            </button>
           </div>
         )}
 
