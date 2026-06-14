@@ -1,10 +1,24 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
-const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Lazy initialization to prevent Vercel Serverless crashes if env vars are missing at boot
+let supabaseInstance: ReturnType<typeof createClient> | null = null;
+
+export function getSupabase() {
+  if (!supabaseInstance) {
+    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
+    const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
+    if (!supabaseUrl) throw new Error("Supabase URL manquant dans l'environnement");
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey);
+  }
+  return supabaseInstance;
+}
+
+export const CAREER_OPS_SYSTEM = `Tu es l'agent IA "Career Ops" intégré au dashboard administrateur d'un expert tech/business.
+Tu agis comme un conseiller carrière hyper-rationnel, orienté produit et business.
+Tes analyses doivent être incisives, sans langue de bois, et toujours justifiées.`;
 
 export async function getCandidateProfile() {
+  const supabase = getSupabase();
   const [
     { data: profile },
     { data: projects },
