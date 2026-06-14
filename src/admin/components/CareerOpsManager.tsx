@@ -114,19 +114,19 @@ export function CareerOpsManager() {
     <div className="bg-[#0E1B2E] border border-[#B99A5A]/20 rounded-xl overflow-hidden text-[#C9C2B6]">
       {/* HEADER TABS */}
       <div className="flex border-b border-[#B99A5A]/20 bg-[#0A1424]">
-        <button onClick={() => setActiveTab('tracker')} className={\`flex-1 p-4 font-medium transition-colors \${activeTab === 'tracker' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]'}\`}>
+        <button onClick={() => setActiveTab('tracker')} className={"flex-1 p-4 font-medium transition-colors " + (activeTab === 'tracker' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
           <Briefcase className="w-5 h-5 mx-auto mb-1" />
           Tracker
         </button>
-        <button onClick={() => setActiveTab('evaluate')} className={\`flex-1 p-4 font-medium transition-colors \${activeTab === 'evaluate' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]'}\`}>
+        <button onClick={() => setActiveTab('evaluate')} className={"flex-1 p-4 font-medium transition-colors " + (activeTab === 'evaluate' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
           <Sparkles className="w-5 h-5 mx-auto mb-1" />
           Évaluation
         </button>
-        <button onClick={() => setActiveTab('cv')} className={\`flex-1 p-4 font-medium transition-colors \${activeTab === 'cv' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]'}\`}>
+        <button onClick={() => setActiveTab('cv')} className={"flex-1 p-4 font-medium transition-colors " + (activeTab === 'cv' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
           <FileText className="w-5 h-5 mx-auto mb-1" />
           Adapter CV
         </button>
-        <button onClick={() => setActiveTab('lm')} className={\`flex-1 p-4 font-medium transition-colors \${activeTab === 'lm' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]'}\`}>
+        <button onClick={() => setActiveTab('lm')} className={"flex-1 p-4 font-medium transition-colors " + (activeTab === 'lm' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
           <FileSignature className="w-5 h-5 mx-auto mb-1" />
           Lettre Motiv'
         </button>
