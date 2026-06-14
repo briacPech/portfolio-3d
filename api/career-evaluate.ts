@@ -1,17 +1,19 @@
 import { GoogleGenAI } from '@google/genai';
 import { getCandidateProfile, CAREER_OPS_SYSTEM } from './career-utils';
 
-export const config = { runtime: 'edge' };
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default async function handler(req: Request) {
-  if (req.method !== 'POST') return new Response('Method Not Allowed', { status: 405 });
+export const maxDuration = 60; // 60 seconds timeout
+
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
   
   try {
-    const { jobTextOrUrl } = await req.json();
-    if (!jobTextOrUrl) return new Response(JSON.stringify({ error: "Offre manquante" }), { status: 400 });
+    const { jobTextOrUrl } = req.body || {};
+    if (!jobTextOrUrl) return res.status(400).json({ error: "Offre manquante" });
 
-    const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
-    if (!apiKey) return new Response(JSON.stringify({ error: "Clé Gemini manquante" }), { status: 500 });
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) return res.status(500).json({ error: "Clé Gemini manquante" });
     const ai = new GoogleGenAI({ apiKey });
 
     const profile = await getCandidateProfile();
@@ -56,9 +58,9 @@ Retourne un JSON strict avec : jobSummary, dimensions (8 entrées avec name, wei
       config: { responseMimeType: "application/json" }
     });
 
-    return new Response(response.text, { headers: { 'Content-Type': 'application/json' } });
+    return res.status(200).json(JSON.parse(response.text || '{}'));
   } catch (error: any) {
     console.error("Evaluate API Error:", error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    return res.status(500).json({ error: error.message });
   }
 }
