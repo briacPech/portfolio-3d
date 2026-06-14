@@ -16,11 +16,13 @@ export const CAREER_OPS_SYSTEM = `Tu es l'assistant Career-Ops pour la recherche
 
 export async function getCandidateProfile() {
   const supabase = getSupabase();
-  const { data, error } = await supabase
+  const { data: rawData, error } = await supabase
     .from('career_profile')
     .select('*')
     .limit(1)
     .single();
+    
+  const data = rawData as any;
 
   if (error || !data) {
     console.error('career_profile fetch error:', error);
