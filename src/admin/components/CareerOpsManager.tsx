@@ -39,11 +39,15 @@ export function CareerOpsManager() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ jobTextOrUrl: jobText })
       });
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(errText);
+      }
       const data = await res.json();
       setEvalResult(data);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert("Erreur lors de l'évaluation");
+      alert("Erreur lors de l'évaluation: " + err.message);
     }
     setLoading(false);
   };
@@ -57,10 +61,15 @@ export function CareerOpsManager() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ jobTextOrUrl: jobText })
       });
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(errText);
+      }
       const data = await res.json();
       setAdaptResult(data);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      alert("Erreur CV: " + err.message);
     }
     setLoading(false);
   };
@@ -74,10 +83,15 @@ export function CareerOpsManager() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ companyName, role: roleName, jobText })
       });
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(errText);
+      }
       const data = await res.json();
       setLmResult(data);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      alert("Erreur LM: " + err.message);
     }
     setLoading(false);
   };
