@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { LogOut, LayoutDashboard, FileText, Image, Settings, Activity, User, Map, FolderGit2 } from 'lucide-react';
+import { LogOut, LayoutDashboard, FileText, Image, Settings, Activity, User, Map, FolderGit2, Zap, Briefcase } from 'lucide-react';
 import { ProfileManager } from './components/ProfileManager';
 import { IslandsManager } from './components/IslandsManager';
+import { ProjectsManager } from './components/ProjectsManager';
+import { SkillsManager } from './components/SkillsManager';
+import { ExperiencesManager } from './components/ExperiencesManager';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -24,8 +27,10 @@ export const Dashboard = () => {
         <nav className="flex-1 p-4 space-y-2">
           <NavItem icon={<LayoutDashboard />} label="Tableau de Bord" active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard')} />
           <NavItem icon={<User />} label="Profil & Contact" active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
-          <NavItem icon={<Map />} label="Îles (Sections)" active={activeTab === 'islands'} onClick={() => setActiveTab('islands')} />
-          <NavItem icon={<FolderGit2 />} label="Projets & Exp." active={activeTab === 'projects'} onClick={() => setActiveTab('projects')} />
+          <NavItem icon={<Map />} label="Textes des Îles" active={activeTab === 'islands'} onClick={() => setActiveTab('islands')} />
+          <NavItem icon={<FolderGit2 />} label="Projets" active={activeTab === 'projects'} onClick={() => setActiveTab('projects')} />
+          <NavItem icon={<Zap />} label="Compétences" active={activeTab === 'skills'} onClick={() => setActiveTab('skills')} />
+          <NavItem icon={<Briefcase />} label="Expériences" active={activeTab === 'experiences'} onClick={() => setActiveTab('experiences')} />
         </nav>
         <div className="p-4 border-t border-[#B99A5A]/20">
           <button 
@@ -58,14 +63,16 @@ export const Dashboard = () => {
             {/* Sections */}
             <div className="bg-[#0E1B2E] rounded-xl border border-[#B99A5A]/20 p-6">
               <h3 className="text-xl font-serif mb-4 text-[#F0C674]">Activité Récente</h3>
-              <p className="text-[#C9C2B6]">L'interface d'administration vient d'être initialisée.</p>
+              <p className="text-[#C9C2B6]">L'interface d'administration vient d'être initialisée. Utilisez le menu de gauche pour modifier vos contenus.</p>
             </div>
           </>
         )}
 
         {activeTab === 'profile' && <ProfileManager />}
         {activeTab === 'islands' && <IslandsManager />}
-        {activeTab === 'projects' && <div className="text-[#C9C2B6]">La gestion des projets est en cours de construction...</div>}
+        {activeTab === 'projects' && <ProjectsManager />}
+        {activeTab === 'skills' && <SkillsManager />}
+        {activeTab === 'experiences' && <ExperiencesManager />}
 
       </main>
     </div>
