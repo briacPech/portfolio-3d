@@ -243,25 +243,25 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
               <div className="mt-8 bg-[#152642] p-6 rounded-lg border border-[#B99A5A]/30">
                 <div className="flex justify-between items-start mb-6">
                   <div>
-                    <h3 className="text-2xl font-bold text-[#F5EFE1]">Verdict: {evalResult.verdict}</h3>
-                    <p className="text-lg text-[#D8AF3A]">Score Global : {evalResult.globalScore}/5 ({evalResult.globalGrade})</p>
+                    <h3 className="text-2xl font-bold text-[#F5EFE1]">Verdict: {typeof evalResult.verdict === 'object' ? JSON.stringify(evalResult.verdict) : String(evalResult.verdict || '')}</h3>
+                    <p className="text-lg text-[#D8AF3A]">Score Global : {typeof evalResult.globalScore === 'object' ? JSON.stringify(evalResult.globalScore) : String(evalResult.globalScore || '')}/5 ({typeof evalResult.globalGrade === 'object' ? JSON.stringify(evalResult.globalGrade) : String(evalResult.globalGrade || '')})</p>
                   </div>
                   <button onClick={saveToTracker} className="bg-[#0A1424] border border-[#D8AF3A] text-[#D8AF3A] px-4 py-2 rounded hover:bg-[#D8AF3A] hover:text-[#0A1424] transition-colors flex gap-2">
                     <Save className="w-5 h-5" /> Sauvegarder
                   </button>
                 </div>
-                <p className="mb-4 text-justify">{evalResult.jobSummary}</p>
+                <p className="mb-4 text-justify">{typeof evalResult.jobSummary === 'object' ? JSON.stringify(evalResult.jobSummary) : String(evalResult.jobSummary || '')}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                   <div className="bg-[#0A1424] p-4 rounded">
                     <h4 className="font-bold text-[#4ade80] mb-2">Points Forts</h4>
                     <ul className="list-disc pl-4 text-sm space-y-1">
-                      {evalResult.strengths?.map((s: string, i: number) => <li key={i}>{s}</li>)}
+                      {evalResult.strengths?.map((s: any, i: number) => <li key={i}>{typeof s === 'object' ? JSON.stringify(s) : s}</li>)}
                     </ul>
                   </div>
                   <div className="bg-[#0A1424] p-4 rounded">
                     <h4 className="font-bold text-[#f87171] mb-2">Points Faibles / Risques</h4>
                     <ul className="list-disc pl-4 text-sm space-y-1">
-                      {evalResult.weaknesses?.map((w: string, i: number) => <li key={i}>{w}</li>)}
+                      {evalResult.weaknesses?.map((w: any, i: number) => <li key={i}>{typeof w === 'object' ? JSON.stringify(w) : w}</li>)}
                     </ul>
                   </div>
                 </div>
