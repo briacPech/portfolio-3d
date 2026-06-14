@@ -19,15 +19,15 @@ Tes analyses doivent être incisives, sans langue de bois, et toujours justifié
 
 export async function getCandidateProfile() {
   const supabase = getSupabase();
-  const [
-    { data: profile },
-    { data: projects },
-    { data: skills }
-  ] = await Promise.all([
+  const [profileRes, projectsRes, skillsRes] = await Promise.all([
     supabase.from('profile').select('*').limit(1).single(),
     supabase.from('projects').select('*').order('display_order', { ascending: true }),
     supabase.from('skills').select('*').order('display_order', { ascending: true })
   ]);
+  
+  const profile = profileRes.data as any;
+  const projects = projectsRes.data as any;
+  const skills = skillsRes.data as any;
 
   const targetRole = profile?.short_description || "Product Builder / Ops No-Code";
   const sector = "Digital / Tech / Ops";
@@ -59,6 +59,3 @@ ${projects?.map((p: any) => `#### ${p.name}\n${cleanHtml(p.short_description)}\n
     responseTone: "Professionnel, direct, orienté impact business et technique."
   };
 }
-
-export const CAREER_OPS_SYSTEM =
-  "Tu es l'assistant Career-Ops pour la recherche d'emploi en France. Profil cible : expert hybride Commercial + No-Code / IA / Automatisation (Maestro). Réponds en français.";
