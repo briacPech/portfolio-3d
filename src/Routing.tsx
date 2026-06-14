@@ -4,6 +4,10 @@ import { Loader } from "@react-three/drei";
 import App from "./App";
 import { LOADER_CONFIG } from "./constants/loaderConfig";
 
+import { ProtectedRoute } from "./admin/ProtectedRoute";
+import { Login } from "./admin/Login";
+import { Dashboard } from "./admin/Dashboard";
+
 const Contact = lazy(() => import("./components/contact/Contact"));
 
 const Routing = () => {
@@ -18,6 +22,10 @@ const Routing = () => {
             </Suspense>
           }
         />
+        <Route path="/admin/login" element={<Login />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/admin" element={<Dashboard />} />
+        </Route>
         <Route path="*" element={<App />} />
       </Routes>
       <Loader {...LOADER_CONFIG} />
