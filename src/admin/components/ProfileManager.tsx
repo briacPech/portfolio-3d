@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Save, Loader2 } from 'lucide-react';
+import { Save, Loader2, Upload, Trash2 } from 'lucide-react';
+import { RichTextEditor } from './RichTextEditor';
 
 export const ProfileManager = () => {
   const [profile, setProfile] = useState<any>(null);
@@ -20,9 +21,13 @@ export const ProfileManager = () => {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    await supabase.from('profile').update(profile).eq('id', 1);
+    const { error } = await supabase.from('profile').update(profile).eq('id', 1);
     setSaving(false);
-    alert('Profil sauvegardé avec succès !');
+    if (error) {
+      alert(`Erreur lors de la sauvegarde : ${error.message}`);
+    } else {
+      alert('Profil sauvegardé avec succès !');
+    }
   };
 
   if (loading) return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-[#D8AF3A] h-8 w-8" /></div>;
@@ -61,12 +66,10 @@ export const ProfileManager = () => {
             />
           </div>
           <div className="md:col-span-2">
-            <label className="block text-[#C9C2B6] mb-2 text-sm">Biographie Complète</label>
-            <textarea 
-              rows={4}
-              value={profile?.bio || ''} 
-              onChange={e => setProfile({...profile, bio: e.target.value})}
-              className="w-full bg-[#050B14] border border-[#B99A5A]/30 text-[#F5EFE1] rounded-lg p-3"
+            <label className="text-xs font-medium text-[#C9C2B6] uppercase tracking-wider">Biographie</label>
+            <RichTextEditor 
+              value={profile?.bio || ''}
+              onChange={(value) => setProfile({ ...profile, bio: value })}
             />
           </div>
           <div>

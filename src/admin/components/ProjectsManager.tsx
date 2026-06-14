@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Save, Plus, Trash2, Loader2 } from 'lucide-react';
+import { RichTextEditor } from './RichTextEditor';
 
 export const ProjectsManager = () => {
   const [projects, setProjects] = useState<any[]>([]);
@@ -30,8 +31,13 @@ export const ProjectsManager = () => {
 
   const handleSave = async (project: any) => {
     setSaving(project.id);
-    await supabase.from('projects').update(project).eq('id', project.id);
+    const { error } = await supabase.from('projects').update(project).eq('id', project.id);
     setSaving(null);
+    if (error) {
+      alert(`Erreur lors de la sauvegarde : ${error.message}`);
+    } else {
+      alert('Projet sauvegardé avec succès !');
+    }
   };
 
   if (loading) return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-[#D8AF3A] h-8 w-8" /></div>;
@@ -112,13 +118,11 @@ export const ProjectsManager = () => {
               </div>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-[#C9C2B6] text-sm mb-1">Description complète (Sauts de ligne autorisés)</label>
-              <textarea 
+              <label className="block text-[#C9C2B6] text-sm mb-1">Description complète</label>
+              <RichTextEditor 
                 value={project.long_description || ''} 
-                onChange={e => setProjects(projects.map(p => p.id === project.id ? {...p, long_description: e.target.value} : p))}
-                rows={6}
-                className="w-full bg-[#050B14] border border-[#B99A5A]/30 text-[#F5EFE1] rounded-lg p-3"
-                placeholder="Le Problème : ... \nLa Solution : ..."
+                onChange={value => setProjects(projects.map(p => p.id === project.id ? {...p, long_description: value} : p))}
+                placeholder="Le Problème : ... <br/>La Solution : ..."
               />
             </div>
             <div className="md:col-span-2">

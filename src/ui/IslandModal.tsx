@@ -1,6 +1,25 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, Component, ErrorInfo, ReactNode } from "react";
+import { Anchor, Compass, Cpu } from "lucide-react";
 import { gameState } from "../scene/gameState";
 import { usePortfolio } from "../contexts/PortfolioContext";
+
+class ModalErrorBoundary extends Component<{children: ReactNode}, {hasError: boolean, error: Error | null}> {
+  state = { hasError: false, error: null as Error | null };
+  static getDerivedStateFromError(error: Error) { return { hasError: true, error }; }
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) { console.error("Modal Error:", error, errorInfo); }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ background: "rgba(255,0,0,0.1)", padding: "20px", color: "#ff8888", borderRadius: "8px", border: "1px solid red", fontSize: "12px", fontFamily: "monospace" }}>
+          <b>ERREUR FATALE DANS LA MODALE :</b><br/><br/>
+          {this.state.error?.message}<br/><br/>
+          Prenez une capture de cet écran et envoyez-la moi !
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 export const IslandModal = () => {
   const [islandId, setIslandId] = useState<string | null>(null);
@@ -18,38 +37,86 @@ export const IslandModal = () => {
   const islandData = islands[islandId];
   if (!islandData) return null; // Attend que les données soient chargées
 
+  // --- HELPER DE NETTOYAGE ---
+  // Quill génère souvent des espaces insécables (&nbsp;) qui bloquent le retour à la ligne CSS natif
+  const cleanHtml = (html: string) => {
+    if (!html) return "";
+    return html.replace(/&nbsp;/g, ' ').replace(/<p><br><\/p>/g, '');
+  };
+
   // --- RECONSTRUCTION DYNAMIQUE DU CONTENU ---
   let bodyContent: React.ReactNode = null;
 
   if (islandId === "profil") {
-    bodyContent = <div style={{ whiteSpace: "pre-line", fontSize: "14px", lineHeight: "1.6" }}>{profile?.bio || profile?.short_description || ""}</div>;
+    bodyContent = <div className="rich-text-content" style={{ fontSize: "14px", lineHeight: "1.6" }} dangerouslySetInnerHTML={{ __html: cleanHtml(profile?.bio || profile?.short_description) }}></div>;
   } 
   
   else if (islandId === "skills") {
-    const categories = Array.from(new Set(skills.map(s => s.category)));
     bodyContent = (
-      <div style={{ display: "flex", flexDirection: "column", gap: "24px", fontSize: "15px" }}>
-        {categories.map((cat: string) => {
-          const catSkills = skills.filter(s => s.category === cat);
-          return (
-            <div key={cat}>
-              <h4 style={{ color: "var(--premium-gold)", marginBottom: "12px", fontSize: "15px", fontWeight: 500, letterSpacing: "0.05em" }}>🔹 {cat}</h4>
-              <ul style={{ listStyleType: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-                {catSkills.map(skill => (
-                  <li key={skill.id}>
-                    <strong style={{ color: "#fff", fontWeight: 500 }}>{skill.name} :</strong> {skill.description || "Compétence validée."}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          );
-        })}
+      <div style={{ display: "flex", flexDirection: "column", gap: "32px", fontSize: "14px", paddingBottom: "10px" }}>
+        
+        {/* Catégorie 1 */}
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+            <Anchor size={24} strokeWidth={1} color="#D8AF3A" />
+            <h4 style={{ color: "#D8AF3A", margin: 0, fontSize: "12px", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase" }}>
+              Commercial & Closing
+            </h4>
+          </div>
+          <ul style={{ listStyleType: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px", color: "#F5EFE1" }}>
+            <li>Closing & Grands Comptes</li>
+            <li>Relation Client Premium</li>
+            <li>Achats & Supply Chain</li>
+            <li>Stratégie & Analyse</li>
+          </ul>
+        </div>
+
+        <div style={{ width: "100%", height: "1px", background: "rgba(185, 154, 90, 0.2)" }} />
+
+        {/* Catégorie 2 */}
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+            <Compass size={24} strokeWidth={1} color="#D8AF3A" />
+            <h4 style={{ color: "#D8AF3A", margin: 0, fontSize: "12px", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase" }}>
+              Conception Digitale & IA
+            </h4>
+          </div>
+          <ul style={{ listStyleType: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px", color: "#F5EFE1" }}>
+            <li>Logique Produit & Conception</li>
+            <li>Vibe Coding & Prototypage IA</li>
+            <li>Analyse de Données & Automatisation</li>
+          </ul>
+        </div>
+
+        <div style={{ width: "100%", height: "1px", background: "rgba(185, 154, 90, 0.2)" }} />
+
+        {/* Catégorie 3 */}
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+            <Cpu size={24} strokeWidth={1} color="#D8AF3A" />
+            <h4 style={{ color: "#D8AF3A", margin: 0, fontSize: "12px", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase" }}>
+              Stack Technique
+            </h4>
+          </div>
+          <ul style={{ listStyleType: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px", color: "#F5EFE1" }}>
+            <li>IA & Automatisation (Ollama, Gemini, Make, Zapier)</li>
+            <li>Dev & Cloud (React, Supabase, Tailwind, Vercel)</li>
+            <li>Data & Productivité (Google Sheets, APIs)</li>
+            <li>Gestion & Systèmes (CRM, NAS)</li>
+          </ul>
+        </div>
+
       </div>
     );
-  } 
+  }
   
   else if (islandId === "experience") {
-    const isEducation = (exp: any) => exp.company?.includes("🎓") || exp.company?.toLowerCase().includes("university") || exp.job_title?.toLowerCase().includes("master") || exp.job_title?.toLowerCase().includes("bac");
+    const isEducation = (exp: any) => 
+      exp.company?.includes("🎓") || 
+      exp.company?.toLowerCase()?.includes("university") || 
+      exp.job_title?.toLowerCase()?.includes("master") || 
+      exp.job_title?.toLowerCase()?.includes("bac");
+    
     const proExps = experiences.filter(e => !isEducation(e));
     const eduExps = experiences.filter(e => isEducation(e));
 
@@ -70,9 +137,7 @@ export const IslandModal = () => {
                     </span>
                   </div>
                   <div style={{ color: "#aaa", fontSize: "13px", marginBottom: "6px", fontStyle: "italic" }}>{exp.job_title}</div>
-                  <ul style={{ listStyleType: "circle", paddingLeft: "16px", margin: 0, display: "flex", flexDirection: "column", gap: "4px", color: "var(--premium-text-muted)" }}>
-                    {exp.description?.split('\n').map((line: string, i: number) => line.trim() ? <li key={i}>{line.trim().replace(/^[-•]/, '')}</li> : null)}
-                  </ul>
+                  <div className="rich-text-content" style={{ color: "var(--premium-text-muted)", fontSize: "13px", lineHeight: "1.6", marginTop: "8px" }} dangerouslySetInnerHTML={{ __html: cleanHtml(exp.description) }}></div>
                 </div>
               ))}
             </div>
@@ -87,7 +152,7 @@ export const IslandModal = () => {
               <div>
                 <ul style={{ listStyleType: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "6px", color: "var(--premium-text-muted)", fontSize: "13px" }}>
                   {eduExps.map(edu => (
-                    <li key={edu.id}>• <strong style={{ color: "#ddd" }}>{edu.job_title}</strong> — {edu.company.replace('🎓', '').trim()} {edu.start_date ? `(${edu.start_date}-${edu.end_date})` : ''}</li>
+                    <li key={edu.id}>• <strong style={{ color: "#ddd" }}>{edu.job_title}</strong> — {edu.company?.replace('🎓', '').trim()} {edu.start_date ? `(${edu.start_date}-${edu.end_date})` : ''}</li>
                   ))}
                 </ul>
               </div>
@@ -113,21 +178,19 @@ export const IslandModal = () => {
             
             <div style={{ marginBottom: "16px", display: "flex", flexDirection: "column", gap: "6px" }}>
               {project.link_url && (
-                <a href={project.link_url} target="_blank" rel="noreferrer" style={{ color: "#3498db", textDecoration: "none", fontSize: "13px", display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                  🔗 {project.link_url.replace('https://', '')}
+                <a href={project.link_url} target="_blank" rel="noreferrer" style={{ color: "#3498db", textDecoration: "none", fontSize: "13px", display: "inline-flex", alignItems: "center", gap: "6px", wordBreak: "break-all" }}>
+                  🔗 {project.link_url?.replace('https://', '')}
                 </a>
               )}
               {project.secondary_link_url && (
-                <a href={project.secondary_link_url} target="_blank" rel="noreferrer" style={{ color: "#3498db", textDecoration: "none", fontSize: "13px", display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                <a href={project.secondary_link_url} target="_blank" rel="noreferrer" style={{ color: "#3498db", textDecoration: "none", fontSize: "13px", display: "inline-flex", alignItems: "center", gap: "6px", wordBreak: "break-all" }}>
                   📄 {project.secondary_link_text || 'Voir le lien secondaire'}
                 </a>
               )}
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              <div style={{ whiteSpace: "pre-line", color: "var(--premium-text-muted)", fontSize: "13px", lineHeight: 1.6 }}>
-                {project.long_description}
-              </div>
+              <div className="rich-text-content" style={{ color: "var(--premium-text-muted)", fontSize: "13px", lineHeight: 1.6, textAlign: "justify", overflowWrap: "break-word", wordBreak: "normal" }} dangerouslySetInnerHTML={{ __html: cleanHtml(project.long_description) }}></div>
 
               {project.tags && project.tags.length > 0 && (
                 <div style={{ marginTop: "12px" }}>
@@ -209,7 +272,9 @@ export const IslandModal = () => {
           fontWeight: 300,
           color: "rgba(255,255,255,0.85)", 
         }}>
-          {bodyContent}
+          <ModalErrorBoundary>
+            {bodyContent}
+          </ModalErrorBoundary>
         </div>
 
         {/* Footer (Sticky bottom) */}

@@ -1,0 +1,71 @@
+.rich-text-container .quill {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(7, 19, 38, 0.6);
+  border: 1px solid rgba(216, 175, 58, 0.25);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.rich-text-container .quill:focus-within {
+  border-color: rgba(216, 175, 58, 0.6);
+  box-shadow: 0 0 0 1px rgba(216, 175, 58, 0.4);
+}
+
+.rich-text-container .ql-toolbar.ql-snow {
+  border: none;
+  border-bottom: 1px solid rgba(216, 175, 58, 0.2);
+  background-color: rgba(14, 27, 46, 0.9);
+  padding: 8px;
+  font-family: inherit;
+}
+
+.rich-text-container .ql-container.ql-snow {
+  border: none;
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: #F5EFE1;
+  min-height: 120px;
+}
+
+.rich-text-container .ql-editor {
+  min-height: 120px;
+  padding: 16px;
+}
+
+.rich-text-container .ql-editor.ql-blank::before {
+  color: rgba(201, 194, 182, 0.4);
+  font-style: normal;
+}
+
+/* Toolbar icons coloring */
+.rich-text-container .ql-snow .ql-stroke {
+  stroke: #C9C2B6;
+}
+
+.rich-text-container .ql-snow .ql-fill {
+  fill: #C9C2B6;
+}
+
+.rich-text-container .ql-snow .ql-picker {
+  color: #C9C2B6;
+}
+
+.rich-text-container .ql-snow.ql-toolbar button:hover .ql-stroke,
+.rich-text-container .ql-snow .ql-toolbar button:hover .ql-stroke,
+.rich-text-container .ql-snow.ql-toolbar button:focus .ql-stroke,
+.rich-text-container .ql-snow .ql-toolbar button:focus .ql-stroke,
+.rich-text-container .ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.rich-text-container .ql-snow .ql-toolbar button.ql-active .ql-stroke {
+  stroke: #D8AF3A;
+}
+
+.rich-text-container .ql-snow.ql-toolbar button:hover .ql-fill,
+.rich-text-container .ql-snow .ql-toolbar button:hover .ql-fill,
+.rich-text-container .ql-snow.ql-toolbar button:focus .ql-fill,
+.rich-text-container .ql-snow .ql-toolbar button:focus .ql-fill,
+.rich-text-container .ql-snow.ql-toolbar button.ql-active .ql-fill,
+.rich-text-container .ql-snow .ql-toolbar button.ql-active .ql-fill {
+  fill: #D8AF3A;
+}

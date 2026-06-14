@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Save, Plus, Trash2, Loader2 } from 'lucide-react';
+import { RichTextEditor } from './RichTextEditor';
 
 export const ExperiencesManager = () => {
   const [experiences, setExperiences] = useState<any[]>([]);
@@ -30,8 +31,13 @@ export const ExperiencesManager = () => {
 
   const handleSave = async (exp: any) => {
     setSaving(exp.id);
-    await supabase.from('experiences').update(exp).eq('id', exp.id);
+    const { error } = await supabase.from('experiences').update(exp).eq('id', exp.id);
     setSaving(null);
+    if (error) {
+      alert(`Erreur lors de la sauvegarde : ${error.message}`);
+    } else {
+      alert('Expérience sauvegardée avec succès !');
+    }
   };
 
   if (loading) return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-[#D8AF3A] h-8 w-8" /></div>;
@@ -95,11 +101,9 @@ export const ExperiencesManager = () => {
               </div>
               <div className="md:col-span-2">
                 <label className="block text-[#C9C2B6] text-sm mb-1">Description détaillée</label>
-                <textarea 
-                  rows={3}
+                <RichTextEditor 
                   value={exp.description || ''} 
-                  onChange={e => setExperiences(experiences.map(x => x.id === exp.id ? {...x, description: e.target.value} : x))}
-                  className="w-full bg-[#050B14] border border-[#B99A5A]/30 text-[#F5EFE1] rounded-lg p-3"
+                  onChange={value => setExperiences(experiences.map(x => x.id === exp.id ? {...x, description: value} : x))}
                 />
               </div>
               

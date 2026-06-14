@@ -133,3 +133,57 @@ h1, h2, h3, h4, .premium-title {
     line-height: 1.6 !important;
   }
 }
+
+/* RICH TEXT CONTENT RENDERING */
+.rich-text-content {
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  max-width: 100%;
+  text-align: justify;
+}
+.rich-text-content * {
+  word-break: normal !important;
+  white-space: normal !important;
+}
+.rich-text-content p {
+  margin-bottom: 1em;
+}
+.rich-text-content p:last-child {
+  margin-bottom: 0;
+}
+.rich-text-content strong {
+  font-weight: 600;
+  color: #FFFFFF;
+}
+.rich-text-content em {
+  font-style: italic;
+}
+.rich-text-content u {
+  text-decoration: underline;
+  text-decoration-color: var(--premium-gold);
+}
+.rich-text-content ul {
+  list-style-type: disc;
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+  color: var(--premium-text-muted);
+}
+.rich-text-content ol {
+  list-style-type: decimal;
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+  color: var(--premium-text-muted);
+}
+.rich-text-content li {
+  margin-bottom: 0.25em;
+}
+.rich-text-content a {
+  color: #3498db;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.rich-text-content a:hover {
+  border-bottom-color: #3498db;
+}
