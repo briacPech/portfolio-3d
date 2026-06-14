@@ -18,17 +18,6 @@ export const NavigationMenu = () => {
     }
   };
 
-  // On force les anciens noms courts pour l'interface
-  const getIslandTitle = (id: string) => {
-    switch(id) {
-      case 'profil': return 'Profil';
-      case 'skills': return 'Compétences';
-      case 'projects': return 'Projets';
-      case 'experience': return 'Expérience';
-      default: return id;
-    }
-  };
-
   // Transforme l'objet islands en tableau ordonné
   const islandsList = Object.values(islands).sort((a: any, b: any) => {
     const orderA = ["profil", "skills", "projects", "experience"].indexOf(a.id);
@@ -36,7 +25,7 @@ export const NavigationMenu = () => {
     return (orderA !== -1 ? orderA : 99) - (orderB !== -1 ? orderB : 99);
   }).map((i: any) => ({
     id: i.id,
-    title: getIslandTitle(i.id),
+    title: i.title, // Utilise le titre du CMS
     pos: getIslandPos(i.id)
   }));
 
