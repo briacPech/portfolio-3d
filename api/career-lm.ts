@@ -46,7 +46,7 @@ Retourne un JSON strict : { "letterMarkdown": "..." }`;
       throw new Error(`Erreur Gemini API: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data: any = await response.json();
     const textResult = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
     
     const cleanText = textResult.replace(/```json/g, '').replace(/```/g, '').trim();

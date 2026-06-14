@@ -22,7 +22,7 @@ export default async function handler(req: Request) {
   }
 
   try {
-    const { messages }: { messages: UIMessage[] } = await req.json();
+    const { messages } = await req.json() as any;
 
     // Fetch all context dynamically from Supabase
     const [

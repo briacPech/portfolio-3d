@@ -27,7 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         platforms: ['linkedin', 'indeed', 'glassdoor', 'google']
       })
     });
-    const scrapeData = await scrapeRes.json();
+    const scrapeData: any = await scrapeRes.json();
     console.log(`[Cron] Scraped: ${scrapeData.total || 0} jobs`);
 
     // Step 2: Score unscored jobs
@@ -36,7 +36,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({})
     });
-    const scoreData = await scoreRes.json();
+    const scoreData: any = await scoreRes.json();
     console.log(`[Cron] Scored: ${scoreData.scored || 0} jobs, ${scoreData.highScore || 0} high score`);
 
     return res.status(200).json({

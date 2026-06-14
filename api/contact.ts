@@ -6,7 +6,7 @@ export default async function handler(req: Request) {
   }
 
   try {
-    const { name, email, message } = await req.json();
+    const { name, email, message } = await req.json() as any;
 
     if (!name || !email || !message) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {

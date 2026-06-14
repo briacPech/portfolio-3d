@@ -61,7 +61,7 @@ Retourne JSON strict : { "score": number, "grade": string, "verdict": string, "w
         });
 
         if (!response.ok) continue;
-        const data = await response.json();
+        const data: any = await response.json();
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
         const result = JSON.parse(text.replace(/```json/g, '').replace(/```/g, '').trim());
 
