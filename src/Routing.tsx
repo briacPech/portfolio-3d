@@ -28,7 +28,6 @@ const Routing = () => {
         </Route>
         <Route path="*" element={<App />} />
       </Routes>
-      <Loader {...LOADER_CONFIG} />
     </Router>
   );
 };
