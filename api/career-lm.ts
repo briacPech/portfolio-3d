@@ -1,5 +1,3 @@
-import { generateText } from 'ai';
-import { google } from '@ai-sdk/google';
 import { getCandidateProfile, CAREER_OPS_SYSTEM } from './career-utils';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
@@ -12,7 +10,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const { companyName, role, jobText } = req.body || {};
     if (!companyName || !role) return res.status(400).json({ error: "Entreprise ou rôle manquant" });
 
-    if (!process.env.GEMINI_API_KEY) return res.status(500).json({ error: "Clé Gemini manquante" });
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) return res.status(500).json({ error: "Clé Gemini manquante" });
 
     const profile = await getCandidateProfile();
 
@@ -29,14 +28,30 @@ Le ton doit être direct, professionnel, légèrement audacieux, et mettre en va
 
 Retourne un JSON strict : { "letterMarkdown": "..." }`;
 
-    const { text } = await generateText({
-      model: google('gemini-2.5-flash'),
-      system: CAREER_OPS_SYSTEM,
-      prompt: prompt,
+    const fullPrompt = `${CAREER_OPS_SYSTEM}\n\n---\n\n${prompt}`;
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+    const response = await fetch(geminiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: fullPrompt }] }],
+        generationConfig: { responseMimeType: "application/json" }
+      })
     });
 
-    const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Gemini API Error:", errorText);
+      throw new Error(`Erreur Gemini API: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const textResult = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+    
+    const cleanText = textResult.replace(/```json/g, '').replace(/```/g, '').trim();
     return res.status(200).json(JSON.parse(cleanText || '{}'));
+    
   } catch (error: any) {
     console.error("Cover Letter API Error:", error);
     return res.status(500).json({ error: error.message });
