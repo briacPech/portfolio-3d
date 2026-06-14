@@ -22,13 +22,13 @@ export const IslandModal = () => {
   let bodyContent: React.ReactNode = null;
 
   if (islandId === "profil") {
-    bodyContent = <div style={{ whiteSpace: "pre-line" }}>{profile?.bio || profile?.short_description || ""}</div>;
+    bodyContent = <div style={{ whiteSpace: "pre-line", fontSize: "14px", lineHeight: "1.6" }}>{profile?.bio || profile?.short_description || ""}</div>;
   } 
   
   else if (islandId === "skills") {
     const categories = Array.from(new Set(skills.map(s => s.category)));
     bodyContent = (
-      <div style={{ display: "flex", flexDirection: "column", gap: "24px", fontSize: "15px", maxHeight: "55vh", overflowY: "auto", paddingRight: "10px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "24px", fontSize: "15px" }}>
         {categories.map((cat: string) => {
           const catSkills = skills.filter(s => s.category === cat);
           return (
@@ -54,7 +54,7 @@ export const IslandModal = () => {
     const eduExps = experiences.filter(e => isEducation(e));
 
     bodyContent = (
-      <div style={{ display: "flex", flexDirection: "column", gap: "24px", fontSize: "14px", maxHeight: "55vh", overflowY: "auto", paddingRight: "10px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "24px", fontSize: "14px" }}>
         
         {/* Parcours Professionnel */}
         {proExps.length > 0 && (
@@ -100,7 +100,7 @@ export const IslandModal = () => {
 
   else if (islandId === "projects") {
     bodyContent = (
-      <div style={{ display: "flex", flexDirection: "column", gap: "24px", fontSize: "14px", maxHeight: "55vh", overflowY: "auto", paddingRight: "10px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "24px", fontSize: "14px" }}>
         {projects.map(project => (
           <div key={project.id} style={{ background: "rgba(255, 255, 255, 0.03)", padding: "20px", borderRadius: "8px", border: "1px solid rgba(255, 255, 255, 0.05)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "16px" }}>
@@ -158,82 +158,107 @@ export const IslandModal = () => {
       display: "flex",
       alignItems: "center",
       justifyContent: "flex-end", // Sur la droite pour laisser voir le bateau à gauche
-      padding: "50px 50px 120px 50px", // Plus d'espace en bas pour le menu de navigation
-      pointerEvents: "none", // Laisse passer les clics autour
+      padding: "20px 40px 80px 40px", // Marges réduites
+      pointerEvents: "none", 
       zIndex: 50,
     }}>
       <div className="island-modal-content" style={{
-        width: "500px",
-        maxHeight: "calc(100vh - 170px)", // S'adapte à la hauteur de l'écran en laissant la place pour le menu
-        overflowY: "auto",
-        background: "var(--glass-bg)",
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
-        border: "1px solid var(--glass-border)",
-        borderLeft: "4px solid var(--premium-gold)",
-        borderRadius: "4px",
-        padding: "50px 40px",
-        color: "var(--premium-text)",
+        width: "400px", // Beaucoup plus fin (400px au lieu de 460/500)
+        maxHeight: "calc(100vh - 120px)", 
+        display: "flex",
+        flexDirection: "column",
+        background: "rgba(14, 27, 46, 0.75)",
+        backdropFilter: "blur(30px)",
+        WebkitBackdropFilter: "blur(30px)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        borderLeft: "2px solid var(--premium-gold)", // Liseré très fin
+        borderRadius: "8px", // Coins moins massifs
         pointerEvents: "auto",
-        boxShadow: "0 30px 60px rgba(0, 0, 0, 0.5)",
-        animation: "modalFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
+        animation: "modalFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
       }}>
-        <h3 style={{
-          fontFamily: "var(--font-sans)",
-          fontSize: "12px",
-          letterSpacing: "0.2em",
-          textTransform: "uppercase",
-          color: "var(--premium-gold)",
-          marginBottom: "10px",
-          fontWeight: 500,
-        }}>{islandData.presentation || ''}</h3>
         
-        <h1 className="premium-title" style={{
-          fontSize: "36px",
-          margin: "0 0 30px 0",
-          lineHeight: 1.2,
-          color: "#ffffff"
-        }}>{islandData.title || ''}</h1>
+        {/* Header de la modale fixe */}
+        <div style={{ padding: "24px 24px 12px 24px", flexShrink: 0 }}>
+          <h3 style={{
+            fontFamily: "var(--font-sans)",
+            fontSize: "9px", // Très petit et chic
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "var(--premium-gold)",
+            marginBottom: "6px",
+            fontWeight: 600,
+          }}>{islandData.presentation || ''}</h3>
+          
+          <h1 className="premium-title" style={{
+            fontSize: "24px", // Titre beaucoup plus petit
+            margin: "0",
+            lineHeight: 1.1,
+            color: "#ffffff"
+          }}>{islandData.title || ''}</h1>
+        </div>
         
-        <div style={{
+        {/* Corps de la modale (Scrollable) */}
+        <div className="modal-scroll-area" style={{
+          padding: "0 24px",
+          overflowY: "auto",
+          flex: 1, 
           fontFamily: "var(--font-sans)",
-          fontSize: "16px",
-          lineHeight: 1.8,
+          fontSize: "12.5px", // Police de lecture fine et compacte
+          lineHeight: 1.5,
           fontWeight: 300,
-          color: "var(--premium-text-muted)",
-          marginBottom: "40px"
+          color: "rgba(255,255,255,0.85)", 
         }}>
           {bodyContent}
         </div>
 
-        <button 
-          onClick={() => gameState.setIsland(null)}
-          style={{
-            background: "transparent",
-            border: "1px solid var(--premium-border)",
-            color: "var(--premium-text)",
-            padding: "12px 30px",
-            fontSize: "12px",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            cursor: "pointer",
-            transition: "all 0.3s ease",
-            borderRadius: "2px",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "var(--premium-gold)";
-            e.currentTarget.style.color = "var(--premium-bg)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "transparent";
-            e.currentTarget.style.color = "var(--premium-text)";
-          }}
-        >
-          Reprendre la navigation
-        </button>
+        {/* Footer (Sticky bottom) */}
+        <div style={{ padding: "16px 24px 24px 24px", flexShrink: 0, marginTop: "8px" }}>
+          <button 
+            onClick={() => gameState.setIsland(null)}
+            style={{
+              background: "rgba(216,175,58,0.1)",
+              border: "1px solid rgba(216,175,58,0.4)",
+              color: "var(--premium-gold)",
+              padding: "8px 16px", // Bouton plus fin
+              fontSize: "10px", // Texte du bouton très discret
+              fontWeight: 600,
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              borderRadius: "4px",
+              width: "100%", 
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--premium-gold)";
+              e.currentTarget.style.color = "#000";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "rgba(216,175,58,0.1)";
+              e.currentTarget.style.color = "var(--premium-gold)";
+            }}
+          >
+            Reprendre la navigation
+          </button>
+        </div>
       </div>
 
       <style>{`
+        /* Scrollbar élégante pour la modale */
+        .modal-scroll-area::-webkit-scrollbar {
+          width: 4px;
+        }
+        .modal-scroll-area::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .modal-scroll-area::-webkit-scrollbar-thumb {
+          background: rgba(216, 175, 58, 0.3);
+          border-radius: 4px;
+        }
+        .modal-scroll-area::-webkit-scrollbar-thumb:hover {
+          background: rgba(216, 175, 58, 0.6);
+        }
         @keyframes modalFadeIn {
           from {
             opacity: 0;

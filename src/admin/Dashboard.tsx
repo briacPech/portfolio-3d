@@ -11,6 +11,8 @@ import { SeoManager } from './components/SeoManager';
 import { MediaManager } from './components/MediaManager';
 import { DataSeeder } from './components/DataSeeder';
 import { DashboardHome } from './components/DashboardHome';
+import { MessagesManager } from './components/MessagesManager';
+import { Mail } from 'lucide-react';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -45,6 +47,7 @@ export const Dashboard = () => {
         </div>
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           <NavItem icon={<LayoutDashboard className="w-4 h-4" />} label="Tableau de Bord" active={activeTab === 'dashboard'} onClick={() => handleTabClick('dashboard')} />
+          <NavItem icon={<Mail className="w-4 h-4" />} label="Boîte de réception" active={activeTab === 'messages'} onClick={() => handleTabClick('messages')} />
           <NavItem icon={<User className="w-4 h-4" />} label="Profil & Contact" active={activeTab === 'profile'} onClick={() => handleTabClick('profile')} />
           <NavItem icon={<Map className="w-4 h-4" />} label="Textes des Îles" active={activeTab === 'islands'} onClick={() => handleTabClick('islands')} />
           <NavItem icon={<FolderGit2 className="w-4 h-4" />} label="Projets" active={activeTab === 'projects'} onClick={() => handleTabClick('projects')} />
@@ -73,6 +76,7 @@ export const Dashboard = () => {
             <DashboardHome />
           )}
 
+          {activeTab === 'messages' && <MessagesManager />}
           {activeTab === 'profile' && <ProfileManager />}
           {activeTab === 'islands' && <IslandsManager />}
           {activeTab === 'projects' && <ProjectsManager />}

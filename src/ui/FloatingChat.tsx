@@ -54,8 +54,12 @@ export function FloatingChat({
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Ouvrir l'assistant IA"
-        className="fixed max-md:top-4 max-md:right-4 md:bottom-8 md:left-8 z-50 flex h-12 md:h-16 items-center gap-2 md:gap-3 rounded-full border border-[rgba(216,175,58,0.5)] bg-[#0E1B2E]/95 px-4 md:px-6 text-[#F0C674] shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-md transition-all hover:scale-105 hover:border-[rgba(216,175,58,0.8)] hover:bg-[#0E1B2E] animate-bounce-slow"
-        style={{ animation: 'pulse 3s infinite' }}
+        className="fixed z-50 flex h-12 md:h-16 items-center gap-2 md:gap-3 rounded-full border border-[rgba(216,175,58,0.5)] bg-[#0E1B2E]/95 px-4 md:px-6 text-[#F0C674] shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-md transition-all hover:scale-105 hover:border-[rgba(216,175,58,0.8)] hover:bg-[#0E1B2E] animate-bounce-slow"
+        style={{ 
+          animation: 'pulse 3s infinite',
+          bottom: '20px',
+          left: '20px'
+        }}
       >
         <MessageCircle className="h-5 w-5 text-[#F0C674]" strokeWidth={2} />
         <span className="font-semibold max-md:text-sm md:hidden">Chat</span>

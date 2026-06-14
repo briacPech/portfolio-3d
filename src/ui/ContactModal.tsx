@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Mail, Send, X, Loader2 } from 'lucide-react';
 import { usePortfolio } from '../contexts/PortfolioContext';
+import { supabase } from '../lib/supabase';
 
 export const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
   const { profile } = usePortfolio();
 
   if (!isOpen) return null;
@@ -12,26 +14,42 @@ export const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
+    setErrorMessage('');
 
     try {
-      const res = await fetch('/api/contact', {
+      // 1. Sauvegarde PRIORITAIRE dans Supabase
+      const { error: dbError } = await supabase
+        .from('messages')
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          message: formData.message
+        }]);
+
+      if (dbError) {
+        console.error("Erreur base de données:", dbError);
+        throw new Error("Impossible d'enregistrer le message dans la base de données.");
+      }
+
+      // 2. Envoi de l'email de notification via Vercel (En tâche de fond, on s'en fiche s'il échoue en local)
+      fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
-      });
+      }).catch(err => console.log("Email API failed (normal in local dev):", err));
 
-      if (res.ok) {
-        setStatus('success');
-        setFormData({ name: '', email: '', message: '' });
-        setTimeout(() => {
-          onClose();
-          setStatus('idle');
-        }, 3000);
-      } else {
-        setStatus('error');
-      }
-    } catch (err) {
+      // 3. Succès immédiat car le message est bien dans Supabase !
+      setStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => {
+        onClose();
+        setStatus('idle');
+      }, 3000);
+
+    } catch (err: any) {
+      console.error(err);
       setStatus('error');
+      setErrorMessage(err.message || 'Erreur réseau');
     }
   };
 
@@ -121,7 +139,9 @@ export const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
               </div>
 
               {status === 'error' && (
-                <p className="text-sm text-[#e74c3c]">Une erreur est survenue lors de l'envoi du message. Veuillez réessayer.</p>
+                <p className="text-sm text-[#e74c3c]">
+                  {errorMessage || "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer."}
+                </p>
               )}
 
               <button

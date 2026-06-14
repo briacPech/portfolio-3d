@@ -60,24 +60,23 @@ export const NavigationMenu = () => {
     <>
     <div className="nav-menu-container" style={{
         position: "absolute",
-        bottom: "20px", // Plus bas pour dégager la vue
+        bottom: "20px", 
         left: "50%",
         transform: "translateX(-50%)",
-        width: "95%", // Prend (presque) toute la largeur
-        maxWidth: "1400px",
+        width: "max-content", 
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-around", // Étale les liens sur la largeur
-        gap: "10px", // Gap minimum, le space-around gère l'espacement
+        justifyContent: "center",
+        gap: "20px", // Espace fortement réduit pour compacter le menu
         zIndex: 100,
         pointerEvents: "auto",
-        background: "var(--glass-bg)",
-        padding: "10px 20px", // Beaucoup plus fin (moins de hauteur)
-        borderRadius: "8px", 
+        background: "rgba(14, 27, 46, 0.65)",
+        padding: "8px 24px", // Pilule ultra-fine
+        borderRadius: "100px", 
         backdropFilter: "blur(24px)",
         WebkitBackdropFilter: "blur(24px)",
-        border: "1px solid var(--glass-border)",
-        boxShadow: "0 10px 30px rgba(0, 0, 0, 0.4)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        boxShadow: "0 15px 30px rgba(0, 0, 0, 0.4)",
       }}>
       {/* On supprime la boussole Emoji */}
       
@@ -88,18 +87,18 @@ export const NavigationMenu = () => {
           onClick={() => gameState.setTargetWaypoint(island.id, island.pos.x, island.pos.z)}
           style={{
             position: "relative",
-            padding: "8px 0",
+            padding: "6px 0",
             background: "transparent",
             color: targetId === island.id ? "var(--premium-gold)" : "var(--premium-text)",
             border: "none",
             cursor: "pointer",
             fontFamily: "var(--font-sans)",
-            fontWeight: targetId === island.id ? "500" : "300",
-            fontSize: "13px",
-            letterSpacing: "0.15em",
+            fontWeight: targetId === island.id ? "500" : "400",
+            fontSize: "10px", // Police très petite et élégante
+            letterSpacing: "0.1em",
             textTransform: "uppercase",
             transition: "all 0.4s ease",
-            opacity: targetId && targetId !== island.id ? 0.5 : 1, // Atténue les autres quand on en sélectionne un
+            opacity: targetId && targetId !== island.id ? 0.5 : 1, 
           }}
           onMouseEnter={(e) => {
             if (targetId !== island.id) {
@@ -114,8 +113,6 @@ export const NavigationMenu = () => {
         >
           {island.title}
           
-          {/* Ligne dorée animée sous le texte actif */}
-          {/* Ligne dorée animée sous le texte actif */}
           <div style={{
             content: '""',
             position: "absolute",
@@ -131,8 +128,8 @@ export const NavigationMenu = () => {
         </button>
       ))}
 
-      {/* Séparateur */}
-      <div className="nav-separator" style={{ width: "1px", height: "20px", background: "rgba(216,175,58,0.3)" }} />
+      {/* Séparateur très fin */}
+      <div className="nav-separator" style={{ width: "1px", height: "14px", background: "rgba(216,175,58,0.2)" }} />
 
       {/* Bouton Contact */}
       <button
@@ -140,15 +137,15 @@ export const NavigationMenu = () => {
         onClick={() => setIsContactOpen(true)}
         style={{
           position: "relative",
-          padding: "8px 0",
+          padding: "6px 0",
           background: "transparent",
           color: "var(--premium-gold)",
           border: "none",
           cursor: "pointer",
           fontFamily: "var(--font-sans)",
           fontWeight: "600",
-          fontSize: "13px",
-          letterSpacing: "0.15em",
+          fontSize: "10px", // Cohérent avec les autres
+          letterSpacing: "0.1em",
           textTransform: "uppercase",
           transition: "all 0.4s ease",
         }}

@@ -29,7 +29,7 @@ const App = () => {
   const { hash } = useLocation();
 
   const isDebugMode = hash === "#debug";
-  const [dpr, setDpr] = useState([0.5, 1.5]); // Résolution adaptative
+  const [dpr, setDpr] = useState([0.8, 1.5]); // Équilibre parfait : fluide sur tel, mais pas de "bouillie de pixels" (min 0.8 au lieu de 0.5)
 
   return (
     <>
@@ -46,10 +46,10 @@ const App = () => {
                 left: 0,
               }}
               camera={{ fov: 55, near: 0.1, far: 1000, position: [0, 20, 35] }}
-              gl={{ antialias: false, powerPreference: "high-performance" }}
+              gl={{ antialias: true, powerPreference: "high-performance" }} // On garde l'anti-aliasing pour la beauté des bords
               id="canvas"
             >
-              <PerformanceMonitor onIncline={() => setDpr([1, 1.5])} onDecline={() => setDpr([0.5, 1])}>
+              <PerformanceMonitor onIncline={() => setDpr([1, 1.5])} onDecline={() => setDpr([0.8, 1])}>
                 {isDebugMode && <Stats />}
                 <Suspense fallback={null}>
                   <Physics debug={isDebugMode && debug}>
