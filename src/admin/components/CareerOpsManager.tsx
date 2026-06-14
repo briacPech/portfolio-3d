@@ -3,7 +3,12 @@ import { supabase } from '../../lib/supabase';
 import { Briefcase, FileText, Mail, Save, Loader2, Zap, X, User } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
-export function CareerOpsManager() {
+interface Props {
+  initialJobText?: string;
+  onClearPending?: () => void;
+}
+
+export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
   const [activeTab, setActiveTab] = useState('tracker');
   const [loading, setLoading] = useState(false);
   const [trackerJobs, setTrackerJobs] = useState<any[]>([]);
@@ -29,6 +34,16 @@ export function CareerOpsManager() {
     fetchJobs();
     fetchCareerProfile();
   }, []);
+
+  useEffect(() => {
+    if (initialJobText) {
+      setJobText(initialJobText);
+      setActiveTab('evaluate');
+      if (onClearPending) {
+        onClearPending();
+      }
+    }
+  }, [initialJobText]);
 
   const fetchCareerProfile = async () => {
     const { data } = await supabase.from('career_profile').select('*').limit(1).single();

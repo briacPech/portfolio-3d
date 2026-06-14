@@ -1,0 +1,3 @@
+jobspy==0.12.5
+pandas>=2.0.0
+python-dotenv

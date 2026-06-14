@@ -13,12 +13,14 @@ import { DataSeeder } from './components/DataSeeder';
 import { DashboardHome } from './components/DashboardHome';
 import { MessagesManager } from './components/MessagesManager';
 import { CareerOpsManager } from './components/CareerOpsManager';
-import { Mail } from 'lucide-react';
+import { OffresCloserManager } from './components/OffresCloserManager';
+import { Mail, Search } from 'lucide-react';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [pendingJobText, setPendingJobText] = useState('');
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -57,6 +59,7 @@ export const Dashboard = () => {
           <NavItem icon={<ImageIcon className="w-4 h-4" />} label="Médias" active={activeTab === 'media'} onClick={() => handleTabClick('media')} />
           <NavItem icon={<Globe className="w-4 h-4" />} label="SEO" active={activeTab === 'seo'} onClick={() => handleTabClick('seo')} />
           <div className="my-2 border-t border-[#B99A5A]/20"></div>
+          <NavItem icon={<Search className="w-4 h-4 text-[#F0C674]" />} label="Offres Closer" active={activeTab === 'offrescloser'} onClick={() => handleTabClick('offrescloser')} />
           <NavItem icon={<Briefcase className="w-4 h-4 text-[#D8AF3A]" />} label="Career Ops (IA)" active={activeTab === 'careerops'} onClick={() => handleTabClick('careerops')} />
         </nav>
         <div className="p-3 border-t border-[#B99A5A]/20">
@@ -87,7 +90,20 @@ export const Dashboard = () => {
           {activeTab === 'experiences' && <ExperiencesManager />}
           {activeTab === 'seo' && <SeoManager />}
           {activeTab === 'media' && <MediaManager />}
-          {activeTab === 'careerops' && <CareerOpsManager />}
+          {activeTab === 'offrescloser' && (
+            <OffresCloserManager 
+              onSendToCareerOps={(text) => {
+                setPendingJobText(text);
+                handleTabClick('careerops');
+              }} 
+            />
+          )}
+          {activeTab === 'careerops' && (
+            <CareerOpsManager 
+              initialJobText={pendingJobText} 
+              onClearPending={() => setPendingJobText('')} 
+            />
+          )}
         </div>
       </main>
     </div>
