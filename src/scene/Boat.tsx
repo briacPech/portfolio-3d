@@ -214,31 +214,31 @@ export const Boat = () => {
         let angleDiff = targetRotation - boatRotation.current;
         while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
         while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
-        boatRotation.current += angleDiff * 2.0 * delta; 
+        boatRotation.current += angleDiff * 1.5 * delta; // Virage plus doux
         
         // 3. Calcul de la vitesse avec inertie et anticipation de l'arrêt
         const distanceToStop = distance - stopDistance;
         const alignmentFactor = Math.max(0.2, 1.0 - Math.abs(angleDiff) / Math.PI);
-        const maxAllowedSpeed = Math.min(22, distanceToStop * 1.5); 
+        const maxAllowedSpeed = Math.min(18, distanceToStop * 1.2); // Vitesse max réduite et freinage anticipé
         
         const targetSpeed = maxAllowedSpeed * alignmentFactor;
         
-        // Accélération/Décélération progressive
-        currentSpeed.current = THREE.MathUtils.lerp(currentSpeed.current, targetSpeed, 1.5 * delta);
+        // Accélération/Décélération très progressive
+        currentSpeed.current = THREE.MathUtils.lerp(currentSpeed.current, targetSpeed, 1.0 * delta);
         
       } else {
         // 4. Coast to a halt
-        currentSpeed.current = THREE.MathUtils.lerp(currentSpeed.current, 0, 5.0 * delta); 
+        currentSpeed.current = THREE.MathUtils.lerp(currentSpeed.current, 0, 3.0 * delta); // Freinage plus naturel
         
         // Déclenchement net de l'île
-        if (currentSpeed.current < 1.0 && targetWaypoint.id !== "ocean") {
+        if (currentSpeed.current < 0.5 && targetWaypoint.id !== "ocean") {
           currentSpeed.current = 0; // Force l'arrêt absolu immédiat
           gameState.setIsland(targetWaypoint.id);
         }
       }
     } else {
       // Dérive lente jusqu'à l'arrêt si pas de cible (cas annulation)
-      currentSpeed.current = THREE.MathUtils.lerp(currentSpeed.current, 0, 3.0 * delta);
+      currentSpeed.current = THREE.MathUtils.lerp(currentSpeed.current, 0, 2.0 * delta);
     }
 
     // 5. Appliquer le déplacement physique avec la vitesse inertielle
@@ -260,9 +260,9 @@ export const Boat = () => {
       while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
     }
     // Roulis selon le virage + bobbing des vagues
-    const targetTilt = angleDiff * 0.2; 
-    tiltAngle.current = THREE.MathUtils.lerp(tiltAngle.current, targetTilt, 2.0 * delta);
-    bobbing.current = Math.sin(state.clock.elapsedTime * 2.5) * 0.12;
+    const targetTilt = angleDiff * 0.15; // Roulis plus subtil
+    tiltAngle.current = THREE.MathUtils.lerp(tiltAngle.current, targetTilt, 1.5 * delta);
+    bobbing.current = Math.sin(state.clock.elapsedTime * 2.0) * 0.1; // Bobbing plus doux
     
     const currentPos = groupRef.current.position;
     gameState.setBoatPosition(currentPos.x, currentPos.z);
@@ -275,7 +275,7 @@ export const Boat = () => {
     let camAngleDiff = boatRotation.current - cameraRotation.current;
     while (camAngleDiff > Math.PI) camAngleDiff -= Math.PI * 2;
     while (camAngleDiff < -Math.PI) camAngleDiff += Math.PI * 2;
-    cameraRotation.current += camAngleDiff * 0.3;
+    cameraRotation.current += camAngleDiff * 0.2; // Caméra plus lente à tourner
 
     _camEuler.set(0, cameraRotation.current, 0);
     _camQuat.setFromEuler(_camEuler);
@@ -287,24 +287,24 @@ export const Boat = () => {
     const currentIslandData = gameState.currentIsland ? ISLANDS_DATA.find(i => i.id === gameState.currentIsland) : null;
     
     // Lerp indépendant du framerate pour la souris (très doux)
-    smoothedPointer.current.lerp(state.pointer, 1.0 - Math.exp(-3.0 * delta));
+    smoothedPointer.current.lerp(state.pointer, 1.0 - Math.exp(-2.0 * delta));
 
     if (currentIslandData) {
       // 🎥 Caméra Cinématique : Le bateau est amarré, on filme l'île depuis le bateau
       const islandPos = new THREE.Vector3(currentIslandData.pos[0], 0, currentIslandData.pos[1]);
       
-      const orbitX = Math.sin(state.clock.elapsedTime * 0.1) * 3;
-      const orbitZ = Math.cos(state.clock.elapsedTime * 0.1) * 3;
+      const orbitX = Math.sin(state.clock.elapsedTime * 0.05) * 3; // Orbite plus lente
+      const orbitZ = Math.cos(state.clock.elapsedTime * 0.05) * 3;
       
       // On se place derrière et au-dessus du bateau
-      _cameraOffset.set(orbitX, 8 + smoothedPointer.current.y * -1.5, 18 + orbitZ);
+      _cameraOffset.set(orbitX, 8 + smoothedPointer.current.y * -1.0, 18 + orbitZ);
       
       // On applique la rotation du bateau pour être toujours dans son dos
       _cameraOffset.applyQuaternion(_camQuat);
       
       _targetCamPos.copy(_boatPos).add(_cameraOffset);
       
-      state.camera.position.lerp(_targetCamPos, 1.0 - Math.exp(-2.5 * delta));
+      state.camera.position.lerp(_targetCamPos, 1.0 - Math.exp(-1.5 * delta)); // Mouvement très doux
       
       // On lève la tête pour filmer le monument de l'île (ex: la fusée)
       const lookHeight = currentIslandData.id === "projects" ? 12 : 3;
@@ -314,15 +314,15 @@ export const Boat = () => {
       
       // Effet d'orbite cinématique : la caméra se déplace à l'opposé de la souris
       _cameraOffset.set(
-        smoothedPointer.current.x * -6, // Décalage horizontal (orbite)
-        4 + speedFactor * 1.5 + smoothedPointer.current.y * -3, // Décalage vertical
-        10 + speedFactor * 3.0 // Recul dynamique selon la vitesse
+        smoothedPointer.current.x * -4, // Décalage horizontal adouci
+        5 + speedFactor * 1.5 + smoothedPointer.current.y * -2, // Un peu plus haut pour mieux voir
+        12 + speedFactor * 3.0 // Un peu plus loin pour un meilleur plan d'ensemble
       ).applyQuaternion(_camQuat);
       
       _targetCamPos.copy(_boatPos).add(_cameraOffset);
       
-      // Lerp constant et souple pour la navigation (Accéléré de 3.0 à 8.0)
-      state.camera.position.lerp(_targetCamPos, 1.0 - Math.exp(-8.0 * delta));
+      // Lerp très souple pour la navigation
+      state.camera.position.lerp(_targetCamPos, 1.0 - Math.exp(-4.0 * delta));
       
       // La caméra pointe devant le bateau
       _lookTargetOffset.set(

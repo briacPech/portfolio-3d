@@ -30,15 +30,15 @@ const WaterMaterial = shaderMaterial(
     vUv = uv;
     vec3 pos = position;
     
-    // Calcul du déplacement des vagues douces (smooth rolling waves) plus petites et plus lentes
-    float wave1 = sin(pos.x * 0.15 + uTime * 0.6) * 0.15;
-    float wave2 = cos(pos.y * 0.15 + uTime * 0.4) * 0.15;
-    float wave3 = sin((pos.x + pos.y) * 0.1 + uTime * 0.2) * 0.1;
+    // Calcul du déplacement des vagues très douces (smooth rolling waves)
+    float wave1 = sin(pos.x * 0.1 + uTime * 0.3) * 0.1;
+    float wave2 = cos(pos.y * 0.1 + uTime * 0.2) * 0.1;
+    float wave3 = sin((pos.x + pos.y) * 0.05 + uTime * 0.1) * 0.05;
     pos.z += wave1 + wave2 + wave3;
     
-    // Calcul analytique de la normale pour de beaux reflets spéculaires
-    float dx = cos(pos.x * 0.15 + uTime * 0.6) * 0.0225 + cos((pos.x + pos.y) * 0.1 + uTime * 0.2) * 0.01;
-    float dy = -sin(pos.y * 0.15 + uTime * 0.4) * 0.0225 + cos((pos.x + pos.y) * 0.1 + uTime * 0.2) * 0.01;
+    // Calcul analytique de la normale pour des reflets élégants
+    float dx = cos(pos.x * 0.1 + uTime * 0.3) * 0.01 + cos((pos.x + pos.y) * 0.05 + uTime * 0.1) * 0.0025;
+    float dy = -sin(pos.y * 0.1 + uTime * 0.2) * 0.01 + cos((pos.x + pos.y) * 0.05 + uTime * 0.1) * 0.0025;
     vec3 localNormal = normalize(vec3(-dx, -dy, 1.0));
     
     // Transmission au Fragment Shader
@@ -77,7 +77,7 @@ const WaterMaterial = shaderMaterial(
       for(int i = -1; i <= 1; i++) {
         vec2 g = vec2(float(i), float(j));
         vec2 o = hash(n + g);
-        o = 0.5 + 0.5 * sin(uTime * 0.5 + 6.2831 * o); // Animation
+        o = 0.5 + 0.5 * sin(uTime * 0.3 + 6.2831 * o); // Animation plus lente
         vec2 r = g - f + o;
         float d = dot(r, r);
         m = min(m, d);
@@ -88,25 +88,25 @@ const WaterMaterial = shaderMaterial(
 
   void main() {
     // Projection des UVs en espace monde pour une surface infinie
-    vec2 uvCaustics = vWorldPosition.xz * 0.2;
+    vec2 uvCaustics = vWorldPosition.xz * 0.15;
     
-    // Caustiques générées de façon procédurale
-    float c1 = voronoi(uvCaustics * 0.8 + uTime * 0.2);
-    float c2 = voronoi(uvCaustics * 1.2 - uTime * 0.15);
+    // Caustiques générées de façon procédurale (très adoucies)
+    float c1 = voronoi(uvCaustics * 0.8 + uTime * 0.1);
+    float c2 = voronoi(uvCaustics * 1.2 - uTime * 0.08);
     
     // Dégradé profond basé sur la normale Y
     float depthMix = smoothstep(0.8, 1.0, vNormal.y);
     vec3 baseWaterColor = mix(uColorSecondary, uColorBase, depthMix);
     
-    // Caustiques (Reflets subtils)
-    float caustics = pow(1.0 - c1, 4.0) * 0.6 + pow(1.0 - c2, 4.0) * 0.4;
-    caustics *= 1.2;
+    // Caustiques (Reflets très subtils)
+    float caustics = pow(1.0 - c1, 4.0) * 0.3 + pow(1.0 - c2, 4.0) * 0.2;
+    caustics *= 0.8;
 
-    // Lumière spéculaire (Soleil d'or doux)
+    // Lumière spéculaire (Soleil d'or doux et élégant)
     vec3 viewDir = normalize(cameraPosition - vWorldPosition);
     vec3 halfVector = normalize(uLightDirection + viewDir);
     float NdotH = max(0.0, dot(vNormal, halfVector));
-    float specular = pow(NdotH, 64.0) * 1.5; // Plus diffus/sobre
+    float specular = pow(NdotH, 128.0) * 1.0; // Plus doux et concentré
 
     // Effet Fresnel subtil avec la couleur secondaire
     float fresnel = pow(1.0 - max(0.0, dot(vNormal, viewDir)), 3.0);
