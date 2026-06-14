@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@ai-sdk/google": "^3.0.82",
     "@ai-sdk/groq": "^3.0.40",
     "@ai-sdk/react": "^3.0.204",
     "@google/genai": "^2.8.0",
