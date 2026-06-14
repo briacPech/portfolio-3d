@@ -158,13 +158,13 @@ export const IslandModal = () => {
       display: "flex",
       alignItems: "center",
       justifyContent: "flex-end", // Sur la droite pour laisser voir le bateau à gauche
-      padding: "50px",
+      padding: "50px 50px 120px 50px", // Plus d'espace en bas pour le menu de navigation
       pointerEvents: "none", // Laisse passer les clics autour
       zIndex: 50,
     }}>
       <div className="island-modal-content" style={{
         width: "500px",
-        maxHeight: "85vh",
+        maxHeight: "calc(100vh - 170px)", // S'adapte à la hauteur de l'écran en laissant la place pour le menu
         overflowY: "auto",
         background: "var(--glass-bg)",
         backdropFilter: "blur(24px)",
