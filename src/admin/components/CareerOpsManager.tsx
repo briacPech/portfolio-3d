@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Briefcase, FileText, FileSignature, Save, Loader2, Sparkles, AlertTriangle } from 'lucide-react';
+import { Briefcase, FileText, Mail, Save, Loader2, Zap, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
 export function CareerOpsManager() {
@@ -119,7 +119,7 @@ export function CareerOpsManager() {
           Tracker
         </button>
         <button onClick={() => setActiveTab('evaluate')} className={"flex-1 p-4 font-medium transition-colors " + (activeTab === 'evaluate' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
-          <Sparkles className="w-5 h-5 mx-auto mb-1" />
+          <Zap className="w-5 h-5 mx-auto mb-1" />
           Évaluation
         </button>
         <button onClick={() => setActiveTab('cv')} className={"flex-1 p-4 font-medium transition-colors " + (activeTab === 'cv' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
@@ -127,7 +127,7 @@ export function CareerOpsManager() {
           Adapter CV
         </button>
         <button onClick={() => setActiveTab('lm')} className={"flex-1 p-4 font-medium transition-colors " + (activeTab === 'lm' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
-          <FileSignature className="w-5 h-5 mx-auto mb-1" />
+          <Mail className="w-5 h-5 mx-auto mb-1" />
           Lettre Motiv'
         </button>
       </div>
@@ -176,7 +176,7 @@ export function CareerOpsManager() {
               onChange={(e) => setJobText(e.target.value)}
             />
             <button onClick={handleEvaluate} disabled={loading} className="bg-[#D8AF3A] hover:bg-[#F0C674] text-[#050B14] font-bold py-2 px-6 rounded transition-colors flex items-center gap-2">
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />}
               Lancer l'évaluation IA
             </button>
 
@@ -224,7 +224,7 @@ export function CareerOpsManager() {
               <div className="mt-6 p-6 bg-[#0A1424] border border-[#B99A5A]/30 rounded-lg">
                 {adaptResult.isPureDevDetected && (
                   <div className="bg-red-900/30 border border-red-500/50 p-4 rounded mb-4 text-red-200 flex gap-3">
-                    <AlertTriangle className="w-6 h-6 shrink-0" />
+                    <X className="w-6 h-6 shrink-0 text-red-500" />
                     <div>
                       <strong>Avertissement : Profil Dev Pur Détecté</strong><br/>
                       {adaptResult.pureDevWarning}
@@ -248,7 +248,7 @@ export function CareerOpsManager() {
               <input type="text" placeholder="Intitulé du poste" value={roleName} onChange={e => setRoleName(e.target.value)} className="flex-1 bg-[#0A1424] border border-[#B99A5A]/30 rounded p-3 text-[#F5EFE1] outline-none" />
             </div>
             <button onClick={handleGenerateLM} disabled={loading || (!jobText && !companyName)} className="bg-[#D8AF3A] hover:bg-[#F0C674] text-[#050B14] font-bold py-2 px-6 rounded transition-colors flex items-center gap-2">
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <FileSignature className="w-5 h-5" />}
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Mail className="w-5 h-5" />}
               Générer Lettre
             </button>
             {lmResult && (
