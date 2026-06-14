@@ -1,4 +1,4 @@
-import { getCandidateProfile, CAREER_OPS_SYSTEM } from './career-utils';
+import { getCandidateProfile, CAREER_OPS_SYSTEM } from './career-utils.js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export const maxDuration = 60; // 60 seconds timeout
