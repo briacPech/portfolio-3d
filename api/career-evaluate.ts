@@ -1,7 +1,7 @@
 import { GoogleGenAI } from '@google/genai';
 import { getCandidateProfile, CAREER_OPS_SYSTEM } from './career-utils';
 
-export const config = { runtime: 'nodejs' };
+export const config = { runtime: 'edge' };
 
 export default async function handler(req: Request) {
   if (req.method !== 'POST') return new Response('Method Not Allowed', { status: 405 });
