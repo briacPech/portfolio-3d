@@ -13,7 +13,7 @@ import { DataSeeder } from './components/DataSeeder';
 import { DashboardHome } from './components/DashboardHome';
 import { MessagesManager } from './components/MessagesManager';
 import { CareerOpsManager } from './components/CareerOpsManager';
-import { Mail, Briefcase } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
