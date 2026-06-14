@@ -21,7 +21,7 @@ export const Login = () => {
     });
 
     if (error) {
-      setError("Identifiants incorrects ou erreur de connexion.");
+      setError(`Erreur Supabase: ${error.message}`);
       setLoading(false);
     } else {
       navigate('/admin');
