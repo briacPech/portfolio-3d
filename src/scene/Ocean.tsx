@@ -190,11 +190,11 @@ export const Ocean = () => {
         <waterMaterial 
           ref={materialRef} 
           transparent={false} 
-          uColorBase={new THREE.Color("#0c2242")} 
-          uColorSecondary={new THREE.Color("#163c6b")} 
-          uColorReflect={new THREE.Color("#2a5c96")} 
-          uGoldColor={new THREE.Color("#f1c40f")} 
-          uLightDirection={new THREE.Vector3(50, 10, 50).normalize()}
+          uColorBase={new THREE.Color("#0077b6")} 
+          uColorSecondary={new THREE.Color("#00b4d8")} 
+          uColorReflect={new THREE.Color("#90e0ef")} 
+          uGoldColor={new THREE.Color("#ffffff")} 
+          uLightDirection={new THREE.Vector3(50, 20, 50).normalize()}
         />
       </mesh>
     </group>
