@@ -2,5 +2,11 @@
   "name": "portfolio-briac",
   "installCommand": "npm install",
   "buildCommand": "npm run build",
-  "outputDirectory": "build"
+  "outputDirectory": "build",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
