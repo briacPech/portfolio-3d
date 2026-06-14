@@ -8,8 +8,8 @@ import { ProfilDecoration, SkillsDecoration, ExperienceDecoration } from "./Isla
 import { IslandModel } from "./IslandModel";
 
 // Précharger le modèle
-useGLTF.preload('/models/lowpoly_island/scene.gltf');
 useGLTF.preload('/models/toy_rocket/scene.gltf');
+useGLTF.preload('/models/island.glb');
 
 /*
 // [ARCHITECTURE GLTF - PRÊT À L'EMPLOI]

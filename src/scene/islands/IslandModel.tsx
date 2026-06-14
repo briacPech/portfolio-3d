@@ -66,8 +66,8 @@ export function IslandModel({ islandId, ...props }: any) {
       // La roche pure, teintée
       matRock: new THREE.MeshStandardMaterial({ color: rockColor, map: textures.rock, flatShading: true, roughness: 0.8, metalness: 0.2 }),
       
-      // Nuages non-impactés par la lumière pour rester cotonneux (Gris bleuté très clair)
-      matCloud: new THREE.MeshBasicMaterial({ color: "#B8C1CB" }),
+      // Nuages non-impactés par la lumière pour rester cotonneux (Blanc pur éclatant)
+      matCloud: new THREE.MeshBasicMaterial({ color: "#FFFFFF" }),
       
       // Noix de coco sombre
       matCoconut: new THREE.MeshStandardMaterial({ color: "#050B14", flatShading: true, roughness: 0.9 })

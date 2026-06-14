@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Mail, Send, X, Loader2 } from 'lucide-react';
+import { usePortfolio } from '../contexts/PortfolioContext';
 
 export const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const { profile } = usePortfolio();
 
   if (!isOpen) return null;
 
@@ -140,6 +142,19 @@ export const ContactModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
                   </>
                 )}
               </button>
+              
+              {/* Liens supplémentaires */}
+              <div className="mt-4 pt-4 border-t border-[rgba(216,175,58,0.2)] flex justify-center gap-6">
+                {profile?.email && (
+                  <a href={`mailto:${profile.email}`} className="text-[#C9C2B6] hover:text-[#F0C674] text-xs transition-colors">Email</a>
+                )}
+                {profile?.linkedin_url && (
+                  <a href={profile.linkedin_url} target="_blank" rel="noreferrer" className="text-[#C9C2B6] hover:text-[#F0C674] text-xs transition-colors">LinkedIn</a>
+                )}
+                {profile?.github_url && (
+                  <a href={profile.github_url} target="_blank" rel="noreferrer" className="text-[#C9C2B6] hover:text-[#F0C674] text-xs transition-colors">GitHub</a>
+                )}
+              </div>
             </form>
           )}
         </div>

@@ -1,17 +1,44 @@
 import { useEffect, useState } from "react";
 import { gameState } from "../scene/gameState";
 import { ContactModal } from "./ContactModal";
-
-const islands = [
-  { id: "profil", title: "Profil", pos: { x: 15, z: -20 } },
-  { id: "skills", title: "Compétences", pos: { x: -20, z: -25 } },
-  { id: "projects", title: "Projets", pos: { x: 25, z: 15 } },
-  { id: "experience", title: "Expérience", pos: { x: -15, z: 20 } },
-];
+import { usePortfolio } from "../contexts/PortfolioContext";
 
 export const NavigationMenu = () => {
   const [targetId, setTargetId] = useState<string | null>(null);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const { islands } = usePortfolio();
+  
+  const getIslandPos = (id: string) => {
+    switch(id) {
+      case 'profil': return { x: 15, z: -20 };
+      case 'skills': return { x: -20, z: -25 };
+      case 'projects': return { x: 25, z: 15 };
+      case 'experience': return { x: -15, z: 20 };
+      default: return { x: 0, z: 0 };
+    }
+  };
+
+  // On force les anciens noms courts pour l'interface
+  const getIslandTitle = (id: string) => {
+    switch(id) {
+      case 'profil': return 'Profil';
+      case 'skills': return 'Compétences';
+      case 'projects': return 'Projets';
+      case 'experience': return 'Expérience';
+      default: return id;
+    }
+  };
+
+  // Transforme l'objet islands en tableau ordonné
+  const islandsList = Object.values(islands).sort((a: any, b: any) => {
+    const orderA = ["profil", "skills", "projects", "experience"].indexOf(a.id);
+    const orderB = ["profil", "skills", "projects", "experience"].indexOf(b.id);
+    return (orderA !== -1 ? orderA : 99) - (orderB !== -1 ? orderB : 99);
+  }).map((i: any) => ({
+    id: i.id,
+    title: getIslandTitle(i.id),
+    pos: getIslandPos(i.id)
+  }));
 
   useEffect(() => {
     const unsubscribe = gameState.subscribe(() => {
@@ -42,7 +69,7 @@ export const NavigationMenu = () => {
     }}>
       {/* On supprime la boussole Emoji */}
       
-      {islands.map((island) => (
+      {islandsList.map((island) => (
         <button
           key={island.id}
           className="nav-btn-premium"

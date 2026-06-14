@@ -47,49 +47,60 @@ export const SkillsManager = () => {
 
       {skills.length === 0 && <p className="text-[#C9C2B6]">Aucune compétence pour le moment.</p>}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {skills.map(skill => (
-          <div key={skill.id} className="bg-[#0E1B2E] p-4 rounded-xl border border-[#B99A5A]/20">
-            <div className="flex justify-between items-start mb-2">
-              <input 
-                type="text" 
-                value={skill.name} 
-                onChange={e => setSkills(skills.map(s => s.id === skill.id ? {...s, name: e.target.value} : s))}
-                className="bg-transparent border-b border-[#B99A5A]/30 text-lg font-bold text-[#F5EFE1] focus:outline-none focus:border-[#D8AF3A] pb-1 w-2/3"
-                placeholder="Nom (ex: React)"
-              />
-              <button onClick={() => handleDelete(skill.id)} className="text-red-400 hover:text-red-300">
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
-            
-            <div className="space-y-3 mt-4">
+          <div key={skill.id} className="bg-[#0E1B2E] p-4 rounded-xl border border-[#B99A5A]/20 relative group">
+            <button
+              onClick={() => handleDelete(skill.id)}
+              className="absolute top-2 right-2 text-red-400/50 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+            <div className="space-y-3">
               <div>
-                <label className="block text-[#C9C2B6] text-xs mb-1">Catégorie</label>
-                <input 
-                  type="text" 
-                  value={skill.category || ''} 
-                  onChange={e => setSkills(skills.map(s => s.id === skill.id ? {...s, category: e.target.value} : s))}
-                  className="w-full bg-[#050B14] border border-[#B99A5A]/30 text-[#F5EFE1] rounded p-2 text-sm"
+                <label className="block text-xs font-medium text-[#C9C2B6] mb-1">Nom de la compétence</label>
+                <input
+                  type="text"
+                  value={skill.name}
+                  onChange={(e) => setSkills(skills.map(s => s.id === skill.id ? { ...s, name: e.target.value } : s))}
+                  className="w-full bg-[#050B14] border border-[#B99A5A]/30 rounded-lg p-2 text-sm text-[#F5EFE1] focus:border-[#D8AF3A] focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-[#C9C2B6] text-xs mb-1">Niveau (%)</label>
-                <input 
-                  type="range" 
-                  min="0" max="100"
-                  value={skill.level || 50} 
-                  onChange={e => setSkills(skills.map(s => s.id === skill.id ? {...s, level: parseInt(e.target.value)} : s))}
+                <label className="block text-xs font-medium text-[#C9C2B6] mb-1">Catégorie</label>
+                <input
+                  type="text"
+                  value={skill.category || ''}
+                  onChange={(e) => setSkills(skills.map(s => s.id === skill.id ? { ...s, category: e.target.value } : s))}
+                  className="w-full bg-[#050B14] border border-[#B99A5A]/30 rounded-lg p-2 text-sm text-[#F5EFE1] focus:border-[#D8AF3A] focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-[#C9C2B6] mb-1">Description détaillée (Optionnel)</label>
+                <textarea
+                  rows={3}
+                  value={skill.description || ''}
+                  onChange={(e) => setSkills(skills.map(s => s.id === skill.id ? { ...s, description: e.target.value } : s))}
+                  className="w-full bg-[#050B14] border border-[#B99A5A]/30 rounded-lg p-2 text-sm text-[#F5EFE1] focus:border-[#D8AF3A] focus:outline-none"
+                  placeholder="Ex: Gestion de cycles de vente complets..."
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-[#C9C2B6] mb-1">Niveau ({skill.level}%)</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={skill.level}
+                  onChange={(e) => setSkills(skills.map(s => s.id === skill.id ? { ...s, level: parseInt(e.target.value) } : s))}
                   className="w-full accent-[#D8AF3A]"
                 />
               </div>
-              <button 
+              <button
                 onClick={() => handleSave(skill)}
-                disabled={saving === skill.id}
-                className="w-full bg-[#284A73] hover:bg-[#0F2D3D] text-[#F5EFE1] font-bold py-2 rounded transition-colors flex items-center justify-center gap-2 mt-2 text-sm"
+                className="w-full bg-[#B99A5A]/20 hover:bg-[#D8AF3A] text-[#F5EFE1] hover:text-[#050B14] p-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2"
               >
-                {saving === skill.id ? <Loader2 className="animate-spin h-4 w-4" /> : <Save className="h-4 w-4" />}
-                Enregistrer
+                {saving === skill.id ? <Loader2 className="animate-spin h-3 w-3" /> : <Save className="h-3 w-3" />} Enregistrer
               </button>
             </div>
           </div>

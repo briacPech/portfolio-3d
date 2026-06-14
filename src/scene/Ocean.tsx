@@ -116,7 +116,7 @@ const WaterMaterial = shaderMaterial(
     vec3 waterColor = mix(baseWaterColor, uColorReflect, caustics * 0.2);
     vec3 finalColor = mix(waterColor, fresnelColor, 0.4) + (uGoldColor * specular);
 
-    gl_FragColor = vec4(finalColor, 1.0); // Opaque pour des perfs maximales
+    gl_FragColor = vec4(finalColor, 1.0); // Opaque pour corriger le bug d'affichage
     
     // IMPORTANT: Support des couleurs encodées correctement pour sRGB
     #include <tonemapping_fragment>
@@ -190,10 +190,10 @@ export const Ocean = () => {
         <waterMaterial 
           ref={materialRef} 
           transparent={false} 
-          uColorBase={new THREE.Color("#071326")} 
-          uColorSecondary={new THREE.Color("#0F2D3D")} 
-          uColorReflect={new THREE.Color("#284A73")} 
-          uGoldColor={new THREE.Color("#D8AF3A")} 
+          uColorBase={new THREE.Color("#0c2242")} 
+          uColorSecondary={new THREE.Color("#163c6b")} 
+          uColorReflect={new THREE.Color("#2a5c96")} 
+          uGoldColor={new THREE.Color("#f1c40f")} 
           uLightDirection={new THREE.Vector3(50, 10, 50).normalize()}
         />
       </mesh>

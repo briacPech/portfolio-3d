@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useChat } from "@ai-sdk/react"
-import { DefaultChatTransport } from "ai"
 import { Send, X, MessageCircle, Sparkles } from "lucide-react"
 
 type FloatingChatProps = {
@@ -30,8 +29,8 @@ export function FloatingChat({
   const [input, setInput] = useState("")
   const bottomRef = useRef<HTMLDivElement>(null)
 
-  const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({ api: apiPath }),
+  const { messages, append, status } = useChat({
+    api: apiPath,
   })
 
   const isBusy = status === "submitted" || status === "streaming"
@@ -44,7 +43,7 @@ export function FloatingChat({
     e.preventDefault()
     const text = input.trim()
     if (!text || isBusy) return
-    sendMessage({ text })
+    append({ role: 'user', content: text })
     setInput("")
   }
 

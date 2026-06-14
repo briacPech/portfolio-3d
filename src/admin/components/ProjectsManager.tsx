@@ -81,13 +81,57 @@ export const ProjectsManager = () => {
                 className="w-full bg-[#050B14] border border-[#B99A5A]/30 text-[#F5EFE1] rounded-lg p-3"
               />
             </div>
-            <div>
-              <label className="block text-[#C9C2B6] text-sm mb-1">Lien vers le projet</label>
+            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[#C9C2B6] text-sm mb-1">Lien principal (ex: Site Web)</label>
+                <input 
+                  type="text" 
+                  value={project.link_url || ''} 
+                  onChange={e => setProjects(projects.map(p => p.id === project.id ? {...p, link_url: e.target.value} : p))}
+                  className="w-full bg-[#050B14] border border-[#B99A5A]/30 text-[#F5EFE1] rounded-lg p-3"
+                  placeholder="https://..."
+                />
+              </div>
+              <div>
+                <label className="block text-[#C9C2B6] text-sm mb-1">Texte 2ème lien (ex: Présentation Notion)</label>
+                <input 
+                  type="text" 
+                  value={project.secondary_link_text || ''} 
+                  onChange={e => setProjects(projects.map(p => p.id === project.id ? {...p, secondary_link_text: e.target.value} : p))}
+                  className="w-full bg-[#050B14] border border-[#B99A5A]/30 text-[#F5EFE1] rounded-lg p-3 mb-2"
+                  placeholder="Texte du bouton..."
+                />
+                <label className="block text-[#C9C2B6] text-sm mb-1">URL 2ème lien</label>
+                <input 
+                  type="text" 
+                  value={project.secondary_link_url || ''} 
+                  onChange={e => setProjects(projects.map(p => p.id === project.id ? {...p, secondary_link_url: e.target.value} : p))}
+                  className="w-full bg-[#050B14] border border-[#B99A5A]/30 text-[#F5EFE1] rounded-lg p-3"
+                  placeholder="https://app.notion.com/..."
+                />
+              </div>
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-[#C9C2B6] text-sm mb-1">Description complète (Sauts de ligne autorisés)</label>
+              <textarea 
+                value={project.long_description || ''} 
+                onChange={e => setProjects(projects.map(p => p.id === project.id ? {...p, long_description: e.target.value} : p))}
+                rows={6}
+                className="w-full bg-[#050B14] border border-[#B99A5A]/30 text-[#F5EFE1] rounded-lg p-3"
+                placeholder="Le Problème : ... \nLa Solution : ..."
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-[#C9C2B6] text-sm mb-1">Stack Technique (Séparez par des virgules)</label>
               <input 
                 type="text" 
-                value={project.link_url || ''} 
-                onChange={e => setProjects(projects.map(p => p.id === project.id ? {...p, link_url: e.target.value} : p))}
+                value={project.tags ? project.tags.join(', ') : ''} 
+                onChange={e => {
+                  const tagsArray = e.target.value.split(',').map(t => t.trim()).filter(t => t !== '');
+                  setProjects(projects.map(p => p.id === project.id ? {...p, tags: tagsArray} : p))
+                }}
                 className="w-full bg-[#050B14] border border-[#B99A5A]/30 text-[#F5EFE1] rounded-lg p-3"
+                placeholder="React 18, TypeScript, Supabase..."
               />
             </div>
             <div className="md:col-span-2 flex justify-between items-center mt-4">
