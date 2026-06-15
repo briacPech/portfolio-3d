@@ -42,9 +42,9 @@
 @media (max-width: 768px) {
   .nav-menu-container {
     bottom: 20px;
-    gap: 8px;
-    padding: 10px 16px;
-    max-width: 95vw;
+    gap: 4px;
+    padding: 8px 8px;
+    max-width: 98vw;
     justify-content: space-evenly;
   }
 }
