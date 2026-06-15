@@ -41,7 +41,7 @@ const INITIAL_EXPERIENCES = [
   { job_title: "Baccalauréat STAE", company: "🎓 Lycée Jules Rieffel", start_date: "2002", end_date: "2004", description: "Diplôme initial.", display_order: 15 },
 ];
 
-const INITIAL_PROJECTS = [
+const INITIAL_PROJECTS: any[] = [
   { 
     title: "Festival Connect", 
     short_description: "CRM Global & Hub d'Opérations Terrain", 
