@@ -14,7 +14,6 @@ import { KEYBOARD_MAP } from "./hooks/useMovementState";
 import useDefaults from "./hooks/useDefaults";
 import { ErrorBoundary } from "./ui/ErrorBoundary";
 import { PremiumLoader } from "./ui/PremiumLoader";
-import { CustomCursor } from "./ui/CustomCursor";
 import { OnboardingTooltip } from "./ui/OnboardingTooltip";
 import "./App.css";
 
@@ -71,7 +70,6 @@ const App = () => {
         </Suspense>
         
         <PremiumLoader />
-        <CustomCursor />
       </div>
       <Suspense fallback={null}>
         <FloatingChat />
