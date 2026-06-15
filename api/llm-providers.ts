@@ -20,6 +20,7 @@ export async function callGroq(prompt: string, options: CallLLMOptions) {
       model: groq(options.model),
       prompt,
       schema: options.schema,
+      mode: 'json',
       temperature: options.temperature ?? 0.2,
       maxRetries: 1,
     });
