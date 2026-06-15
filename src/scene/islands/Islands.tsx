@@ -305,38 +305,34 @@ const IslandLabel = ({ isNear, id, title, scale }: { isNear: boolean, id: string
         <div 
           onClick={() => gameState.setIsland(id)}
           style={{
-            background: "linear-gradient(135deg, rgba(14,27,46,0.85) 0%, rgba(7,19,38,0.95) 100%)",
-            backdropFilter: "blur(12px)",
+            background: "rgba(14, 27, 46, 0.55)",
+            backdropFilter: "blur(20px)",
             padding: "10px 24px",
-            border: "1px solid rgba(216,175,58,0.3)",
-            borderRadius: "30px", // Forme pilule premium
+            border: "1px solid rgba(255, 255, 255, 0.05)",
+            borderRadius: "12px",
             cursor: "pointer",
-            color: "#F0C674", // Premium gold
+            color: "#ffffff",
             fontFamily: "var(--font-inter), system-ui, sans-serif",
             fontWeight: 500,
-            letterSpacing: "1.5px",
+            letterSpacing: "0.15em",
             textTransform: "uppercase",
             fontSize: "0.85rem",
             pointerEvents: "auto",
-            transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)", // Effet ressort au survol
-            boxShadow: "0 8px 32px rgba(0,0,0,0.4), inset 0 0 10px rgba(216,175,58,0.05)",
+            transition: "all 250ms ease",
+            boxShadow: "0 12px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)",
             animation: "islandBadgeFade 1s ease forwards, islandBadgeFloat 4s ease-in-out infinite",
           }}
           onPointerOver={(e) => {
-            e.currentTarget.style.transform = "translateY(-5px) scale(1.05)";
-            e.currentTarget.style.borderColor = "rgba(216,175,58,0.8)";
-            e.currentTarget.style.background = "linear-gradient(135deg, rgba(14,27,46,0.95) 0%, rgba(7,19,38,1) 100%)";
-            e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.6), inset 0 0 15px rgba(216,175,58,0.15)";
+            e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow = "0 16px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)";
           }}
           onPointerOut={(e) => {
-            e.currentTarget.style.transform = "translateY(0) scale(1)";
-            e.currentTarget.style.borderColor = "rgba(216,175,58,0.3)";
-            e.currentTarget.style.background = "linear-gradient(135deg, rgba(14,27,46,0.85) 0%, rgba(7,19,38,0.95) 100%)";
-            e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.4), inset 0 0 10px rgba(216,175,58,0.05)";
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 12px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)";
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#D8AF3A', display: 'inline-block', boxShadow: '0 0 8px #D8AF3A' }}></span>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'linear-gradient(135deg, #f0d49a, #b8854f)', display: 'inline-block', boxShadow: '0 0 10px rgba(216,175,58,0.5)' }}></span>
             <span>{title}</span>
           </div>
         </div>

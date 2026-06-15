@@ -13,11 +13,11 @@ declare module "@react-three/fiber" {
 const WaterMaterial = shaderMaterial(
   {
     uTime: 0,
-    uColorBase: new THREE.Color("#071326"),
-    uColorSecondary: new THREE.Color("#0F2D3D"),
-    uColorReflect: new THREE.Color("#284A73"),
-    uGoldColor: new THREE.Color("#D8AF3A"),
-    uLightDirection: new THREE.Vector3(50.0, 10.0, 50.0).normalize(),
+    uColorLagoon: new THREE.Color("#00b4d8"),
+    uColorDeep: new THREE.Color("#023e8a"),
+    uColorReflect: new THREE.Color("#90e0ef"),
+    uGoldColor: new THREE.Color("#ffffff"),
+    uLightDirection: new THREE.Vector3(50.0, 20.0, 50.0).normalize(),
   },
   // Vertex Shader
   `
@@ -51,8 +51,8 @@ const WaterMaterial = shaderMaterial(
   `,
   // Fragment Shader
   `
-  uniform vec3 uColorBase;
-  uniform vec3 uColorSecondary;
+  uniform vec3 uColorLagoon;
+  uniform vec3 uColorDeep;
   uniform vec3 uColorReflect;
   uniform vec3 uGoldColor;
   uniform float uTime;
@@ -94,9 +94,14 @@ const WaterMaterial = shaderMaterial(
     float c1 = voronoi(uvCaustics * 0.8 + uTime * 0.1);
     float c2 = voronoi(uvCaustics * 1.2 - uTime * 0.08);
     
-    // Dégradé profond basé sur la normale Y
+    // Effet lagon (Lagon clair près du centre où sont les îles, profond vers le large)
+    float distToCenter = length(vWorldPosition.xz);
+    float lagoonMix = smoothstep(10.0, 70.0, distToCenter);
+    vec3 baseWaterColor = mix(uColorLagoon, uColorDeep, lagoonMix);
+    
+    // Assombrissement en profondeur basé sur la normale
     float depthMix = smoothstep(0.8, 1.0, vNormal.y);
-    vec3 baseWaterColor = mix(uColorSecondary, uColorBase, depthMix);
+    baseWaterColor = mix(baseWaterColor * 0.8, baseWaterColor, depthMix);
     
     // Caustiques (Reflets très subtils)
     float caustics = pow(1.0 - c1, 4.0) * 0.3 + pow(1.0 - c2, 4.0) * 0.2;
@@ -190,8 +195,8 @@ export const Ocean = () => {
         <waterMaterial 
           ref={materialRef} 
           transparent={false} 
-          uColorBase={new THREE.Color("#0077b6")} 
-          uColorSecondary={new THREE.Color("#00b4d8")} 
+          uColorLagoon={new THREE.Color("#00b4d8")} 
+          uColorDeep={new THREE.Color("#03045e")} 
           uColorReflect={new THREE.Color("#90e0ef")} 
           uGoldColor={new THREE.Color("#ffffff")} 
           uLightDirection={new THREE.Vector3(50, 20, 50).normalize()}

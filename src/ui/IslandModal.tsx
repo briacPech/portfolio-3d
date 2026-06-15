@@ -225,19 +225,20 @@ export const IslandModal = () => {
       pointerEvents: "none", 
       zIndex: 50,
     }}>
-      <div className="island-modal-content" style={{
+      <div className="island-modal-content premium-island-modal" style={{
         width: "400px",
         maxHeight: "calc(100vh - 120px)", 
         display: "flex",
         flexDirection: "column",
-        background: "rgba(10, 20, 36, 0.78)",
+        background: "rgba(14, 27, 46, 0.55)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        border: "1px solid rgba(185, 154, 90, 0.2)",
+        border: "1px solid rgba(255, 255, 255, 0.05)",
         borderRadius: "12px",
         pointerEvents: "auto",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
+        boxShadow: "0 24px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05)",
         animation: "modalFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        position: "relative",
       }}>
         
         {/* Header de la modale fixe */}
@@ -247,7 +248,7 @@ export const IslandModal = () => {
             fontSize: "9px",
             letterSpacing: "0.2em",
             textTransform: "uppercase",
-            color: "var(--premium-text-muted)",
+            color: "#7A8E99",
             marginBottom: "8px",
             fontWeight: 600,
           }}>{islandData.presentation || ''}</h3>
@@ -279,16 +280,16 @@ export const IslandModal = () => {
           <button 
             onClick={() => gameState.setIsland(null)}
             style={{
-              background: "linear-gradient(135deg, #D8AF3A, #B8912A)",
+              background: "linear-gradient(135deg, #f0d49a 0%, #d4a574 50%, #b8854f 100%)",
               border: "none",
               color: "#050B14",
-              padding: "10px 20px",
+              padding: "12px 20px",
               fontSize: "10px",
               fontWeight: 700,
               letterSpacing: "0.15em",
               textTransform: "uppercase" as const,
               cursor: "pointer",
-              transition: "all 250ms ease-in-out",
+              transition: "all 250ms ease",
               borderRadius: "6px",
               width: "100%",
               display: "flex",
@@ -312,6 +313,17 @@ export const IslandModal = () => {
       </div>
 
       <style>{`
+        .premium-island-modal::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 10%;
+          bottom: 10%;
+          width: 2px;
+          background: linear-gradient(to bottom, rgba(216,175,58,0) 0%, rgba(216,175,58,0.8) 50%, rgba(216,175,58,0) 100%);
+          border-radius: 2px 0 0 2px;
+          pointer-events: none;
+        }
         /* Scrollbar élégante pour la modale */
         .modal-scroll-area::-webkit-scrollbar {
           width: 4px;

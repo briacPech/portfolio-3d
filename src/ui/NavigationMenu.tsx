@@ -67,16 +67,16 @@ export const NavigationMenu = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: "28px",
+        gap: "32px",
         zIndex: 100,
         pointerEvents: "auto",
-        background: "rgba(14, 27, 46, 0.65)",
-        padding: "8px 24px", // Pilule ultra-fine
+        background: "rgba(14, 27, 46, 0.55)",
+        padding: "12px 32px",
         borderRadius: "100px", 
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        boxShadow: "0 15px 30px rgba(0, 0, 0, 0.4)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        border: "1px solid rgba(255, 255, 255, 0.05)",
+        boxShadow: "0 12px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05)",
       }}>
       {/* On supprime la boussole Emoji */}
       
@@ -104,14 +104,14 @@ export const NavigationMenu = () => {
             if (targetId !== island.id) {
               e.currentTarget.style.color = "var(--premium-gold-light)";
               const underline = e.currentTarget.querySelector('.nav-underline') as HTMLElement;
-              if (underline) underline.style.transform = "scaleX(1)";
+              if (underline) underline.style.width = "100%";
             }
           }}
           onMouseLeave={(e) => {
             if (targetId !== island.id) {
               e.currentTarget.style.color = "var(--premium-text)";
               const underline = e.currentTarget.querySelector('.nav-underline') as HTMLElement;
-              if (underline) underline.style.transform = "scaleX(0)";
+              if (underline) underline.style.width = "0%";
             }
           }}
         >
@@ -120,13 +120,12 @@ export const NavigationMenu = () => {
           <div className="nav-underline" style={{
             position: "absolute",
             bottom: 0,
-            left: 0,
-            width: "100%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: targetId === island.id ? "100%" : "0%",
             height: "1px",
             background: "var(--premium-gold)",
-            transform: targetId === island.id ? "scaleX(1)" : "scaleX(0)",
-            transformOrigin: "center",
-            transition: "transform 300ms ease-in-out"
+            transition: "width 300ms ease-in-out"
           }} />
         </button>
       ))}
