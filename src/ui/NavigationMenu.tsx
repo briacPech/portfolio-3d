@@ -21,10 +21,10 @@ export const NavigationMenu = () => {
 
   const getIslandTitle = (id: string) => {
     switch (id) {
-      case "profil": return "Mon Profil";
-      case "skills": return "Mes Compétences";
-      case "projects": return "Mes Projets";
-      case "experience": return "Mon Expérience";
+      case "profil": return "Profil";
+      case "skills": return "Compétences";
+      case "projects": return "Projets";
+      case "experience": return "Parcours";
       default: return "";
     }
   };
@@ -43,10 +43,10 @@ export const NavigationMenu = () => {
   // Fallback de sécurité si Supabase ne répond pas ou que les variables d'environnement manquent
   if (islandsList.length === 0) {
     islandsList = [
-      { id: "profil", title: "Mon Profil", pos: { x: 15, z: -20 } },
-      { id: "skills", title: "Mes Compétences", pos: { x: -20, z: -25 } },
-      { id: "projects", title: "Mes Projets", pos: { x: 25, z: 15 } },
-      { id: "experience", title: "Mon Expérience", pos: { x: -15, z: 20 } },
+      { id: "profil", title: "Profil", pos: { x: 15, z: -20 } },
+      { id: "skills", title: "Compétences", pos: { x: -20, z: -25 } },
+      { id: "projects", title: "Projets", pos: { x: 25, z: 15 } },
+      { id: "experience", title: "Parcours", pos: { x: -15, z: 20 } },
     ];
   }
 
