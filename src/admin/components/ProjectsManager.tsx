@@ -1,12 +1,43 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Save, Plus, Trash2, Loader2 } from 'lucide-react';
+import { Save, Plus, Trash2, Loader2, Upload } from 'lucide-react';
 import { RichTextEditor } from './RichTextEditor';
 
 export const ProjectsManager = () => {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
+  const [uploadingId, setUploadingId] = useState<string | null>(null);
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>, projectId: string) => {
+    if (!event.target.files || event.target.files.length === 0) return;
+    
+    const file = event.target.files[0];
+    const fileExt = file.name.split('.').pop();
+    const fileName = `project_${projectId}_${Date.now()}.${fileExt}`;
+    
+    setUploadingId(projectId);
+    
+    try {
+      const { error: uploadError } = await supabase.storage
+        .from('portfolio-media')
+        .upload(fileName, file, { cacheControl: '3600', upsert: false });
+        
+      if (uploadError) throw uploadError;
+      
+      const { data: urlData } = supabase.storage
+        .from('portfolio-media')
+        .getPublicUrl(fileName);
+        
+      if (urlData && urlData.publicUrl) {
+        setProjects(projects.map(p => p.id === projectId ? {...p, image_url: urlData.publicUrl} : p));
+      }
+    } catch (error: any) {
+      alert(`Erreur d'upload : ${error.message}`);
+    } finally {
+      setUploadingId(null);
+    }
+  };
 
   useEffect(() => {
     fetchProjects();
@@ -92,13 +123,26 @@ export const ProjectsManager = () => {
               />
             </div>
             <div>
-              <label className="block text-[#C9C2B6] text-sm mb-1">URL de l'image (temporaire avant upload)</label>
-              <input 
-                type="text" 
-                value={project.image_url || ''} 
-                onChange={e => setProjects(projects.map(p => p.id === project.id ? {...p, image_url: e.target.value} : p))}
-                className="w-full bg-[#050B14] border border-[#B99A5A]/30 text-[#F5EFE1] rounded-lg p-3"
-              />
+              <label className="block text-[#C9C2B6] text-sm mb-1">Image du projet</label>
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  value={project.image_url || ''} 
+                  onChange={e => setProjects(projects.map(p => p.id === project.id ? {...p, image_url: e.target.value} : p))}
+                  className="w-full bg-[#050B14] border border-[#B99A5A]/30 text-[#F5EFE1] rounded-lg p-3"
+                  placeholder="https://..."
+                />
+                <label className={`bg-[#D8AF3A] hover:bg-[#F0C674] text-[#050B14] px-4 rounded-lg font-bold flex items-center justify-center cursor-pointer transition-colors ${uploadingId === project.id ? 'opacity-50' : ''}`}>
+                  {uploadingId === project.id ? <Loader2 className="animate-spin h-5 w-5" /> : <Upload className="h-5 w-5" />}
+                  <input 
+                    type="file" 
+                    className="hidden" 
+                    accept="image/*"
+                    onChange={(e) => handleImageUpload(e, project.id)}
+                    disabled={uploadingId === project.id}
+                  />
+                </label>
+              </div>
             </div>
             <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
