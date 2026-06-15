@@ -5,6 +5,7 @@ import { usePortfolio } from "../contexts/PortfolioContext";
 
 export const NavigationMenu = () => {
   const [targetId, setTargetId] = useState<string | null>(null);
+  const [currentIsland, setCurrentIsland] = useState<string | null>(null);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const { islands } = usePortfolio();
   
@@ -50,11 +51,17 @@ export const NavigationMenu = () => {
   }
 
   useEffect(() => {
+    setCurrentIsland(gameState.currentIsland);
     const unsubscribe = gameState.subscribe(() => {
       setTargetId(gameState.targetWaypoint?.id || null);
+      setCurrentIsland(gameState.currentIsland);
     });
     return unsubscribe;
   }, []);
+
+  // On mobile, hide the navigation menu entirely if a modal is open to free up screen real estate
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  if (isMobile && currentIsland !== null) return null;
 
   return (
     <>

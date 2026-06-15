@@ -45,3 +45,33 @@
     justify-content: flex-start;
   }
 }
+
+.island-modal-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 20px 40px 80px 40px;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.premium-island-modal {
+  width: 400px;
+  max-height: calc(100vh - 120px);
+}
+
+@media (max-width: 768px) {
+  .island-modal-wrapper {
+    justify-content: center;
+    padding: 20px 20px 40px 20px;
+  }
+  .premium-island-modal {
+    width: 100%;
+    max-height: calc(100vh - 80px);
+  }
+}

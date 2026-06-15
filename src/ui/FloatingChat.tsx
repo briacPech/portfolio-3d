@@ -28,7 +28,18 @@ export function FloatingChat({
 }: FloatingChatProps) {
   const [open, setOpen] = useState(defaultOpen)
   const [input, setInput] = useState("")
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    // Import gameState here to avoid circular dependency issues at top level
+    import("../scene/gameState").then(({ gameState }) => {
+      setIsModalOpen(gameState.currentIsland !== null);
+      gameState.subscribe(() => {
+        setIsModalOpen(gameState.currentIsland !== null);
+      });
+    });
+  }, []);
 
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({ api: apiPath }),
@@ -49,6 +60,7 @@ export function FloatingChat({
   }
 
   if (!open) {
+    if (isModalOpen && window.matchMedia("(max-width: 768px)").matches) return null;
     return (
       <div className="fixed z-50 bottom-[20px] left-[20px] flex items-center">
         <button
@@ -88,6 +100,8 @@ export function FloatingChat({
       </div>
     )
   }
+
+  if (isModalOpen && window.matchMedia("(max-width: 768px)").matches) return null;
 
   return (
     <div

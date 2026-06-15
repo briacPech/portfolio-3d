@@ -1,4 +1,5 @@
 import { Html, Text, Clone, useGLTF, Billboard, Sparkles, Center, Float } from "@react-three/drei";
+import { useState, useEffect } from "react";
 import { RigidBody } from "@react-three/rapier";
 import { useState, useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
@@ -294,7 +295,17 @@ const Island = ({ id, position, title, color = "#ffffff", scale = 1, rotationY =
 
 // Composant isolé pour éviter de re-render l'île complète quand isNear change
 const IslandLabel = ({ isNear, id, title, scale }: { isNear: boolean, id: string, title: string, scale: number }) => {
-  if (!isNear) return null;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setIsModalOpen(gameState.currentIsland !== null);
+    const unsub = gameState.subscribe(() => {
+      setIsModalOpen(gameState.currentIsland !== null);
+    });
+    return unsub;
+  }, []);
+
+  if (!isNear || isModalOpen) return null;
   return (
     <Html position={[0, 5.5 * scale, 0]} center zIndexRange={[100, 0]}>
       <div style={{

@@ -212,22 +212,8 @@ export const IslandModal = () => {
   }
 
   return (
-    <div className="island-modal-wrapper" style={{
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "flex-end", // Sur la droite pour laisser voir le bateau à gauche
-      padding: "20px 40px 80px 40px", // Marges réduites
-      pointerEvents: "none", 
-      zIndex: 50,
-    }}>
+    <div className="island-modal-wrapper">
       <div className="island-modal-content premium-island-modal" style={{
-        width: "400px",
-        maxHeight: "calc(100vh - 120px)", 
         display: "flex",
         flexDirection: "column",
         background: "rgba(14, 27, 46, 0.55)",
