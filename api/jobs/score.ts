@@ -1,6 +1,9 @@
 import { getCandidateProfile, CAREER_OPS_SYSTEM } from '../career-utils.js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
+import { z } from 'zod';
+import { callLLM } from '../src/lib/llm/providers.js';
+import { JOB_SCORING_MODEL } from '../src/lib/llm/models.js';
 
 export const maxDuration = 60;
 
@@ -8,9 +11,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
 
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) return res.status(500).json({ error: 'Clé Gemini manquante' });
-
     const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
     const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -26,7 +26,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!jobs || jobs.length === 0) return res.status(200).json({ message: 'Aucune offre à scorer', scored: 0 });
 
     const profile = await getCandidateProfile();
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
     let scored = 0;
     const highScore: any[] = [];
@@ -49,21 +48,21 @@ Description : ${job.job_description?.slice(0, 1500) || 'Non fournie'}
 
 Donne un score de 1 à 5, une note lettre (A-F), un verdict (POSTULER|GARDER EN VEILLE|PASSER) et une phrase d'explication (why_one_line).
 Les postes de développeur pur (Java, C++, .NET, backend) doivent avoir un score < 2.5 et verdict PASSER.
-Retourne JSON strict : { "score": number, "grade": string, "verdict": string, "why_one_line": string }`;
+Tu dois UNIQUEMENT retourner du JSON strict. Aucune phrase d'intro.`;
 
-        const response = await fetch(geminiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: `${CAREER_OPS_SYSTEM}\n\n${prompt}` }] }],
-            generationConfig: { responseMimeType: 'application/json' }
+        const result: any = await callLLM(prompt, {
+          model: JOB_SCORING_MODEL,
+          provider: 'groq',
+          schema: z.object({
+             score: z.number(),
+             grade: z.string(),
+             verdict: z.string(),
+             why_one_line: z.string(),
+             profile_fit: z.string().optional(),
+             contract_fit: z.string().optional(),
+             remote_fit: z.string().optional()
           })
         });
-
-        if (!response.ok) continue;
-        const data: any = await response.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-        const result = JSON.parse(text.replace(/```json/g, '').replace(/```/g, '').trim());
 
         await supabase.from('scraped_jobs').update({
           score: result.score,

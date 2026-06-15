@@ -26,8 +26,21 @@ Ne mens pas sur les expériences, mais :
 1. Reformule les intitulés et bullet points pour faire écho au vocabulaire de l'offre.
 2. Mets en avant les compétences (hard et soft) demandées.
 3. Propose une accroche percutante.
+4. Structure rigoureusement la réponse selon le schéma JSON demandé, adapté pour un export PDF propre.
 
-Retourne un JSON strict : { "adaptedCvMarkdown": "...", "adjustmentsSummary": "...", "isPureDevDetected": false, "pureDevWarning": "", "injectedKeywords": [{"keyword": "...", "justification": "..."}] }`;
+Retourne un JSON strict respectant CE FORMAT EXACT (pas de markdown en dehors des valeurs si nécessaire, mais préfère du texte simple pour le PDF) :
+{
+  "identity": { "name": "Prénom Nom", "contact": "Email • Téléphone • LinkedIn", "location": "Ville" },
+  "title": "Titre du poste visé",
+  "summary": "Accroche percutante...",
+  "skills": { "hard": ["Compétence 1", "Compétence 2"], "soft": ["Soft skill 1"] },
+  "experience": [ { "company": "Nom", "role": "Titre", "duration": "Dates", "bullets": ["Point 1", "Point 2"] } ],
+  "projects": [ { "name": "Projet", "description": "Desc", "technologies": ["Tech 1"] } ],
+  "education": [ { "degree": "Diplôme", "school": "École", "date": "Année" } ],
+  "tools": ["Outil 1", "Outil 2"],
+  "isPureDevDetected": false,
+  "pureDevWarning": ""
+}`;
 
     const fullPrompt = `${CAREER_OPS_SYSTEM}\n\n---\n\n${prompt}`;
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;

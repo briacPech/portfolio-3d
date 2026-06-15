@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Briefcase, FileText, Mail, Save, Loader2, Zap, X, User } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
+import { CvPdfDocument } from '../../components/career/CvPdfDocument';
 
 interface Props {
   initialJobText?: string;
@@ -19,6 +21,7 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
 
   // States for Adapt CV
   const [adaptResult, setAdaptResult] = useState<any>(null);
+  const [cvTemplate, setCvTemplate] = useState<'classic' | 'premium' | 'corporate'>('premium');
 
   // States for Lettre
   const [companyName, setCompanyName] = useState('');
@@ -149,6 +152,7 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
       evaluation_summary: evalResult.jobSummary,
       evaluation_strengths: evalResult.strengths,
       evaluation_weaknesses: evalResult.weaknesses,
+      cv_json: adaptResult || null,
     };
     const { error } = await supabase.from('job_applications').insert(newJob);
     if (!error) {
@@ -275,10 +279,24 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
           <div className="space-y-4">
             <h2 className="text-xl font-serif text-[#F0C674]">Adapter mon CV</h2>
             <p className="text-sm">Assurez-vous d'avoir collé l'offre dans l'onglet "Évaluation" d'abord.</p>
-            <button onClick={handleAdaptCV} disabled={loading || !jobText} className="bg-[#D8AF3A] hover:bg-[#F0C674] text-[#050B14] font-bold py-2 px-6 rounded transition-colors flex items-center gap-2">
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <FileText className="w-5 h-5" />}
-              Générer CV
-            </button>
+            
+            <div className="flex gap-4 items-center">
+              <select
+                value={cvTemplate}
+                onChange={(e) => setCvTemplate(e.target.value as any)}
+                className="bg-[#0A1424] text-[#C9C2B6] border border-[#B99A5A]/30 rounded p-2 outline-none focus:border-[#D8AF3A]"
+              >
+                <option value="classic">Template Classique</option>
+                <option value="premium">Template Premium</option>
+                <option value="corporate">Template Corporate</option>
+              </select>
+
+              <button onClick={handleAdaptCV} disabled={loading || !jobText} className="bg-[#D8AF3A] hover:bg-[#F0C674] text-[#050B14] font-bold py-2 px-6 rounded transition-colors flex items-center gap-2">
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <FileText className="w-5 h-5" />}
+                Générer CV
+              </button>
+            </div>
+
             {adaptResult && (
               <div className="mt-6 p-6 bg-[#0A1424] border border-[#B99A5A]/30 rounded-lg">
                 {adaptResult.isPureDevDetected && (
@@ -290,8 +308,23 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
                     </div>
                   </div>
                 )}
-                <div className="prose prose-invert prose-p:text-justify max-w-none">
-                  <ReactMarkdown>{adaptResult.adaptedCvMarkdown}</ReactMarkdown>
+                
+                <div className="flex justify-end mb-4">
+                  <PDFDownloadLink
+                    document={<CvPdfDocument data={adaptResult} template={cvTemplate} />}
+                    fileName="briac-pech-cv.pdf"
+                    className="bg-[#152642] border border-[#D8AF3A] text-[#D8AF3A] px-4 py-2 rounded hover:bg-[#D8AF3A] hover:text-[#0A1424] transition-colors flex gap-2 items-center"
+                  >
+                    {({ loading: pdfLoading }) => (
+                      pdfLoading ? 'Génération du PDF...' : 'Télécharger en PDF'
+                    )}
+                  </PDFDownloadLink>
+                </div>
+                
+                <div className="h-[800px] w-full rounded overflow-hidden border border-[#B99A5A]/20">
+                  <PDFViewer width="100%" height="100%" className="border-0">
+                    <CvPdfDocument data={adaptResult} template={cvTemplate} />
+                  </PDFViewer>
                 </div>
               </div>
             )}

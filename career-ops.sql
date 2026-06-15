@@ -17,9 +17,13 @@ CREATE TABLE IF NOT EXISTS public.job_applications (
     evaluation_weaknesses JSONB,
     cv_markdown TEXT,
     letter_markdown TEXT,
+    cv_json JSONB,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+-- Note: To migrate an existing database, run:
+-- ALTER TABLE public.job_applications ADD COLUMN cv_json JSONB;
 
 -- Active RLS (Row Level Security)
 ALTER TABLE public.job_applications ENABLE ROW LEVEL SECURITY;
