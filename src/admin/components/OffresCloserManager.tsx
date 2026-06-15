@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Search, RefreshCw, Loader2, ExternalLink, Zap, AlertCircle, CheckCircle, ArrowRight } from 'lucide-react';
+import { Search, RefreshCw, Loader2, ExternalLink, Zap, AlertCircle, CheckCircle, ArrowRight, Save } from 'lucide-react';
 
 interface ScrapedJob {
   id: string;
@@ -45,6 +45,7 @@ export function OffresCloserManager({ onSendToCareerOps }: Props) {
   const [loading, setLoading] = useState(false);
   const [scoring, setScoring] = useState(false);
   const [scraping, setScraping] = useState(false);
+  const [savingSettings, setSavingSettings] = useState(false);
   const [filter, setFilter] = useState<'all' | 'postuler' | 'veille' | 'passer'>('all');
   const [expandedJob, setExpandedJob] = useState<string | null>(null);
 
@@ -55,7 +56,37 @@ export function OffresCloserManager({ onSendToCareerOps }: Props) {
 
   useEffect(() => {
     fetchJobs();
+    fetchSettings();
   }, []);
+
+  const fetchSettings = async () => {
+    const { data: urlData } = supabase.storage.from('portfolio-media').getPublicUrl('job-spy-settings.json');
+    if (urlData && urlData.publicUrl) {
+      try {
+        const res = await fetch(urlData.publicUrl + '?t=' + Date.now());
+        if (res.ok) {
+          const settings = await res.json();
+          if (settings.query) setQuery(settings.query);
+          if (settings.location) setLocation(settings.location);
+          if (settings.platforms) setPlatforms(settings.platforms);
+        }
+      } catch (e) {
+        console.error("No saved settings found", e);
+      }
+    }
+  };
+
+  const saveSettings = async () => {
+    setSavingSettings(true);
+    try {
+      const settings = { query, location, platforms };
+      const blob = new Blob([JSON.stringify(settings)], { type: 'application/json' });
+      await supabase.storage.from('portfolio-media').upload('job-spy-settings.json', blob, { upsert: true });
+    } catch (e) {
+      console.error("Error saving settings", e);
+    }
+    setSavingSettings(false);
+  };
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -188,7 +219,17 @@ export function OffresCloserManager({ onSendToCareerOps }: Props) {
 
       {/* Search Form */}
       <div className="bg-[#0A1424] border border-[#B99A5A]/20 rounded-xl p-5 space-y-4">
-        <h3 className="text-[#F0C674] font-medium">Paramètres de scan</h3>
+        <div className="flex justify-between items-center">
+          <h3 className="text-[#F0C674] font-medium">Paramètres de scan (Manuel & Automatique)</h3>
+          <button
+            onClick={saveSettings}
+            disabled={savingSettings}
+            className="text-xs flex items-center gap-1 bg-[#152642] hover:bg-[#D8AF3A]/20 text-[#C9C2B6] hover:text-[#D8AF3A] px-3 py-1.5 rounded transition-colors"
+          >
+            {savingSettings ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
+            Définir par défaut (Robot)
+          </button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs text-[#D8AF3A] mb-1">Mots-clés</label>

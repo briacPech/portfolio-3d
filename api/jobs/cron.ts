@@ -13,19 +13,47 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ? `https://${process.env.VERCEL_URL}`
       : 'http://localhost:3000';
 
-    console.log('[Cron] Starting Career Ops pipeline...');
+    console.log('[Cron] Fetching custom Job Spy settings...');
+    let spySettings = {
+      query: 'Product Builder No-Code Automatisation Ops',
+      location: 'France',
+      hours_old: 24,
+      results_wanted: 15,
+      platforms: ['linkedin', 'indeed', 'glassdoor', 'google']
+    };
+
+    try {
+      const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
+      const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+      
+      const { data: urlData } = supabase.storage.from('portfolio-media').getPublicUrl('job-spy-settings.json');
+      if (urlData && urlData.publicUrl) {
+        const res = await fetch(urlData.publicUrl + '?t=' + Date.now());
+        if (res.ok) {
+          const customSettings = await res.json();
+          console.log('[Cron] Custom settings found:', customSettings);
+          if (customSettings.query) spySettings.query = customSettings.query;
+          if (customSettings.location) spySettings.location = customSettings.location;
+          if (customSettings.platforms) {
+            spySettings.platforms = Object.entries(customSettings.platforms)
+              .filter(([, v]) => v)
+              .map(([k]) => k);
+          }
+        }
+      }
+    } catch (e) {
+      console.log('[Cron] Failed to fetch custom settings, using defaults.', e);
+    }
+
+    console.log('[Cron] Starting Career Ops pipeline with query:', spySettings.query);
 
     // Step 1: Scrape new jobs
     const scrapeRes = await fetch(`${baseUrl}/api/jobs/scrape`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        query: 'Product Builder No-Code Automatisation Ops',
-        location: 'France',
-        hours_old: 24,
-        results_wanted: 15,
-        platforms: ['linkedin', 'indeed', 'glassdoor', 'google']
-      })
+      body: JSON.stringify(spySettings)
     });
     const scrapeData: any = await scrapeRes.json();
     console.log(`[Cron] Scraped: ${scrapeData.total || 0} jobs`);
