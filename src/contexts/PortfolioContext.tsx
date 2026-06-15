@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import type { Profile, SeoSettings, IslandData, Skill, Experience, Project } from '../types';
 
 type PortfolioData = {
-  profile: any;
-  seoSettings: any;
-  islands: Record<string, any>;
-  skills: any[];
-  experiences: any[];
-  projects: any[];
+  profile: Profile | null;
+  seoSettings: SeoSettings | null;
+  islands: Record<string, IslandData>;
+  skills: Skill[];
+  experiences: Experience[];
+  projects: Project[];
   loading: boolean;
 };
 
@@ -45,8 +46,8 @@ export const PortfolioProvider = ({ children }: { children: React.ReactNode }) =
           supabase.from('projects').select('*').eq('status', 'published').order('display_order').then(res => res, () => ({ data: [] }))
         ]);
 
-        const islandsData = islandsRes.data || [];
-        const islandsMap = islandsData.reduce((acc: any, island: any) => {
+        const islandsData: IslandData[] = islandsRes.data || [];
+        const islandsMap = islandsData.reduce((acc: Record<string, IslandData>, island: IslandData) => {
           acc[island.id] = island;
           return acc;
         }, {});

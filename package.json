@@ -38,7 +38,8 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "eslint ./src/",
-    "lint:fix": "eslint ./src/ --fix"
+    "lint:fix": "eslint ./src/ --fix",
+    "scrape:jobs": "python scripts/scrape_worker.py"
   },
   "browserslist": {
     "production": [
