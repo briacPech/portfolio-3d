@@ -19,7 +19,20 @@ export const ProjectsManager = () => {
   };
 
   const handleAdd = async () => {
-    const { data } = await supabase.from('projects').insert({ title: 'Nouveau Projet', status: 'draft' }).select().single();
+    const newProject = { 
+      title: 'Nouveau Projet', 
+      status: 'draft',
+      display_order: projects.length + 1,
+      short_description: '',
+      long_description: '',
+      link_url: '',
+      image_url: ''
+    };
+    const { data, error } = await supabase.from('projects').insert(newProject).select().single();
+    if (error) {
+      alert("Erreur lors de la création : " + error.message);
+      console.error(error);
+    }
     if (data) setProjects([...projects, data]);
   };
 
