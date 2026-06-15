@@ -2,8 +2,8 @@ import { getCandidateProfile, CAREER_OPS_SYSTEM } from '../career-utils.js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
-import { callLLM } from '../../src/lib/llm/providers.js';
-import { JOB_SCORING_MODEL } from '../../src/lib/llm/models.js';
+import { callLLM } from '../llm-providers.js';
+import { JOB_SCORING_MODEL } from '../llm-models.js';
 
 export const maxDuration = 60;
 
