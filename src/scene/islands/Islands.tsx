@@ -1,5 +1,4 @@
 import { Html, Text, Clone, useGLTF, Billboard, Sparkles, Center, Float } from "@react-three/drei";
-import { useState, useEffect } from "react";
 import { RigidBody } from "@react-three/rapier";
 import { useState, useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
