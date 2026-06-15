@@ -50,21 +50,42 @@ export function FloatingChat({
 
   if (!open) {
     return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        aria-label="Ouvrir l'assistant IA"
-        className="fixed z-50 flex h-12 md:h-16 items-center gap-2 md:gap-3 rounded-full border border-[rgba(216,175,58,0.5)] bg-[#0E1B2E]/95 px-4 md:px-6 text-[#F0C674] shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-md transition-all hover:scale-105 hover:border-[rgba(216,175,58,0.8)] hover:bg-[#0E1B2E] animate-bounce-slow"
-        style={{ 
-          animation: 'pulse 3s infinite',
-          bottom: '20px',
-          left: '20px'
-        }}
-      >
-        <MessageCircle className="h-5 w-5 text-[#F0C674]" strokeWidth={2} />
-        <span className="font-semibold max-md:text-sm md:hidden">Chat</span>
-        <span className="max-md:hidden font-semibold" style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontSize: "1.1rem" }}>Le Capitaine</span>
-      </button>
+      <div className="fixed z-50 bottom-[20px] left-[20px] flex items-center">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label="Ouvrir l'assistant IA"
+          className="flex h-12 md:h-16 items-center gap-2 md:gap-3 rounded-full border border-[rgba(216,175,58,0.5)] bg-[#0E1B2E]/95 px-4 md:px-6 text-[#F0C674] shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-md transition-all hover:scale-105 hover:border-[rgba(216,175,58,0.8)] hover:bg-[#0E1B2E] animate-bounce-slow"
+          style={{ animation: 'pulse 3s infinite' }}
+        >
+          <MessageCircle className="h-5 w-5 text-[#F0C674]" strokeWidth={2} />
+          <span className="font-semibold max-md:text-sm md:hidden">Chat</span>
+          <span className="max-md:hidden font-semibold" style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontSize: "1.1rem" }}>Le Capitaine</span>
+        </button>
+
+        {/* Bulle d'incitation */}
+        <div 
+          className="ml-4 px-4 py-2 rounded-xl border border-[rgba(216,175,58,0.3)] bg-[#0E1B2E]/80 backdrop-blur-sm shadow-lg max-md:hidden opacity-0 animate-[fadeIn_0.5s_ease-out_3s_forwards]"
+          style={{
+            position: "relative",
+          }}
+        >
+          {/* Petite flèche */}
+          <div className="absolute left-[-6px] top-1/2 -translate-y-1/2 w-3 h-3 border-l border-b border-[rgba(216,175,58,0.3)] bg-[#0E1B2E] rotate-45" />
+          
+          <span className="text-[#F5EFE1] text-sm italic tracking-wide" style={{ fontFamily: "var(--font-inter)" }}>
+            Une question sur mon profil ? Discutez avec mon IA !
+          </span>
+        </div>
+        
+        {/* CSS pour l'animation de la bulle d'incitation */}
+        <style>{`
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+        `}</style>
+      </div>
     )
   }
 
