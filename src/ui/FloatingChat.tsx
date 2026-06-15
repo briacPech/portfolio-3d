@@ -62,7 +62,7 @@ export function FloatingChat({
   if (!open) {
     if (isModalOpen && window.matchMedia("(max-width: 768px)").matches) return null;
     return (
-      <div className="fixed z-50 bottom-[20px] left-[20px] flex items-center">
+      <div className="fixed z-50 top-[20px] left-[20px] flex items-center">
         <button
           type="button"
           onClick={() => setOpen(true)}
@@ -101,11 +101,10 @@ export function FloatingChat({
     )
   }
 
-  if (isModalOpen && window.matchMedia("(max-width: 768px)").matches) return null;
-
+  // Si la modale du chat est ouverte, on la place proprement
   return (
     <div
-      className="fixed max-md:top-20 max-md:right-4 max-md:left-4 max-md:h-[70vh] md:bottom-8 md:left-8 z-50 flex h-[40rem] w-[min(28rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[rgba(216,175,58,0.3)] bg-[#0E1B2E]/75 shadow-[0_16px_48px_rgba(0,0,0,0.5)] backdrop-blur-2xl"
+      className="fixed max-md:top-[80px] max-md:right-4 max-md:left-4 max-md:h-[60vh] md:top-20 md:left-8 z-50 flex h-[40rem] w-[min(28rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[rgba(216,175,58,0.3)] bg-[#0E1B2E]/75 shadow-[0_16px_48px_rgba(0,0,0,0.5)] backdrop-blur-2xl"
       role="dialog"
       aria-label="Le Capitaine"
     >

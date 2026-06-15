@@ -59,9 +59,8 @@ export const NavigationMenu = () => {
     return unsubscribe;
   }, []);
 
-  // On mobile, hide the navigation menu entirely if a modal is open to free up screen real estate
-  const isMobile = window.matchMedia("(max-width: 768px)").matches;
-  if (isMobile && currentIsland !== null) return null;
+  // On s'assure que le menu de navigation est toujours visible
+  // const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
   return (
     <>
