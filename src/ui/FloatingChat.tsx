@@ -86,7 +86,7 @@ export function FloatingChat({
           <div className="absolute left-[-6px] top-1/2 -translate-y-1/2 w-3 h-3 border-l border-b border-[rgba(216,175,58,0.3)] bg-[#0E1B2E] rotate-45" />
           
           <span className="text-[#F5EFE1] text-sm italic tracking-wide" style={{ fontFamily: "var(--font-inter)" }}>
-            Une question sur mon profil ? Discutez avec mon IA !
+            Une question sur mon profil ? Discutez avec le Capitaine !
           </span>
         </div>
         
