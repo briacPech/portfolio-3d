@@ -13,6 +13,7 @@ export const SeoManager = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [llmsText, setLlmsText] = useState<string>('');
 
   useEffect(() => {
     fetchSeo();
@@ -26,6 +27,19 @@ export const SeoManager = () => {
       } else if (error && error.code === 'PGRST116') {
         // La ligne n'existe pas encore
         console.log("Les paramètres SEO n'existent pas encore.");
+      }
+
+      // Fetch LLMs context from bucket
+      const { data: urlData } = supabase.storage.from('portfolio-media').getPublicUrl('llms.txt');
+      if (urlData && urlData.publicUrl) {
+        try {
+          const res = await fetch(urlData.publicUrl + '?t=' + Date.now());
+          if (res.ok) {
+            setLlmsText(await res.text());
+          }
+        } catch (e) {
+          console.error("Error fetching llms.txt", e);
+        }
       }
     } catch (error) {
       console.error('Error fetching SEO:', error);
@@ -43,6 +57,14 @@ export const SeoManager = () => {
         .upsert({ id: 1, ...seo });
       
       if (error) throw error;
+
+      // Save llms.txt
+      if (llmsText) {
+        const llmsBlob = new Blob([llmsText], { type: 'text/plain;charset=utf-8' });
+        const { error: storageError } = await supabase.storage.from('portfolio-media').upload('llms.txt', llmsBlob, { upsert: true });
+        if (storageError) console.error("Error saving llms.txt:", storageError);
+      }
+
       setSaveStatus('success');
       setTimeout(() => setSaveStatus('idle'), 3000);
     } catch (error) {
@@ -141,6 +163,32 @@ export const SeoManager = () => {
                 <img src={seo.og_image} alt="Aperçu Open Graph" className="w-full h-auto object-cover" />
               </div>
             )}
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-[#0E1B2E] border border-[#B99A5A]/20 rounded-xl overflow-hidden mb-8">
+        <div className="p-6 border-b border-[#B99A5A]/20 bg-[#050B14]">
+          <h3 className="text-lg font-medium text-[#F5EFE1] flex items-center gap-2">
+            <Search className="w-5 h-5 text-[#C9C2B6]" />
+            AEO - Intelligences Artificielles (llms.txt)
+          </h3>
+        </div>
+        <div className="p-6 space-y-6">
+          <div>
+            <label className="block text-[#C9C2B6] text-sm font-medium mb-2">
+              Contexte pour ChatGPT, Claude, Perplexity...
+            </label>
+            <textarea
+              value={llmsText}
+              onChange={(e) => setLlmsText(e.target.value)}
+              rows={12}
+              placeholder="# Votre profil..."
+              className="w-full font-mono text-sm bg-[#050B14] border border-[#B99A5A]/30 rounded-lg p-3 text-[#F5EFE1] focus:border-[#D8AF3A] focus:ring-1 focus:ring-[#D8AF3A] outline-none transition-all"
+            />
+            <p className="text-xs text-[#C9C2B6]/60 mt-2">
+              Ce texte est invisible pour les humains, mais c'est exactement ce que liront les IA qui visitent votre site. Utilisez le format Markdown pour structurer (ex: ## Compétences).
+            </p>
           </div>
         </div>
       </div>
