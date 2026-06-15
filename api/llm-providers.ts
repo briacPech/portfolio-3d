@@ -21,6 +21,7 @@ export async function callGroq(prompt: string, options: CallLLMOptions) {
       prompt,
       schema: options.schema,
       temperature: options.temperature ?? 0.2,
+      maxRetries: 1,
     });
     return object;
   } else {
@@ -28,6 +29,7 @@ export async function callGroq(prompt: string, options: CallLLMOptions) {
       model: groq(options.model),
       prompt,
       temperature: options.temperature ?? 0.7,
+      maxRetries: 1,
     });
     return text;
   }
@@ -60,8 +62,14 @@ export async function callLLM(prompt: string, options: CallLLMOptions) {
 
   try {
     return await callGroq(prompt, options);
-  } catch (error) {
-    console.warn("Groq failed, falling back to Gemini", error);
-    return callGemini(prompt, { ...options, provider: 'gemini' });
+  } catch (groqError: any) {
+    console.warn("Groq failed:", groqError?.message || groqError);
+    try {
+      console.log("Falling back to Gemini...");
+      return await callGemini(prompt, { ...options, provider: 'gemini' });
+    } catch (geminiError: any) {
+      console.error("Gemini fallback also failed:", geminiError?.message || geminiError);
+      throw new Error(`Failed after 3 attempts. Last error: ${groqError?.message || 'Unknown Groq error'}. Gemini fallback error: ${geminiError?.message || 'Unknown Gemini error'}`);
+    }
   }
 }
