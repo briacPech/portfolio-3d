@@ -13,6 +13,9 @@ import { LOADER_CONFIG } from "./constants/loaderConfig";
 import { KEYBOARD_MAP } from "./hooks/useMovementState";
 import useDefaults from "./hooks/useDefaults";
 import { ErrorBoundary } from "./ui/ErrorBoundary";
+import { PremiumLoader } from "./ui/PremiumLoader";
+import { CustomCursor } from "./ui/CustomCursor";
+import { OnboardingTooltip } from "./ui/OnboardingTooltip";
 import "./App.css";
 
 // Lazy loading des interfaces 2D lourdes
@@ -64,9 +67,11 @@ const App = () => {
         <Suspense fallback={null}>
           <NavigationMenu />
           <IslandModal />
+          <OnboardingTooltip />
         </Suspense>
         
-        <Loader {...LOADER_CONFIG} />
+        <PremiumLoader />
+        <CustomCursor />
       </div>
       <Suspense fallback={null}>
         <FloatingChat />
