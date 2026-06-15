@@ -52,6 +52,28 @@ const INITIAL_PROJECTS = [
     image_url: "/images/festival-connect-logo.png",
     status: "published",
     display_order: 1
+  },
+  {
+    title: "Portfolio Immersif 3D & Career Ops IA",
+    short_description: "Application web 3D interactive agissant comme une carte de visite, dotée d'un Closer IA et d'un Job Spy automatique.",
+    long_description: "<h3>🚨 Le Problème</h3><p>Les CV traditionnels et portfolios classiques peinent à démontrer concrètement des compétences transverses (Vente, Tech, IA). De plus, la veille d'offres et les candidatures prennent un temps considérable, et les recruteurs manquent d'un moyen de conversion direct sur un profil.</p><h3>💡 La Solution</h3><p>Développement de bout en bout d'une web app :</p><ul><li><strong>Portfolio Immersif 3D :</strong> Interface React Three Fiber esthétique et \"wow effect\".</li><li><strong>Assistant \"Closer\" IA :</strong> Agent conversationnel entraîné pour pitcher le profil et convertir en rendez-vous.</li><li><strong>Career Ops (Job Spy) :</strong> Back-office sécurisé avec scraping quotidien et automatique d'offres, scoring IA et génération de CV.</li><li><strong>AEO :</strong> Fichier <code>llms.txt</code> dynamique pour optimiser l'indexation par ChatGPT/Perplexity.</li></ul><h3>🎯 Mon Rôle</h3><p>Product Builder & Ingénieur Commercial : Conception de A à Z (Front/Back/DB), ingénierie de prompt, automatisation des flux, et UX orientée conversion.</p>",
+    link_url: "https://github.com/briacPech/portfolio-3d",
+    secondary_link_text: "Aperçu en ligne",
+    secondary_link_url: "https://briac-pecheur.vercel.app/",
+    tags: ["React", "Three.js", "Supabase", "Edge Functions", "IA / LLMs", "TailwindCSS"],
+    image_url: "/bp_favicon_gold.png",
+    status: "published",
+    display_order: 2
+  },
+  {
+    title: "Jarvis - Assistant IA Vocal & Local",
+    short_description: "Assistant vocal autonome hybride, doté de STT/TTS local, mémoire RAG, routage intelligent Ollama/Groq et pilotage Windows.",
+    long_description: "<h3>🚨 Le Problème</h3><p>Les assistants vocaux (Siri, Alexa) soulèvent de forts enjeux de confidentialité des données. Les API cloud (OpenAI) sont coûteuses pour une utilisation 24/7. De plus, les assistants actuels manquent d'une véritable mémoire long terme et ne sont pas programmables pour des actions locales poussées.</p><h3>💡 La Solution</h3><p>Développement de <strong>Jarvis</strong>, une IA personnelle 100% autonome et hybride :</p><ul><li><strong>Routage Local/Cloud intelligent :</strong> Modèle local (Ollama/Qwen 3B) pour les tâches simples avec bascule sur le Cloud (Groq) pour les requêtes complexes, assurant rapidité et économie.</li><li><strong>Mémoire & RAG :</strong> Mémoire persistante SQLite + ChromaDB permettant à l'assistant de retenir des faits et le contexte des conversations passées.</li><li><strong>100% Vocal :</strong> Détection de mot d'éveil hors-ligne (\"Salut Jarvis\") et Text-To-Speech (Piper).</li><li><strong>Interface & Système :</strong> Backend FastAPI robuste, pilotage du système local (volume, musique via Tidal) et interface Web.</li></ul><h3>🎯 Mon Rôle</h3><p>Ingénieur IA & Développeur Backend (Python) : Architecture système, implémentation des algorithmes d'IA (RAG, routage), développement du backend API, et optimisation de la stack pour GPU modeste (GTX 1650 4Go).</p>",
+    link_url: "https://github.com/briacPech/jarvis-assistant",
+    tags: ["Python", "FastAPI", "Ollama", "Groq", "ChromaDB", "SQLite", "Piper TTS"],
+    image_url: "",
+    status: "published",
+    display_order: 3
   }
 ];
 
