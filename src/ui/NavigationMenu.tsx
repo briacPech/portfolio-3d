@@ -58,26 +58,7 @@ export const NavigationMenu = () => {
 
   return (
     <>
-    <div className="nav-menu-container" style={{
-        position: "absolute",
-        bottom: "20px", 
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "max-content", 
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "32px",
-        zIndex: 100,
-        pointerEvents: "auto",
-        background: "rgba(14, 27, 46, 0.55)",
-        padding: "12px 32px",
-        borderRadius: "100px", 
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
-        boxShadow: "0 12px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05)",
-      }}>
+    <div className="nav-menu-container">
       {/* On supprime la boussole Emoji */}
       
       {islandsList.map((island) => (
@@ -98,7 +79,9 @@ export const NavigationMenu = () => {
             letterSpacing: "0.12em",
             textTransform: "uppercase",
             transition: "all 0.4s ease",
-            opacity: targetId && targetId !== island.id ? 0.5 : 1, 
+            opacity: targetId && targetId !== island.id ? 0.5 : 1,
+            whiteSpace: "nowrap",
+            flexShrink: 0
           }}
           onMouseEnter={(e) => {
             if (targetId !== island.id) {
@@ -131,7 +114,7 @@ export const NavigationMenu = () => {
       ))}
 
       {/* Séparateur très fin */}
-      <div className="nav-separator" style={{ width: "1px", height: "14px", background: "rgba(216,175,58,0.2)" }} />
+      <div className="nav-separator" style={{ width: "1px", height: "14px", background: "rgba(216,175,58,0.2)", flexShrink: 0 }} />
 
       {/* Bouton Contact */}
       <button
@@ -150,6 +133,8 @@ export const NavigationMenu = () => {
           letterSpacing: "0.12em",
           textTransform: "uppercase",
           transition: "all 0.4s ease",
+          whiteSpace: "nowrap",
+          flexShrink: 0
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.color = "#FFF";
