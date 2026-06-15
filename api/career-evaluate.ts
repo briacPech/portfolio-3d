@@ -1,5 +1,8 @@
 import { getCandidateProfile, CAREER_OPS_SYSTEM } from './career-utils.js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { z } from 'zod';
+import { callLLM } from '../src/lib/llm/providers.js';
+import { PREMIUM_MODEL, JOB_SCORING_MODEL } from '../src/lib/llm/models.js';
 
 export const maxDuration = 60;
 
@@ -7,11 +10,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
 
   try {
-    const { jobTextOrUrl } = req.body || {};
+    const { jobTextOrUrl, isPremium } = req.body || {};
     if (!jobTextOrUrl) return res.status(400).json({ error: "Offre manquante" });
-
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) return res.status(500).json({ error: "Clé Gemini manquante" });
 
     const profile = await getCandidateProfile();
 
@@ -64,28 +64,35 @@ Extrais également les mots-clés ATS clés détectés dans l'offre qu'il faut a
 Spécifie clairement comment le projet phare Festival Connect de Briac s'insère comme preuve solide d'autorité pour cette offre.
 Rédige un conseil stratégique personnalisé pour postuler.
 
-Retourne un JSON avec : jobSummary, dimensions (8 entrées avec name, weight, score, grade, reasoning), globalScore, globalGrade, verdict (POSTULER|GARDER EN VEILLE|PASSER), strengths[], weaknesses[], atsKeywords[], festivalConnectArgument, applicationAdvice, expired (boolean).`;
+Tu dois UNIQUEMENT retourner du JSON strict. Aucune phrase d'intro.`;
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-    const response = await fetch(geminiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: `${CAREER_OPS_SYSTEM}\n\n---\n\n${prompt}` }] }],
-        generationConfig: { responseMimeType: "application/json" }
+    const fullPrompt = `${CAREER_OPS_SYSTEM}\n\n---\n\n${prompt}`;
+    
+    const result: any = await callLLM(fullPrompt, {
+      model: isPremium ? PREMIUM_MODEL : JOB_SCORING_MODEL,
+      provider: isPremium ? 'gemini' : 'groq',
+      schema: z.object({
+        jobSummary: z.string(),
+        dimensions: z.array(z.object({
+          name: z.string(),
+          weight: z.number(),
+          score: z.number(),
+          grade: z.string(),
+          reasoning: z.string()
+        })),
+        globalScore: z.number(),
+        globalGrade: z.string(),
+        verdict: z.string(),
+        strengths: z.array(z.string()),
+        weaknesses: z.array(z.string()),
+        atsKeywords: z.array(z.string()),
+        festivalConnectArgument: z.string(),
+        applicationAdvice: z.string(),
+        expired: z.boolean()
       })
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Gemini API Error:", errorText);
-      throw new Error(`Erreur Gemini API: ${response.status}`);
-    }
-
-    const data: any = await response.json();
-    const textResult = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-    const cleanText = textResult.replace(/```json/g, '').replace(/```/g, '').trim();
-    return res.status(200).json(JSON.parse(cleanText || '{}'));
+    return res.status(200).json(result);
 
   } catch (error: any) {
     console.error("Evaluate API Error:", error);

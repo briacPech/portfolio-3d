@@ -42,3 +42,34 @@ ON public.job_applications
 FOR SELECT 
 TO public 
 USING (true);
+
+-- Table pour les jobs scrappés
+CREATE TABLE IF NOT EXISTS public.scraped_jobs (
+    id UUID DEFAULT extensions.uuid_generate_v4() PRIMARY KEY,
+    title TEXT,
+    company TEXT,
+    location TEXT,
+    platform TEXT,
+    url TEXT UNIQUE,
+    job_description TEXT,
+    salary TEXT,
+    contract_type TEXT,
+    score NUMERIC,
+    grade TEXT,
+    verdict TEXT,
+    why_one_line TEXT,
+    processed BOOLEAN DEFAULT false,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Table pour les documents générés (CV / LM)
+CREATE TABLE IF NOT EXISTS public.generated_documents (
+    id UUID DEFAULT extensions.uuid_generate_v4() PRIMARY KEY,
+    application_id UUID REFERENCES public.job_applications(id) ON DELETE CASCADE,
+    type TEXT NOT NULL, -- 'cv' ou 'lm'
+    provider TEXT NOT NULL, -- 'groq' ou 'gemini'
+    model TEXT NOT NULL,
+    content_json JSONB,
+    content_text TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);

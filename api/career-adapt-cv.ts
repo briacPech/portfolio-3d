@@ -1,5 +1,8 @@
 import { getCandidateProfile, CAREER_OPS_SYSTEM } from './career-utils.js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { z } from 'zod';
+import { callLLM } from '../src/lib/llm/providers.js';
+import { PREMIUM_MODEL, CV_DRAFT_MODEL } from '../src/lib/llm/models.js';
 
 export const maxDuration = 60; // 60 seconds timeout
 
@@ -7,11 +10,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
   
   try {
-    const { jobTextOrUrl } = req.body || {};
+    const { jobTextOrUrl, isPremium } = req.body || {};
     if (!jobTextOrUrl) return res.status(400).json({ error: "Offre manquante" });
-
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) return res.status(500).json({ error: "Clé Gemini manquante" });
 
     const profile = await getCandidateProfile();
 
@@ -28,43 +28,28 @@ Ne mens pas sur les expériences, mais :
 3. Propose une accroche percutante.
 4. Structure rigoureusement la réponse selon le schéma JSON demandé, adapté pour un export PDF propre.
 
-Retourne un JSON strict respectant CE FORMAT EXACT (pas de markdown en dehors des valeurs si nécessaire, mais préfère du texte simple pour le PDF) :
-{
-  "identity": { "name": "Prénom Nom", "contact": "Email • Téléphone • LinkedIn", "location": "Ville" },
-  "title": "Titre du poste visé",
-  "summary": "Accroche percutante...",
-  "skills": { "hard": ["Compétence 1", "Compétence 2"], "soft": ["Soft skill 1"] },
-  "experience": [ { "company": "Nom", "role": "Titre", "duration": "Dates", "bullets": ["Point 1", "Point 2"] } ],
-  "projects": [ { "name": "Projet", "description": "Desc", "technologies": ["Tech 1"] } ],
-  "education": [ { "degree": "Diplôme", "school": "École", "date": "Année" } ],
-  "tools": ["Outil 1", "Outil 2"],
-  "isPureDevDetected": false,
-  "pureDevWarning": ""
-}`;
+Tu dois UNIQUEMENT retourner du JSON strict. Aucune phrase d'intro.`;
 
     const fullPrompt = `${CAREER_OPS_SYSTEM}\n\n---\n\n${prompt}`;
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-
-    const response = await fetch(geminiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: fullPrompt }] }],
-        generationConfig: { responseMimeType: "application/json" }
+    
+    const result: any = await callLLM(fullPrompt, {
+      model: isPremium ? PREMIUM_MODEL : CV_DRAFT_MODEL,
+      provider: isPremium ? 'gemini' : 'groq',
+      schema: z.object({
+        identity: z.object({ name: z.string(), contact: z.string(), location: z.string() }),
+        title: z.string(),
+        summary: z.string(),
+        skills: z.object({ hard: z.array(z.string()), soft: z.array(z.string()) }),
+        experience: z.array(z.object({ company: z.string(), role: z.string(), duration: z.string(), bullets: z.array(z.string()) })),
+        projects: z.array(z.object({ name: z.string(), description: z.string(), technologies: z.array(z.string()) })),
+        education: z.array(z.object({ degree: z.string(), school: z.string(), date: z.string() })),
+        tools: z.array(z.string()),
+        isPureDevDetected: z.boolean(),
+        pureDevWarning: z.string().optional()
       })
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Gemini API Error:", errorText);
-      throw new Error(`Erreur Gemini API: ${response.status}`);
-    }
-
-    const data: any = await response.json();
-    const textResult = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-    
-    const cleanText = textResult.replace(/```json/g, '').replace(/```/g, '').trim();
-    return res.status(200).json(JSON.parse(cleanText || '{}'));
+    return res.status(200).json(result);
     
   } catch (error: any) {
     console.error("Adapt CV API Error:", error);

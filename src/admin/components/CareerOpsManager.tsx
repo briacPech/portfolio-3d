@@ -14,6 +14,7 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
   const [activeTab, setActiveTab] = useState('tracker');
   const [loading, setLoading] = useState(false);
   const [trackerJobs, setTrackerJobs] = useState<any[]>([]);
+  const [isPremium, setIsPremium] = useState(false); // Toggle between Groq and Gemini
 
   // States for Evaluation
   const [jobText, setJobText] = useState('');
@@ -81,7 +82,7 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
       const res = await fetch('/api/career-evaluate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobTextOrUrl: jobText })
+        body: JSON.stringify({ jobTextOrUrl: jobText, isPremium })
       });
       if (!res.ok) {
         const errText = await res.text();
@@ -103,7 +104,7 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
       const res = await fetch('/api/career-adapt-cv', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobTextOrUrl: jobText })
+        body: JSON.stringify({ jobTextOrUrl: jobText, isPremium })
       });
       if (!res.ok) {
         const errText = await res.text();
@@ -125,7 +126,7 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
       const res = await fetch('/api/career-lm', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ companyName, role: roleName, jobText })
+        body: JSON.stringify({ companyName, role: roleName, jobText, isPremium })
       });
       if (!res.ok) {
         const errText = await res.text();
@@ -136,6 +137,39 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
     } catch (err: any) {
       console.error(err);
       alert("Erreur LM: " + err.message);
+    }
+    setLoading(false);
+  };
+
+  const handleScoreJobs = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/jobs/score', { method: 'POST' });
+      const data = await res.json();
+      alert(`Scoring terminé. ${data.scored} offres évaluées.`);
+      fetchJobs();
+    } catch (err: any) {
+      alert("Erreur lors du scoring en masse: " + err.message);
+    }
+    setLoading(false);
+  };
+
+  const handleScrapeJobs = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/jobs/scrape', { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: "Product Builder No-Code Automatisation",
+          location: "France",
+          results_wanted: 10
+        })
+      });
+      const data = await res.json();
+      alert(`Scraping terminé. ${data.total || data.scraped_count || 0} offres récupérées.`);
+    } catch (err: any) {
+      alert("Erreur lors du scraping: " + err.message);
     }
     setLoading(false);
   };
@@ -195,11 +229,41 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
         </button>
       </div>
 
+      <div className="bg-[#152642] p-3 flex justify-between items-center border-b border-[#B99A5A]/20">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-[#C9C2B6]">Modèle IA :</span>
+          <div className="flex bg-[#0A1424] rounded-lg p-1 border border-[#B99A5A]/30">
+            <button 
+              onClick={() => setIsPremium(false)}
+              className={`px-3 py-1 text-xs rounded transition-colors ${!isPremium ? 'bg-[#D8AF3A] text-[#050B14] font-bold' : 'text-[#C9C2B6] hover:text-[#F0C674]'}`}
+            >
+              Standard (Groq)
+            </button>
+            <button 
+              onClick={() => setIsPremium(true)}
+              className={`px-3 py-1 text-xs rounded transition-colors ${isPremium ? 'bg-[#D8AF3A] text-[#050B14] font-bold' : 'text-[#C9C2B6] hover:text-[#F0C674]'}`}
+            >
+              Premium (Gemini)
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="p-6">
         {/* TAB 1: TRACKER */}
         {activeTab === 'tracker' && (
           <div>
-            <h2 className="text-xl font-serif text-[#F0C674] mb-4">Tracker de Candidatures</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-serif text-[#F0C674]">Tracker de Candidatures</h2>
+              <div className="flex gap-2">
+                <button onClick={handleScrapeJobs} disabled={loading} className="bg-[#152642] border border-[#D8AF3A] text-[#D8AF3A] px-3 py-1 text-sm rounded hover:bg-[#D8AF3A] hover:text-[#0A1424] transition-colors">
+                  {loading ? '...' : 'Lancer JobSpy'}
+                </button>
+                <button onClick={handleScoreJobs} disabled={loading} className="bg-[#152642] border border-[#D8AF3A] text-[#D8AF3A] px-3 py-1 text-sm rounded hover:bg-[#D8AF3A] hover:text-[#0A1424] transition-colors">
+                  {loading ? '...' : 'Scorer Offres Non-Traitées'}
+                </button>
+              </div>
+            </div>
             {trackerJobs.length === 0 ? (
               <p>Aucune candidature sauvegardée. Allez dans "Évaluation" pour commencer.</p>
             ) : (

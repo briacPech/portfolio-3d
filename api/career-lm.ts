@@ -1,5 +1,8 @@
 import { getCandidateProfile, CAREER_OPS_SYSTEM } from './career-utils.js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { z } from 'zod';
+import { callLLM } from '../src/lib/llm/providers.js';
+import { PREMIUM_MODEL, LETTER_MODEL } from '../src/lib/llm/models.js';
 
 export const maxDuration = 60; // 60 seconds timeout
 
@@ -7,11 +10,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
   
   try {
-    const { companyName, role, jobText } = req.body || {};
+    const { companyName, role, jobText, isPremium } = req.body || {};
     if (!companyName || !role) return res.status(400).json({ error: "Entreprise ou rôle manquant" });
-
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) return res.status(500).json({ error: "Clé Gemini manquante" });
 
     const profile = await getCandidateProfile();
 
@@ -26,31 +26,21 @@ Détails de l'offre: ${jobText || 'Non fournis'}
 Rédige une lettre de motivation ou un message de prospection percutant (selon ce qui est le plus adapté).
 Le ton doit être direct, professionnel, légèrement audacieux, et mettre en valeur le côté hybride (produit/business) et pragmatique du profil.
 
-Retourne un JSON strict : { "letterMarkdown": "..." }`;
+Tu dois UNIQUEMENT retourner du JSON strict. Aucune phrase d'intro.`;
 
     const fullPrompt = `${CAREER_OPS_SYSTEM}\n\n---\n\n${prompt}`;
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-
-    const response = await fetch(geminiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: fullPrompt }] }],
-        generationConfig: { responseMimeType: "application/json" }
+    
+    const result: any = await callLLM(fullPrompt, {
+      model: isPremium ? PREMIUM_MODEL : LETTER_MODEL,
+      provider: isPremium ? 'gemini' : 'groq',
+      schema: z.object({
+        subject: z.string(),
+        letter: z.string(),
+        tone: z.string()
       })
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Gemini API Error:", errorText);
-      throw new Error(`Erreur Gemini API: ${response.status}`);
-    }
-
-    const data: any = await response.json();
-    const textResult = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-    
-    const cleanText = textResult.replace(/```json/g, '').replace(/```/g, '').trim();
-    return res.status(200).json(JSON.parse(cleanText || '{}'));
+    return res.status(200).json(result);
     
   } catch (error: any) {
     console.error("Cover Letter API Error:", error);
