@@ -409,8 +409,14 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
             </button>
             {lmResult && (
               <div className="mt-6 p-6 bg-[#0A1424] border border-[#B99A5A]/30 rounded-lg">
+                {lmResult.subject && (
+                  <h3 className="text-lg font-bold text-[#F0C674] mb-3">Objet : {lmResult.subject}</h3>
+                )}
+                {lmResult.tone && (
+                  <p className="text-xs text-[#B99A5A] mb-4">Ton : {lmResult.tone}</p>
+                )}
                 <div className="prose prose-invert prose-p:text-justify max-w-none">
-                  <ReactMarkdown>{lmResult.letterMarkdown}</ReactMarkdown>
+                  <ReactMarkdown>{lmResult.letter || lmResult.letterMarkdown || ''}</ReactMarkdown>
                 </div>
               </div>
             )}
