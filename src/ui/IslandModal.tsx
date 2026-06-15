@@ -39,7 +39,7 @@ export const IslandModal = () => {
 
   // --- HELPER DE NETTOYAGE ---
   // Quill génère souvent des espaces insécables (&nbsp;) qui bloquent le retour à la ligne CSS natif
-  const cleanHtml = (html: string) => {
+  const cleanHtml = (html: string | undefined | null) => {
     if (!html) return "";
     return html.replace(/&nbsp;/g, ' ').replace(/<p><br><\/p>/g, '');
   };

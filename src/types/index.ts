@@ -55,5 +55,8 @@ export interface SeoSettings {
   id: number;
   title: string;
   description: string;
+  keywords?: string;
+  og_image?: string;
+  twitter_card?: string;
   og_image_url?: string;
 }
