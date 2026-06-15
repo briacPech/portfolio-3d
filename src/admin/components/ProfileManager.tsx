@@ -53,7 +53,7 @@ export const ProfileManager = () => {
       alert('Photo de profil mise à jour avec succès !');
     } catch (error: any) {
       console.error('Error uploading avatar:', error);
-      alert('Erreur lors de l\\'upload : ' + error.message);
+      alert("Erreur lors de l'upload : " + error.message);
     } finally {
       setUploadingAvatar(false);
       event.target.value = '';
