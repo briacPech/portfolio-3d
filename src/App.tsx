@@ -42,7 +42,7 @@ const App = () => {
             <Canvas
               dpr={dpr as [number, number]}
               style={{
-                height: "100vh",
+                height: "100dvh",
                 width: "100vw",
                 position: "absolute",
                 top: 0,
