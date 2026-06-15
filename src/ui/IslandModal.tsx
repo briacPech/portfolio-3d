@@ -226,49 +226,47 @@ export const IslandModal = () => {
       zIndex: 50,
     }}>
       <div className="island-modal-content" style={{
-        width: "400px", // Beaucoup plus fin (400px au lieu de 460/500)
+        width: "400px",
         maxHeight: "calc(100vh - 120px)", 
         display: "flex",
         flexDirection: "column",
-        background: "rgba(14, 27, 46, 0.75)",
-        backdropFilter: "blur(30px)",
-        WebkitBackdropFilter: "blur(30px)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        borderLeft: "2px solid var(--premium-gold)", // Liseré très fin
-        borderRadius: "8px", // Coins moins massifs
+        background: "rgba(10, 20, 36, 0.78)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        border: "1px solid rgba(185, 154, 90, 0.2)",
+        borderRadius: "12px",
         pointerEvents: "auto",
-        boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
         animation: "modalFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
       }}>
         
         {/* Header de la modale fixe */}
-        <div style={{ padding: "24px 24px 12px 24px", flexShrink: 0 }}>
+        <div style={{ padding: "32px 32px 16px 32px", flexShrink: 0 }}>
           <h3 style={{
             fontFamily: "var(--font-sans)",
-            fontSize: "9px", // Très petit et chic
+            fontSize: "9px",
             letterSpacing: "0.2em",
             textTransform: "uppercase",
-            color: "var(--premium-gold)",
-            marginBottom: "6px",
+            color: "var(--premium-text-muted)",
+            marginBottom: "8px",
             fontWeight: 600,
           }}>{islandData.presentation || ''}</h3>
           
           <h1 className="premium-title" style={{
-            fontSize: "24px", // Titre beaucoup plus petit
+            fontSize: "28px",
             margin: "0",
-            lineHeight: 1.1,
+            lineHeight: 1.15,
             color: "#ffffff"
           }}>{islandData.title || ''}</h1>
         </div>
         
-        {/* Corps de la modale (Scrollable) */}
         <div className="modal-scroll-area" style={{
-          padding: "0 24px",
+          padding: "0 32px",
           overflowY: "auto",
           flex: 1, 
           fontFamily: "var(--font-sans)",
-          fontSize: "12.5px", // Police de lecture fine et compacte
-          lineHeight: 1.5,
+          fontSize: "13px",
+          lineHeight: 1.65,
           fontWeight: 300,
           color: "rgba(255,255,255,0.85)", 
         }}>
@@ -277,34 +275,38 @@ export const IslandModal = () => {
           </ModalErrorBoundary>
         </div>
 
-        {/* Footer (Sticky bottom) */}
-        <div style={{ padding: "16px 24px 24px 24px", flexShrink: 0, marginTop: "8px" }}>
+        <div style={{ padding: "16px 32px 32px 32px", flexShrink: 0, marginTop: "8px" }}>
           <button 
             onClick={() => gameState.setIsland(null)}
             style={{
-              background: "rgba(216,175,58,0.1)",
-              border: "1px solid rgba(216,175,58,0.4)",
-              color: "var(--premium-gold)",
-              padding: "8px 16px", // Bouton plus fin
-              fontSize: "10px", // Texte du bouton très discret
-              fontWeight: 600,
+              background: "linear-gradient(135deg, #D8AF3A, #B8912A)",
+              border: "none",
+              color: "#050B14",
+              padding: "10px 20px",
+              fontSize: "10px",
+              fontWeight: 700,
               letterSpacing: "0.15em",
-              textTransform: "uppercase",
+              textTransform: "uppercase" as const,
               cursor: "pointer",
-              transition: "all 0.3s ease",
-              borderRadius: "4px",
-              width: "100%", 
+              transition: "all 250ms ease-in-out",
+              borderRadius: "6px",
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "var(--premium-gold)";
-              e.currentTarget.style.color = "#000";
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "0 6px 20px rgba(216,175,58,0.4)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "rgba(216,175,58,0.1)";
-              e.currentTarget.style.color = "var(--premium-gold)";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
             }}
           >
             Reprendre la navigation
+            <span style={{ fontSize: "14px" }}>→</span>
           </button>
         </div>
       </div>

@@ -67,7 +67,7 @@ export const NavigationMenu = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: "20px", // Espace fortement réduit pour compacter le menu
+        gap: "28px",
         zIndex: 100,
         pointerEvents: "auto",
         background: "rgba(14, 27, 46, 0.65)",
@@ -94,8 +94,8 @@ export const NavigationMenu = () => {
             cursor: "pointer",
             fontFamily: "var(--font-sans)",
             fontWeight: targetId === island.id ? "500" : "400",
-            fontSize: "10px", // Police très petite et élégante
-            letterSpacing: "0.1em",
+            fontSize: "11px",
+            letterSpacing: "0.12em",
             textTransform: "uppercase",
             transition: "all 0.4s ease",
             opacity: targetId && targetId !== island.id ? 0.5 : 1, 
@@ -103,18 +103,21 @@ export const NavigationMenu = () => {
           onMouseEnter={(e) => {
             if (targetId !== island.id) {
               e.currentTarget.style.color = "var(--premium-gold-light)";
+              const underline = e.currentTarget.querySelector('.nav-underline') as HTMLElement;
+              if (underline) underline.style.transform = "scaleX(1)";
             }
           }}
           onMouseLeave={(e) => {
             if (targetId !== island.id) {
               e.currentTarget.style.color = "var(--premium-text)";
+              const underline = e.currentTarget.querySelector('.nav-underline') as HTMLElement;
+              if (underline) underline.style.transform = "scaleX(0)";
             }
           }}
         >
           {island.title}
           
-          <div style={{
-            content: '""',
+          <div className="nav-underline" style={{
             position: "absolute",
             bottom: 0,
             left: 0,
@@ -123,7 +126,7 @@ export const NavigationMenu = () => {
             background: "var(--premium-gold)",
             transform: targetId === island.id ? "scaleX(1)" : "scaleX(0)",
             transformOrigin: "center",
-            transition: "transform 0.4s ease"
+            transition: "transform 300ms ease-in-out"
           }} />
         </button>
       ))}
@@ -144,8 +147,8 @@ export const NavigationMenu = () => {
           cursor: "pointer",
           fontFamily: "var(--font-sans)",
           fontWeight: "600",
-          fontSize: "10px", // Cohérent avec les autres
-          letterSpacing: "0.1em",
+          fontSize: "11px",
+          letterSpacing: "0.12em",
           textTransform: "uppercase",
           transition: "all 0.4s ease",
         }}
