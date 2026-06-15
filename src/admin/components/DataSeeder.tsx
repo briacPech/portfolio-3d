@@ -74,6 +74,16 @@ const INITIAL_PROJECTS = [
     image_url: "",
     status: "published",
     display_order: 3
+  },
+  {
+    title: "AutoPoster Pro - IA pour Artisans",
+    short_description: "Application SaaS pour générer des annonces via l'IA et récolter des prospects (CRM intégré).",
+    long_description: "<h3>🚨 Le Problème</h3><p>Les professionnels de l'artisanat manquent de temps et de compétences en marketing digital pour créer des annonces accrocheuses, gérer des Landing Pages et suivre efficacement les demandes de devis entrants.</p><h3>💡 La Solution</h3><p>Développement de <strong>AutoPoster Pro</strong>, une solution SaaS :</p><ul><li><strong>Génération IA :</strong> Création automatique d'annonces optimisées via Google Gemini.</li><li><strong>CRM & Leads :</strong> Centralisation et traitement des demandes de devis.</li><li><strong>Landing Page :</strong> Page vitrine générée automatiquement, optimisée SEO local.</li></ul><h3>🎯 Mon Rôle</h3><p>Développeur Full-Stack & Intégrateur IA : React/Zustand pour l'interface, Node/Express pour le backend, et prompt engineering sur l'API Gemini.</p>",
+    link_url: "",
+    tags: ["React 19", "TypeScript", "Node.js", "Express", "Google Gemini AI", "Zustand"],
+    image_url: "",
+    status: "published",
+    display_order: 4
   }
 ];
 
