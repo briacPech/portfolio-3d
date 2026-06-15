@@ -2,6 +2,7 @@ import React, { useEffect, useState, Component, ErrorInfo, ReactNode } from "rea
 import { Anchor, Compass, Cpu } from "lucide-react";
 import { gameState } from "../scene/gameState";
 import { usePortfolio } from "../contexts/PortfolioContext";
+import { supabase } from "../lib/supabase";
 
 class ModalErrorBoundary extends Component<{children: ReactNode}, {hasError: boolean, error: Error | null}> {
   state = { hasError: false, error: null as Error | null };
@@ -229,22 +230,55 @@ export const IslandModal = () => {
         
         {/* Header de la modale fixe */}
         <div style={{ padding: "32px 32px 16px 32px", flexShrink: 0 }}>
-          <h3 style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: "9px",
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            color: "#7A8E99",
-            marginBottom: "8px",
-            fontWeight: 600,
-          }}>{islandData.presentation || ''}</h3>
-          
-          <h1 className="premium-title" style={{
-            fontSize: "28px",
-            margin: "0",
-            lineHeight: 1.15,
-            color: "#ffffff"
-          }}>{islandData.title || ''}</h1>
+          {islandId === "profil" ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+              <div style={{
+                width: "70px", height: "70px", borderRadius: "50%", 
+                border: "2px solid var(--premium-gold)", overflow: "hidden", 
+                flexShrink: 0, boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+                background: "rgba(14, 27, 46, 0.8)"
+              }}>
+                <img 
+                  src={`${supabase.storage.from('portfolio-media').getPublicUrl('avatar.png').data.publicUrl}?t=${Math.floor(Date.now() / 60000)}`} // Cache bust every minute
+                  alt="Avatar" 
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none'; // Hide if missing
+                    (e.target as HTMLImageElement).parentElement!.style.display = 'none'; // Hide container too
+                  }}
+                />
+              </div>
+              <div>
+                <h3 style={{
+                  fontFamily: "var(--font-sans)", fontSize: "9px", letterSpacing: "0.2em",
+                  textTransform: "uppercase", color: "#7A8E99", marginBottom: "8px", fontWeight: 600,
+                }}>{islandData.presentation || ''}</h3>
+                
+                <h1 className="premium-title" style={{
+                  fontSize: "28px", margin: "0", lineHeight: 1.15, color: "#ffffff"
+                }}>{islandData.title || ''}</h1>
+              </div>
+            </div>
+          ) : (
+            <>
+              <h3 style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: "9px",
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: "#7A8E99",
+                marginBottom: "8px",
+                fontWeight: 600,
+              }}>{islandData.presentation || ''}</h3>
+              
+              <h1 className="premium-title" style={{
+                fontSize: "28px",
+                margin: "0",
+                lineHeight: 1.15,
+                color: "#ffffff"
+              }}>{islandData.title || ''}</h1>
+            </>
+          )}
         </div>
         
         <div className="modal-scroll-area" style={{
