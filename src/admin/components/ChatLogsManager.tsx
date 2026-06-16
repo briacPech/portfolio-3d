@@ -62,16 +62,24 @@ function groupIntoConversations(logs: ChatLog[]): Conversation[] {
 export const ChatLogsManager = () => {
   const [logs, setLogs] = useState<ChatLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [expandedConv, setExpandedConv] = useState<string | null>(null);
 
   const fetchLogs = async () => {
     setLoading(true);
-    const { data } = await supabase
+    setError(null);
+    const { data, error: supabaseError } = await supabase
       .from('chat_logs')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(200);
-    if (data) setLogs(data as ChatLog[]);
+
+    if (supabaseError) {
+      setError(`Erreur Supabase : ${supabaseError.message} (code: ${supabaseError.code})`);
+      setLogs([]);
+    } else {
+      setLogs((data ?? []) as ChatLog[]);
+    }
     setLoading(false);
   };
 
@@ -133,13 +141,24 @@ export const ChatLogsManager = () => {
         </div>
       )}
 
+      {/* Erreur Supabase */}
+      {error && (
+        <div className="p-4 bg-red-900/20 border border-red-500/40 rounded-xl text-red-300 text-sm space-y-2">
+          <p className="font-semibold">⚠️ Impossible de charger l'historique :</p>
+          <code className="block text-xs text-red-400 bg-black/30 p-2 rounded">{error}</code>
+          <p className="text-xs text-red-300/70">
+            Vérifiez que la table <strong>chat_logs</strong> existe bien dans Supabase et que les politiques RLS autorisent la lecture.
+          </p>
+        </div>
+      )}
+
       {/* Conversations */}
       <div className="space-y-3">
         {loading ? (
           <div className="p-8 text-center text-[#C9C2B6] bg-[#0E1B2E] rounded-xl border border-[#B99A5A]/20">
             Chargement de l'historique...
           </div>
-        ) : conversations.length === 0 ? (
+        ) : conversations.length === 0 && !error ? (
           <div className="p-8 text-center text-[#C9C2B6] flex flex-col items-center bg-[#0E1B2E] rounded-xl border border-[#B99A5A]/20">
             <MessageCircle className="w-8 h-8 text-[#D8AF3A]/50 mb-3" />
             <p>Aucun échange enregistré pour le moment.</p>
