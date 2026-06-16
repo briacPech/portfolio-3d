@@ -16,15 +16,22 @@ export interface CallLLMOptions {
 
 export async function callGroq(prompt: string, options: CallLLMOptions) {
   if (options.schema) {
-    const { object } = await generateObject({
+    const promptWithInstructions = prompt + "\n\nCRITICAL INSTRUCTION: You must return ONLY raw JSON matching the exact requested structure. Do not wrap in markdown blocks like ```json. Do not include any explanations.";
+    
+    const { text } = await generateText({
       model: groq(options.model),
-      prompt,
-      schema: options.schema,
-      mode: 'json',
+      prompt: promptWithInstructions,
       temperature: options.temperature ?? 0.2,
       maxRetries: 1,
     });
-    return object;
+    
+    try {
+      const jsonStr = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+      return JSON.parse(jsonStr);
+    } catch (e) {
+      console.error("Failed to parse Groq JSON:", text);
+      throw new Error("Failed to parse JSON from Groq output.");
+    }
   } else {
     const { text } = await generateText({
       model: groq(options.model),
