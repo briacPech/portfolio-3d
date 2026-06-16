@@ -16,35 +16,48 @@ export const CAREER_OPS_SYSTEM = `Tu es l'assistant Career-Ops pour la recherche
 
 export async function getCandidateProfile() {
   const supabase = getSupabase();
-  const { data: rawData, error } = await supabase
-    .from('career_profile')
-    .select('*')
-    .limit(1)
-    .single();
-    
-  const data = rawData as any;
+  
+  // Requêtes concurrentes pour récupérer toutes les données
+  const [
+    { data: careerProfile },
+    { data: profile },
+    { data: projects },
+    { data: experiences },
+    { data: skills }
+  ] = await Promise.all([
+    supabase.from('career_profile').select('*').limit(1).single(),
+    supabase.from('profile').select('*').limit(1).single(),
+    supabase.from('projects').select('*').order('display_order', { ascending: true }),
+    supabase.from('experiences').select('*').order('start_date', { ascending: false }),
+    supabase.from('skills').select('*').order('display_order', { ascending: true })
+  ]);
 
-  if (error || !data) {
-    console.error('career_profile fetch error:', error);
-    return {
-      targetRole: 'Product Builder / Ops No-Code',
-      sector: 'Digital / Tech / Ops',
-      location: 'France / Télétravail',
-      salaryExpectation: 'À discuter selon profil et impact généré',
-      absolutelyAvoid: 'Développement pur (backend lourd, C++, mobile natif), ESN très classiques',
-      responseTone: 'Professionnel, direct, orienté impact business et technique.',
-      cvText: ''
-    };
-  }
+  // Construction dynamique du CV Brut à partir de la BDD du Portfolio
+  const cvText = `
+--- INFORMATIONS PERSONNELLES ---
+NOM : ${profile?.full_name || 'Non précisé'}
+BIO : ${profile?.bio || 'Non précisée'}
+DESCRIPTION COURTE : ${profile?.short_description || 'Non précisée'}
 
+--- EXPÉRIENCES PROFESSIONNELLES ---
+${experiences?.map((exp: any) => `- ${exp.job_title} chez ${exp.company_name} (${exp.duration}) : ${exp.description}`).join('\n') || 'Aucune expérience enregistrée.'}
+
+--- PROJETS RÉALISÉS ---
+${projects?.map((proj: any) => `- ${proj.name} : ${proj.short_description}`).join('\n') || 'Aucun projet enregistré.'}
+
+--- COMPÉTENCES ---
+${skills?.map((skill: any) => `- ${skill.name} (Niveau ${skill.level || 'Non précisé'} / Catégorie: ${skill.category || 'Non précisée'})`).join('\n') || 'Aucune compétence enregistrée.'}
+`.trim();
+
+  // On renvoie un mix des préférences Career Ops et du CV généré
   return {
-    targetRole: data.target_role || 'Product Builder / Ops No-Code',
-    sector: data.sector || 'Digital / Tech / Ops',
-    location: data.location || 'France / Télétravail',
-    salaryExpectation: data.salary_expectation || 'À discuter',
-    absolutelyAvoid: data.absolutely_avoid || '',
-    responseTone: data.response_tone || 'Professionnel, direct.',
-    cvText: data.cv_text || ''
+    targetRole: careerProfile?.target_role || 'Product Builder / Ops No-Code',
+    sector: careerProfile?.sector || 'Digital / Tech / Ops',
+    location: careerProfile?.location || 'France / Télétravail',
+    salaryExpectation: careerProfile?.salary_expectation || 'À discuter',
+    absolutelyAvoid: careerProfile?.absolutely_avoid || '',
+    responseTone: careerProfile?.response_tone || 'Professionnel, direct.',
+    cvText: cvText
   };
 }
 

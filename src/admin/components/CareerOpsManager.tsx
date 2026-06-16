@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Briefcase, FileText, Mail, Save, Loader2, Zap, X, User, Search } from 'lucide-react';
+import { Briefcase, FileText, Mail, Save, Loader2, Zap, X, User, Search, FolderOpen, Trash2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
 import { CvPdfDocument } from '../../components/career/CvPdfDocument';
@@ -147,7 +147,7 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
   const saveToTracker = async () => {
     if (!evalResult) return;
     const newJob = {
-      company_name: "Entreprise Inconnue", // Idéalement à extraire du texte ou à demander à l'utilisateur
+      company_name: "Entreprise Inconnue",
       role_title: "Poste à définir",
       status: '🟡 À préparer',
       score: evalResult.globalScore || 0,
@@ -157,6 +157,7 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
       evaluation_strengths: evalResult.strengths,
       evaluation_weaknesses: evalResult.weaknesses,
       cv_json: adaptResult || null,
+      lm_json: lmResult || null,
     };
     const { error } = await supabase.from('job_applications').insert(newJob);
     if (!error) {
@@ -165,6 +166,34 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
       setActiveTab('tracker');
     } else {
       alert("Erreur de sauvegarde: " + error.message);
+    }
+  };
+
+  const deleteJob = async (id: string) => {
+    if (!confirm('Supprimer cette candidature ?')) return;
+    await supabase.from('job_applications').delete().eq('id', id);
+    fetchJobs();
+  };
+
+  const handleReopenJob = (job: any) => {
+    // Restaure tout le contexte de la candidature
+    setJobText(job.job_description || '');
+    if (job.cv_json) setAdaptResult(job.cv_json);
+    if (job.lm_json) setLmResult(job.lm_json);
+    // Reconstruction de l'evalResult depuis les champs sauvegardés
+    setEvalResult({
+      globalScore: job.score,
+      globalGrade: job.grade,
+      jobSummary: job.evaluation_summary,
+      strengths: job.evaluation_strengths || [],
+      weaknesses: job.evaluation_weaknesses || [],
+      verdict: job.grade,
+    });
+    // Redirige vers l'onglet le plus utile
+    if (job.cv_json) {
+      setActiveTab('cv');
+    } else {
+      setActiveTab('evaluate');
     }
   };
 
@@ -235,7 +264,6 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
           </div>
         )}
 
-        {/* TAB 1: TRACKER */}
         {activeTab === 'tracker' && (
           <div>
             <div className="flex justify-between items-center mb-4">
@@ -246,22 +274,54 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
             ) : (
               <div className="grid gap-4">
                 {trackerJobs.map(job => (
-                  <div key={job.id} className="bg-[#152642] p-4 rounded-lg border border-[#B99A5A]/10 flex justify-between items-center">
-                    <div>
-                      <h3 className="text-[#F5EFE1] font-bold">{job.role_title} @ {job.company_name}</h3>
-                      <p className="text-sm">Score : {job.score}/5 ({job.grade})</p>
+                  <div key={job.id} className="bg-[#152642] p-4 rounded-lg border border-[#B99A5A]/10">
+                    <div className="flex justify-between items-start gap-3">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-[#F5EFE1] font-bold truncate">{job.role_title} @ {job.company_name}</h3>
+                        <p className="text-sm mt-1">Score : {job.score}/5 ({job.grade})</p>
+                        {/* Badges CV/LM disponibles */}
+                        <div className="flex gap-2 mt-2">
+                          {job.cv_json && (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-300">📄 CV sauvegardé</span>
+                          )}
+                          {job.lm_json && (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-300">✉️ LM sauvegardée</span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-2 shrink-0">
+                        <select 
+                          value={job.status} 
+                          onChange={(e) => updateJobStatus(job.id, e.target.value)}
+                          className="bg-[#0A1424] text-[#C9C2B6] border border-[#B99A5A]/30 rounded p-2 outline-none text-sm"
+                        >
+                          <option value="🟡 À préparer">🟡 À préparer</option>
+                          <option value="🟠 Envoyée">🟠 Envoyée</option>
+                          <option value="🟢 Entretien">🟢 Entretien</option>
+                          <option value="🔴 Refus">🔴 Refus</option>
+                          <option value="⚪ Abandon">⚪ Abandon</option>
+                        </select>
+                        <button
+                          onClick={() => handleReopenJob(job)}
+                          className="flex items-center justify-center gap-1.5 px-3 py-2 bg-[#D8AF3A]/20 border border-[#D8AF3A]/40 text-[#D8AF3A] rounded hover:bg-[#D8AF3A]/30 transition-colors text-sm"
+                          title="Rouvrir cette candidature (CV, LM, évaluation)"
+                        >
+                          <FolderOpen className="w-4 h-4" />
+                          Rouvrir
+                        </button>
+                        <button
+                          onClick={() => deleteJob(job.id)}
+                          className="flex items-center justify-center gap-1.5 px-3 py-2 bg-red-900/20 border border-red-500/30 text-red-400 rounded hover:bg-red-900/40 transition-colors text-sm"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          Supprimer
+                        </button>
+                      </div>
                     </div>
-                    <select 
-                      value={job.status} 
-                      onChange={(e) => updateJobStatus(job.id, e.target.value)}
-                      className="bg-[#0A1424] text-[#C9C2B6] border border-[#B99A5A]/30 rounded p-2 outline-none"
-                    >
-                      <option value="🟡 À préparer">🟡 À préparer</option>
-                      <option value="🟠 Envoyée">🟠 Envoyée</option>
-                      <option value="🟢 Entretien">🟢 Entretien</option>
-                      <option value="🔴 Refus">🔴 Refus</option>
-                      <option value="⚪ Abandon">⚪ Abandon</option>
-                    </select>
+                    {/* Aperçu du résumé */}
+                    {job.evaluation_summary && (
+                      <p className="text-xs text-[#C9C2B6]/60 mt-3 line-clamp-2 italic">{job.evaluation_summary}</p>
+                    )}
                   </div>
                 ))}
               </div>
@@ -435,14 +495,13 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
               <input type="text" value={profileData.response_tone || ''} onChange={e => setProfileData({...profileData, response_tone: e.target.value})} className="w-full bg-[#0A1424] border border-[#B99A5A]/30 rounded p-2 text-[#F5EFE1] outline-none focus:border-[#D8AF3A]" />
             </div>
 
-            <div>
-              <label className="block text-xs text-[#D8AF3A] mb-1">CV complet (Markdown) — utilisé par l'IA pour personnaliser les analyses</label>
-              <textarea
-                className="w-full h-64 bg-[#0A1424] border border-[#B99A5A]/30 rounded p-3 text-[#F5EFE1] outline-none focus:border-[#D8AF3A] font-mono text-sm"
-                placeholder="Collez ici votre CV complet en texte brut ou Markdown..."
-                value={profileData.cv_text || ''}
-                onChange={e => setProfileData({...profileData, cv_text: e.target.value})}
-              />
+            <div className="bg-blue-900/20 border border-blue-500/30 p-4 rounded text-blue-200 text-sm flex gap-3">
+              <User className="w-5 h-5 shrink-0 text-blue-400" />
+              <p>
+                <strong>Synchronisation Automatique :</strong> Les informations factuelles de votre CV (Expériences, Projets, Compétences) 
+                sont automatiquement générées à la volée à partir de la base de données du portfolio. 
+                Plus besoin de copier-coller votre CV !
+              </p>
             </div>
 
             <button onClick={saveCareerProfile} disabled={profileLoading} className="bg-[#D8AF3A] hover:bg-[#F0C674] text-[#050B14] font-bold py-2 px-6 rounded transition-colors flex items-center gap-2">

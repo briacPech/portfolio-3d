@@ -13,8 +13,7 @@ import { DataSeeder } from './components/DataSeeder';
 import { DashboardHome } from './components/DashboardHome';
 import { MessagesManager } from './components/MessagesManager';
 import { CareerOpsManager } from './components/CareerOpsManager';
-import { ChatLogsManager } from './components/ChatLogsManager';
-import { Mail, Search, MessageCircle } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -51,7 +50,6 @@ export const Dashboard = () => {
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           <NavItem icon={<LayoutDashboard className="w-4 h-4" />} label="Tableau de Bord" active={activeTab === 'dashboard'} onClick={() => handleTabClick('dashboard')} />
           <NavItem icon={<Mail className="w-4 h-4" />} label="Boîte de réception" active={activeTab === 'messages'} onClick={() => handleTabClick('messages')} />
-          <NavItem icon={<MessageCircle className="w-4 h-4" />} label="Historique Chat" active={activeTab === 'chatlogs'} onClick={() => handleTabClick('chatlogs')} />
           <NavItem icon={<User className="w-4 h-4" />} label="Profil & Contact" active={activeTab === 'profile'} onClick={() => handleTabClick('profile')} />
           <NavItem icon={<Map className="w-4 h-4" />} label="Textes des Îles" active={activeTab === 'islands'} onClick={() => handleTabClick('islands')} />
           <NavItem icon={<FolderGit2 className="w-4 h-4" />} label="Projets" active={activeTab === 'projects'} onClick={() => handleTabClick('projects')} />
@@ -83,7 +81,6 @@ export const Dashboard = () => {
           )}
 
           {activeTab === 'messages' && <MessagesManager />}
-          {activeTab === 'chatlogs' && <ChatLogsManager />}
           {activeTab === 'profile' && <ProfileManager />}
           {activeTab === 'islands' && <IslandsManager />}
           {activeTab === 'projects' && <ProjectsManager />}
