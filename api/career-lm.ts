@@ -26,7 +26,14 @@ Détails de l'offre: ${jobText || 'Non fournis'}
 Rédige une lettre de motivation ou un message de prospection percutant (selon ce qui est le plus adapté).
 Le ton doit être direct, professionnel, légèrement audacieux, et mettre en valeur le côté hybride (produit/business) et pragmatique du profil.
 
-Tu dois UNIQUEMENT retourner du JSON strict. Aucune phrase d'intro.`;
+Tu dois UNIQUEMENT retourner du JSON strict avec EXACTEMENT cette structure (ne change pas les clés) :
+{
+  "subject": "string",
+  "letter": "string",
+  "tone": "string"
+}
+
+Aucune phrase d'intro, uniquement le JSON.`;
 
     const fullPrompt = `${CAREER_OPS_SYSTEM}\n\n---\n\n${prompt}`;
     

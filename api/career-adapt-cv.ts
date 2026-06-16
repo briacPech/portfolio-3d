@@ -28,7 +28,23 @@ Ne mens pas sur les expériences, mais :
 3. Propose une accroche percutante.
 4. Structure rigoureusement la réponse selon le schéma JSON demandé, adapté pour un export PDF propre.
 
-Tu dois UNIQUEMENT retourner du JSON strict. Aucune phrase d'intro.`;
+Tu dois UNIQUEMENT retourner du JSON strict avec EXACTEMENT cette structure (ne change pas les clés) :
+{
+  "tailoredHook": "string",
+  "adaptedExperiences": [
+    {
+      "company": "string",
+      "role": "string",
+      "duration": "string",
+      "bullets": ["string"]
+    }
+  ],
+  "adaptedSkills": ["string"],
+  "pureDevWarning": "string",
+  "isPureDevDetected": false
+}
+
+Aucune phrase d'intro, uniquement le JSON.`;
 
     const fullPrompt = `${CAREER_OPS_SYSTEM}\n\n---\n\n${prompt}`;
     

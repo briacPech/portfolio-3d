@@ -64,7 +64,30 @@ Extrais également les mots-clés ATS clés détectés dans l'offre qu'il faut a
 Spécifie clairement comment le projet phare Festival Connect de Briac s'insère comme preuve solide d'autorité pour cette offre.
 Rédige un conseil stratégique personnalisé pour postuler.
 
-Tu dois UNIQUEMENT retourner du JSON strict. Aucune phrase d'intro.`;
+Tu dois UNIQUEMENT retourner du JSON strict avec EXACTEMENT cette structure (ne change pas les clés) :
+{
+  "jobSummary": "string",
+  "dimensions": [
+    {
+      "name": "string",
+      "weight": 0,
+      "score": 0,
+      "grade": "string",
+      "reasoning": "string"
+    }
+  ],
+  "globalScore": 0,
+  "globalGrade": "string",
+  "verdict": "string",
+  "strengths": ["string"],
+  "weaknesses": ["string"],
+  "atsKeywords": ["string"],
+  "festivalConnectArgument": "string",
+  "applicationAdvice": "string",
+  "expired": false
+}
+
+Aucune phrase d'intro, uniquement le JSON.`;
 
     const fullPrompt = `${CAREER_OPS_SYSTEM}\n\n---\n\n${prompt}`;
     

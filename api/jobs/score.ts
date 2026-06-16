@@ -53,8 +53,20 @@ Plateforme : ${job.platform}
 Description : ${job.job_description?.slice(0, 1500) || 'Non fournie'}
 
 Donne un score de 1 à 5, une note lettre (A-F), un verdict (POSTULER|GARDER EN VEILLE|PASSER) et une phrase d'explication (why_one_line).
-Les postes de développeur pur (Java, C++, .NET, backend) doivent avoir un score < 2.5 et verdict PASSER.
-Tu dois UNIQUEMENT retourner du JSON strict. Aucune phrase d'intro.`;
+Les postes de développeur pur (Java, C++, .NET, backend) doivent avoir un score < 2.5 et verdict PASSER. Rédige aussi un pourquoi (why_one_line) très direct.
+
+Tu dois UNIQUEMENT retourner du JSON strict avec EXACTEMENT cette structure (ne change pas les clés) :
+{
+  "score": 0,
+  "grade": "string",
+  "verdict": "string",
+  "why_one_line": "string",
+  "profile_fit": "string",
+  "contract_fit": "string",
+  "remote_fit": "string"
+}
+
+Aucune phrase d'intro, uniquement le JSON.`;
 
         const result: any = await callLLM(prompt, {
           model: JOB_SCORING_MODEL,
