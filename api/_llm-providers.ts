@@ -64,7 +64,7 @@ export async function callGemini(prompt: string, options: CallLLMOptions) {
 }
 
 export async function callLLM(prompt: string, options: CallLLMOptions) {
-  const provider = options.provider || 'gemini'; // Force Gemini as default
+  const provider = options.provider || 'groq';
 
   if (provider === 'gemini') {
     try {
