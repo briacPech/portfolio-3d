@@ -1,5 +1,5 @@
 import { createGroq } from '@ai-sdk/groq';
-import { streamText, convertToModelMessages, type UIMessage } from 'ai';
+import { streamText, convertToModelMessages } from 'ai';
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize the Groq provider
@@ -13,7 +13,6 @@ const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABA
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // --- Cache du contexte Supabase (TTL: 5 minutes) ---
-// Évite de refaire 4 requêtes à chaque message envoyé au chat
 let contextCache: { data: any; expiresAt: number } | null = null;
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
@@ -38,7 +37,7 @@ async function getPortfolioContext() {
 }
 
 export const config = {
-  runtime: 'nodejs', // Node.js runtime : attend que onFinish soit terminé avant de clôturer la fonction
+  runtime: 'edge', // Edge runtime requis pour le streaming
 };
 
 export default async function handler(req: Request) {
@@ -76,48 +75,44 @@ ${skills?.map((skill: any) => `- ${skill.name} (Niveau ${skill.level || 'Non pr�
 
 Si on te demande comment contacter Briac, dis d'utiliser le bouton "Contact" dans le menu de navigation (en bas de l'écran) ou d'utiliser le mail briac.pech@gmail.com.`;
 
-    // Extraire le dernier message de l'utilisateur pour l'historique
+    // --- Sauvegarder le message de l'utilisateur ---
     // Gère les deux formats : string simple et tableau de parts {type, text}
     const lastMessage = messages[messages.length - 1];
     if (lastMessage && lastMessage.role === 'user') {
-      let content = '';
+      let userContent = '';
       if (typeof lastMessage.content === 'string') {
-        content = lastMessage.content;
+        userContent = lastMessage.content;
       } else if (Array.isArray(lastMessage.content)) {
-        content = lastMessage.content
-          .filter((p: any) => p.type === 'text')
-          .map((p: any) => p.text ?? '')
-          .join('');
+        userContent = lastMessage.content.filter((p: any) => p.type === 'text').map((p: any) => p.text ?? '').join('');
       } else if (typeof lastMessage.text === 'string') {
-        content = lastMessage.text;
+        userContent = lastMessage.text;
       } else if (Array.isArray(lastMessage.parts)) {
-        content = lastMessage.parts
-          .filter((p: any) => p.type === 'text')
-          .map((p: any) => p.text ?? '')
-          .join('');
+        userContent = lastMessage.parts.filter((p: any) => p.type === 'text').map((p: any) => p.text ?? '').join('');
       }
-      if (content.trim()) {
-        supabase.from('chat_logs').insert({
-          role: 'user',
-          content: content.trim()
-        }).then(({ error }) => {
-          if (error) console.error('Error logging user message:', error);
-        });
+      if (userContent.trim()) {
+        // Fire-and-forget avant de retourner la réponse streaming (fonctionne sur Edge)
+        supabase.from('chat_logs').insert({ role: 'user', content: userContent.trim() })
+          .then(({ error }) => { if (error) console.error('Log user msg error:', error); });
       }
     }
 
+    // --- Générer la réponse streaming ---
     const result = streamText({
       model: groq('llama-3.3-70b-versatile'),
       system: SYSTEM_PROMPT,
       messages: await convertToModelMessages(messages),
-      onFinish: async ({ text }) => {
-        const { error } = await supabase.from('chat_logs').insert({
-          role: 'assistant',
-          content: text
-        });
-        if (error) console.error('Error logging assistant message:', error);
-      }
     });
+
+    // --- Intercepter le texte complet via un TransformStream ---
+    // On utilise result.text (Promise) qui résout quand l'IA a fini de générer.
+    // Sur Edge, on ne peut pas await après avoir retourné, mais on peut s'y prendre
+    // en chaînant sur la promise AVANT de retourner le stream.
+    result.text.then((fullText) => {
+      if (fullText.trim()) {
+        supabase.from('chat_logs').insert({ role: 'assistant', content: fullText.trim() })
+          .then(({ error }) => { if (error) console.error('Log assistant msg error:', error); });
+      }
+    }).catch(console.error);
 
     return result.toUIMessageStreamResponse();
   } catch (error) {
