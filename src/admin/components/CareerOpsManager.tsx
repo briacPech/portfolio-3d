@@ -626,13 +626,16 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
               <input type="text" value={profileData.response_tone || ''} onChange={e => setProfileData({...profileData, response_tone: e.target.value})} className="w-full bg-[#0A1424] border border-[#B99A5A]/30 rounded p-2 text-[#F5EFE1] outline-none focus:border-[#D8AF3A]" />
             </div>
 
-            <div className="bg-blue-900/20 border border-blue-500/30 p-4 rounded text-blue-200 text-sm flex gap-3">
-              <User className="w-5 h-5 shrink-0 text-blue-400" />
-              <p>
-                <strong>Synchronisation Automatique :</strong> Les informations factuelles de votre CV (Expériences, Projets, Compétences) 
-                sont automatiquement générées à la volée à partir de la base de données du portfolio. 
-                Plus besoin de copier-coller votre CV !
-              </p>
+            <div>
+              <label className="block text-xs text-[#D8AF3A] mb-1">
+                CV Brut (Markdown) - "Narrative, Superpowers, Expériences"
+              </label>
+              <textarea 
+                value={profileData.cv_text || ''} 
+                onChange={e => setProfileData({...profileData, cv_text: e.target.value})} 
+                className="w-full h-64 bg-[#0A1424] border border-[#B99A5A]/30 rounded p-2 text-[#F5EFE1] outline-none focus:border-[#D8AF3A] font-mono text-sm"
+                placeholder="Collez ici votre profile YAML ou Markdown ultra-travaillé (Narrative, Superpowers, etc.)"
+              />
             </div>
 
             <button onClick={saveCareerProfile} disabled={profileLoading} className="bg-[#D8AF3A] hover:bg-[#F0C674] text-[#050B14] font-bold py-2 px-6 rounded transition-colors flex items-center gap-2">
