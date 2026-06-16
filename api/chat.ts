@@ -75,44 +75,12 @@ ${skills?.map((skill: any) => `- ${skill.name} (Niveau ${skill.level || 'Non pr�
 
 Si on te demande comment contacter Briac, dis d'utiliser le bouton "Contact" dans le menu de navigation (en bas de l'écran) ou d'utiliser le mail briac.pech@gmail.com.`;
 
-    // --- Sauvegarder le message de l'utilisateur ---
-    // Gère les deux formats : string simple et tableau de parts {type, text}
-    const lastMessage = messages[messages.length - 1];
-    if (lastMessage && lastMessage.role === 'user') {
-      let userContent = '';
-      if (typeof lastMessage.content === 'string') {
-        userContent = lastMessage.content;
-      } else if (Array.isArray(lastMessage.content)) {
-        userContent = lastMessage.content.filter((p: any) => p.type === 'text').map((p: any) => p.text ?? '').join('');
-      } else if (typeof lastMessage.text === 'string') {
-        userContent = lastMessage.text;
-      } else if (Array.isArray(lastMessage.parts)) {
-        userContent = lastMessage.parts.filter((p: any) => p.type === 'text').map((p: any) => p.text ?? '').join('');
-      }
-      if (userContent.trim()) {
-        // Fire-and-forget avant de retourner la réponse streaming (fonctionne sur Edge)
-        supabase.from('chat_logs').insert({ role: 'user', content: userContent.trim() })
-          .then(({ error }) => { if (error) console.error('Log user msg error:', error); });
-      }
-    }
-
-    // --- Générer la réponse streaming ---
+    // Logging géré côté client dans FloatingChat.tsx (onFinish)
     const result = streamText({
       model: groq('llama-3.3-70b-versatile'),
       system: SYSTEM_PROMPT,
       messages: await convertToModelMessages(messages),
     });
-
-    // --- Intercepter le texte complet via un TransformStream ---
-    // On utilise result.text (Promise) qui résout quand l'IA a fini de générer.
-    // Sur Edge, on ne peut pas await après avoir retourné, mais on peut s'y prendre
-    // en chaînant sur la promise AVANT de retourner le stream.
-    result.text.then((fullText) => {
-      if (fullText.trim()) {
-        supabase.from('chat_logs').insert({ role: 'assistant', content: fullText.trim() })
-          .then(({ error }) => { if (error) console.error('Log assistant msg error:', error); });
-      }
-    }).catch(console.error);
 
     return result.toUIMessageStreamResponse();
   } catch (error) {
