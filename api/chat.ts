@@ -61,10 +61,31 @@ ${skills?.map((skill: any) => `- ${skill.name} (Niveau ${skill.level || 'Non prÃ
 
 Si on te demande comment contacter Briac, dis d'utiliser le bouton "Contact" dans le menu de navigation (en bas de l'Ã©cran) ou d'utiliser le mail briac.pech@gmail.com.`;
 
+    // Extraire le dernier message de l'utilisateur pour l'historique
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage && lastMessage.role === 'user') {
+      const content = lastMessage.content || lastMessage.text || '';
+      if (content) {
+        supabase.from('chat_logs').insert({
+          role: 'user',
+          content: content
+        }).then(({ error }) => {
+          if (error) console.error('Error logging user message:', error);
+        });
+      }
+    }
+
     const result = streamText({
       model: groq('llama-3.3-70b-versatile'),
       system: SYSTEM_PROMPT,
       messages: await convertToModelMessages(messages),
+      onFinish: async ({ text }) => {
+        const { error } = await supabase.from('chat_logs').insert({
+          role: 'assistant',
+          content: text
+        });
+        if (error) console.error('Error logging assistant message:', error);
+      }
     });
 
     return result.toUIMessageStreamResponse();

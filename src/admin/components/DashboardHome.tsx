@@ -6,6 +6,7 @@ export const DashboardHome = () => {
   const [stats, setStats] = useState({
     todayVisitors: 0,
     totalViews: 0,
+    totalUniqueVisitors: 0,
     recentPages: [] as any[]
   });
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,13 @@ export const DashboardHome = () => {
         
       const uniqueToday = new Set(todayData?.map(d => d.session_id)).size;
 
+      // Visiteurs uniques (Total)
+      const { data: allData } = await supabase
+        .from('page_views')
+        .select('session_id');
+        
+      const totalUniqueVisitors = new Set(allData?.map(d => d.session_id)).size;
+
       // Pages récemment vues
       const { data: recent } = await supabase
         .from('page_views')
@@ -42,6 +50,7 @@ export const DashboardHome = () => {
       setStats({
         todayVisitors: uniqueToday,
         totalViews: totalViews || 0,
+        totalUniqueVisitors: totalUniqueVisitors,
         recentPages: recent || []
       });
     } catch (error) {
@@ -59,7 +68,7 @@ export const DashboardHome = () => {
       </header>
 
       {/* Dashboard Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
         <StatCard 
           title="Visiteurs uniques (Aujourd'hui)" 
           value={loading ? "..." : stats.todayVisitors.toString()} 
@@ -71,6 +80,12 @@ export const DashboardHome = () => {
           value={loading ? "..." : stats.totalViews.toString()} 
           trend="Historique complet" 
           icon={<Eye className="w-5 h-5 text-[#D8AF3A]" />}
+        />
+        <StatCard 
+          title="Visiteurs uniques (Total)" 
+          value={loading ? "..." : stats.totalUniqueVisitors.toString()} 
+          trend="Historique complet" 
+          icon={<Users className="w-5 h-5 text-[#D8AF3A]" />}
         />
         <StatCard 
           title="Statut du site" 
