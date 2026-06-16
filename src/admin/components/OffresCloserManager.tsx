@@ -394,11 +394,15 @@ export function OffresCloserManager({ onSendToCareerOps }: Props) {
                         <ExternalLink className="w-4 h-4" />
                       </a>
                     )}
-                    {!job.sent_to_career_ops && onSendToCareerOps && (
+                    {onSendToCareerOps && (
                       <button
                         onClick={() => handleSendToCareerOps(job)}
-                        className="p-1.5 rounded bg-[#D8AF3A]/20 text-[#D8AF3A] hover:bg-[#D8AF3A]/30 transition-colors"
-                        title="Traiter dans Career Ops"
+                        className={`p-1.5 rounded transition-colors ${
+                          job.sent_to_career_ops 
+                            ? 'bg-blue-900/20 text-blue-400 hover:bg-blue-900/40' 
+                            : 'bg-[#D8AF3A]/20 text-[#D8AF3A] hover:bg-[#D8AF3A]/30'
+                        }`}
+                        title={job.sent_to_career_ops ? "Renvoyer vers Career Ops" : "Traiter dans Career Ops"}
                       >
                         <ArrowRight className="w-4 h-4" />
                       </button>

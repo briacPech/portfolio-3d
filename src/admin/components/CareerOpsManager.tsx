@@ -228,7 +228,7 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
         </button>
         <button onClick={() => setActiveTab('profil')} className={"flex-1 p-3 text-sm font-medium transition-colors " + (activeTab === 'profil' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
           <User className="w-4 h-4 mx-auto mb-1" />
-          Profil
+          Préférences
         </button>
       </div>
 
@@ -460,11 +460,11 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
           </div>
         )}
 
-        {/* TAB 5: PROFIL */}
+        {/* TAB 5: PREFERENCES */}
         {activeTab === 'profil' && profileData && (
           <div className="space-y-4">
-            <h2 className="text-xl font-serif text-[#F0C674]">Profil Career Ops</h2>
-            <p className="text-sm text-[#C9C2B6]/70">Ces informations sont utilisées par l'IA pour scorer et adapter votre candidature.</p>
+            <h2 className="text-xl font-serif text-[#F0C674]">Préférences de Recherche (Career Ops)</h2>
+            <p className="text-sm text-[#C9C2B6]/70">Réglez ici vos cibles. L'IA fusionnera ces préférences avec le CV de votre portfolio pour analyser les offres.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
