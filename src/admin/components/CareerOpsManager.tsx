@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Briefcase, FileText, Mail, Save, Loader2, Zap, X, User } from 'lucide-react';
+import { Briefcase, FileText, Mail, Save, Loader2, Zap, X, User, Search } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
 import { CvPdfDocument } from '../../components/career/CvPdfDocument';
+import { OffresCloserManager } from './OffresCloserManager';
 
 interface Props {
   initialJobText?: string;
@@ -11,7 +12,7 @@ interface Props {
 }
 
 export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
-  const [activeTab, setActiveTab] = useState('tracker');
+  const [activeTab, setActiveTab] = useState('radar');
   const [loading, setLoading] = useState(false);
   const [trackerJobs, setTrackerJobs] = useState<any[]>([]);
   const [isPremium, setIsPremium] = useState(false); // Toggle between Groq and Gemini
@@ -141,38 +142,7 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
     setLoading(false);
   };
 
-  const handleScoreJobs = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/jobs/score', { method: 'POST' });
-      const data = await res.json();
-      alert(`Scoring terminé. ${data.scored} offres évaluées.`);
-      fetchJobs();
-    } catch (err: any) {
-      alert("Erreur lors du scoring en masse: " + err.message);
-    }
-    setLoading(false);
-  };
-
-  const handleScrapeJobs = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/jobs/scrape', { 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: "Product Builder No-Code Automatisation",
-          location: "France",
-          results_wanted: 10
-        })
-      });
-      const data = await res.json();
-      alert(`Scraping terminé. ${data.total || data.scraped_count || 0} offres récupérées.`);
-    } catch (err: any) {
-      alert("Erreur lors du scraping: " + err.message);
-    }
-    setLoading(false);
-  };
+  // handleScrapeJobs and handleScoreJobs removed as they are now handled by OffresCloserManager
 
   const saveToTracker = async () => {
     if (!evalResult) return;
@@ -207,6 +177,10 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
     <div className="bg-[#0E1B2E] border border-[#B99A5A]/20 rounded-xl overflow-hidden text-[#C9C2B6]">
       {/* HEADER TABS */}
       <div className="flex border-b border-[#B99A5A]/20 bg-[#0A1424]">
+        <button onClick={() => setActiveTab('radar')} className={"flex-1 p-3 text-sm font-medium transition-colors " + (activeTab === 'radar' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
+          <Search className="w-4 h-4 mx-auto mb-1" />
+          Radar (Offres)
+        </button>
         <button onClick={() => setActiveTab('tracker')} className={"flex-1 p-3 text-sm font-medium transition-colors " + (activeTab === 'tracker' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
           <Briefcase className="w-4 h-4 mx-auto mb-1" />
           Tracker
@@ -250,19 +224,22 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
       </div>
 
       <div className="p-6">
+        {activeTab === 'radar' && (
+          <div className="space-y-4">
+            <OffresCloserManager 
+              onSendToCareerOps={(text) => {
+                setJobText(text);
+                setActiveTab('evaluate');
+              }} 
+            />
+          </div>
+        )}
+
         {/* TAB 1: TRACKER */}
         {activeTab === 'tracker' && (
           <div>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-serif text-[#F0C674]">Tracker de Candidatures</h2>
-              <div className="flex gap-2">
-                <button onClick={handleScrapeJobs} disabled={loading} className="bg-[#152642] border border-[#D8AF3A] text-[#D8AF3A] px-3 py-1 text-sm rounded hover:bg-[#D8AF3A] hover:text-[#0A1424] transition-colors">
-                  {loading ? '...' : 'Lancer JobSpy'}
-                </button>
-                <button onClick={handleScoreJobs} disabled={loading} className="bg-[#152642] border border-[#D8AF3A] text-[#D8AF3A] px-3 py-1 text-sm rounded hover:bg-[#D8AF3A] hover:text-[#0A1424] transition-colors">
-                  {loading ? '...' : 'Scorer Offres Non-Traitées'}
-                </button>
-              </div>
             </div>
             {trackerJobs.length === 0 ? (
               <p>Aucune candidature sauvegardée. Allez dans "Évaluation" pour commencer.</p>

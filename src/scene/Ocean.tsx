@@ -13,7 +13,7 @@ declare module "@react-three/fiber" {
 const WaterMaterial = shaderMaterial(
   {
     uTime: 0,
-    uColorLagoon: new THREE.Color("#00b4d8"),
+    uColorLagoon: new THREE.Color("#0077b6"),
     uColorDeep: new THREE.Color("#023e8a"),
     uColorReflect: new THREE.Color("#90e0ef"),
     uGoldColor: new THREE.Color("#ffffff"),
@@ -195,7 +195,7 @@ export const Ocean = () => {
         <waterMaterial 
           ref={materialRef} 
           transparent={false} 
-          uColorLagoon={new THREE.Color("#00b4d8")} 
+          uColorLagoon={new THREE.Color("#0077b6")} 
           uColorDeep={new THREE.Color("#03045e")} 
           uColorReflect={new THREE.Color("#90e0ef")} 
           uGoldColor={new THREE.Color("#ffffff")} 
