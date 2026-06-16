@@ -38,7 +38,7 @@ async function getPortfolioContext() {
 }
 
 export const config = {
-  runtime: 'edge', // Edge runtime is required for streaming
+  runtime: 'nodejs', // Node.js runtime : attend que onFinish soit terminé avant de clôturer la fonction
 };
 
 export default async function handler(req: Request) {
