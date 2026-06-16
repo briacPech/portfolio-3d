@@ -47,10 +47,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     // Mark jobs as alert sent
+    const authHeader = req.headers.authorization;
+    
     const { createClient } = await import('@supabase/supabase-js');
     const supabase = createClient(
       process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '',
-      process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || ''
+      process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '',
+      { global: { headers: { Authorization: authHeader || '' } } }
     );
     const ids = jobs.map((j: any) => j.id).filter(Boolean);
     if (ids.length > 0) {

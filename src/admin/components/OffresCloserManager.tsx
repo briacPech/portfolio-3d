@@ -123,7 +123,10 @@ export function OffresCloserManager({ onSendToCareerOps }: Props) {
 
       // Save to Supabase
       if (data.jobs && data.jobs.length > 0) {
-        await supabase.from('scraped_jobs').insert(data.jobs);
+        const { error: insertError } = await supabase.from('scraped_jobs').insert(data.jobs);
+        if (insertError) {
+          throw new Error('Erreur insertion Supabase: ' + insertError.message);
+        }
         await fetchJobs();
         alert(`✅ ${data.jobs.length} offres scrapées et sauvegardées !`);
       } else {
@@ -141,10 +144,16 @@ export function OffresCloserManager({ onSendToCareerOps }: Props) {
     let totalAlerts = 0;
     
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+
       while (true) {
         const res = await fetch('/api/jobs/score', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+          },
           body: JSON.stringify({})
         });
         const data = await res.json();

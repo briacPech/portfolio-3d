@@ -11,9 +11,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
 
   try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader ? authHeader.replace('Bearer ', '') : '';
+    
     const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
     const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      global: { headers: { Authorization: authHeader || '' } }
+    });
 
     // Fetch only 1 unscored job at a time to avoid Vercel 10s timeout limits
     const { data: jobs, error } = await supabase
@@ -85,7 +91,10 @@ Tu dois UNIQUEMENT retourner du JSON strict. Aucune phrase d'intro.`;
     if (highScore.length > 0) {
       await fetch(`${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : ''}/api/jobs/alert`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': authHeader || ''
+        },
         body: JSON.stringify({ jobs: highScore })
       }).catch(() => {});
     }
