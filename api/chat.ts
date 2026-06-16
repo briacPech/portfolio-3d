@@ -12,6 +12,31 @@ const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL ||
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+// --- Cache du contexte Supabase (TTL: 5 minutes) ---
+// Évite de refaire 4 requêtes à chaque message envoyé au chat
+let contextCache: { data: any; expiresAt: number } | null = null;
+const CACHE_TTL_MS = 5 * 60 * 1000;
+
+async function getPortfolioContext() {
+  if (contextCache && Date.now() < contextCache.expiresAt) {
+    return contextCache.data;
+  }
+  const [
+    { data: profile },
+    { data: projects },
+    { data: experiences },
+    { data: skills }
+  ] = await Promise.all([
+    supabase.from('profile').select('*').limit(1).single(),
+    supabase.from('projects').select('*').order('display_order', { ascending: true }),
+    supabase.from('experiences').select('*').order('start_date', { ascending: false }),
+    supabase.from('skills').select('*').order('display_order', { ascending: true })
+  ]);
+  const data = { profile, projects, experiences, skills };
+  contextCache = { data, expiresAt: Date.now() + CACHE_TTL_MS };
+  return data;
+}
+
 export const config = {
   runtime: 'edge', // Edge runtime is required for streaming
 };
@@ -24,18 +49,8 @@ export default async function handler(req: Request) {
   try {
     const { messages } = await req.json() as any;
 
-    // Fetch all context dynamically from Supabase
-    const [
-      { data: profile },
-      { data: projects },
-      { data: experiences },
-      { data: skills }
-    ] = await Promise.all([
-      supabase.from('profile').select('*').limit(1).single(),
-      supabase.from('projects').select('*').order('display_order', { ascending: true }),
-      supabase.from('experiences').select('*').order('start_date', { ascending: false }),
-      supabase.from('skills').select('*').order('display_order', { ascending: true })
-    ]);
+    // Fetch context from cache or Supabase
+    const { profile, projects, experiences, skills } = await getPortfolioContext();
 
     // Construct the dynamic System Prompt
     const SYSTEM_PROMPT = `Tu es "Le Capitaine", l'assistant IA virtuel du portfolio 3D de Briac Pécheur.
@@ -62,13 +77,29 @@ ${skills?.map((skill: any) => `- ${skill.name} (Niveau ${skill.level || 'Non pr�
 Si on te demande comment contacter Briac, dis d'utiliser le bouton "Contact" dans le menu de navigation (en bas de l'écran) ou d'utiliser le mail briac.pech@gmail.com.`;
 
     // Extraire le dernier message de l'utilisateur pour l'historique
+    // Gère les deux formats : string simple et tableau de parts {type, text}
     const lastMessage = messages[messages.length - 1];
     if (lastMessage && lastMessage.role === 'user') {
-      const content = lastMessage.content || lastMessage.text || '';
-      if (content) {
+      let content = '';
+      if (typeof lastMessage.content === 'string') {
+        content = lastMessage.content;
+      } else if (Array.isArray(lastMessage.content)) {
+        content = lastMessage.content
+          .filter((p: any) => p.type === 'text')
+          .map((p: any) => p.text ?? '')
+          .join('');
+      } else if (typeof lastMessage.text === 'string') {
+        content = lastMessage.text;
+      } else if (Array.isArray(lastMessage.parts)) {
+        content = lastMessage.parts
+          .filter((p: any) => p.type === 'text')
+          .map((p: any) => p.text ?? '')
+          .join('');
+      }
+      if (content.trim()) {
         supabase.from('chat_logs').insert({
           role: 'user',
-          content: content
+          content: content.trim()
         }).then(({ error }) => {
           if (error) console.error('Error logging user message:', error);
         });

@@ -36,7 +36,7 @@ export const NavigationMenu = () => {
     return (orderA !== -1 ? orderA : 99) - (orderB !== -1 ? orderB : 99);
   }).map((i: any) => ({
     id: i.id,
-    title: getIslandTitle(i.id), // Force les anciens noms
+    title: getIslandTitle(i.id),
     pos: getIslandPos(i.id)
   }));
 
@@ -59,102 +59,100 @@ export const NavigationMenu = () => {
     return unsubscribe;
   }, []);
 
-  // On s'assure que le menu de navigation est toujours visible
-  // const isMobile = window.matchMedia("(max-width: 768px)").matches;
-
   return (
     <>
-    <div className="nav-menu-container">
-      {/* On supprime la boussole Emoji */}
-      
-      {islandsList.map((island) => (
+      {/* Styles CSS injectés une seule fois pour les nav buttons */}
+      <style>{`
+        .nav-btn-item {
+          position: relative;
+          padding: 6px 0;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          font-family: var(--font-sans);
+          font-weight: 400;
+          font-size: clamp(7px, 2.2vw, 11px);
+          letter-spacing: clamp(0.01em, 0.5vw, 0.12em);
+          text-transform: uppercase;
+          transition: color 0.3s ease, opacity 0.3s ease;
+          white-space: nowrap;
+          flex-shrink: 0;
+          color: var(--premium-text);
+        }
+        .nav-btn-item.is-active {
+          color: var(--premium-gold);
+          font-weight: 500;
+        }
+        .nav-btn-item.is-dimmed {
+          opacity: 0.5;
+        }
+        .nav-btn-item:not(.is-active):hover {
+          color: var(--premium-gold-light);
+        }
+        .nav-btn-item .nav-underline {
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0%;
+          height: 1px;
+          background: var(--premium-gold);
+          transition: width 300ms ease-in-out;
+        }
+        .nav-btn-item.is-active .nav-underline,
+        .nav-btn-item:not(.is-active):hover .nav-underline {
+          width: 100%;
+        }
+        .nav-btn-contact {
+          position: relative;
+          padding: clamp(4px, 1vw, 6px) 0;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          font-family: var(--font-sans);
+          font-weight: 600;
+          font-size: clamp(7px, 2.2vw, 11px);
+          letter-spacing: clamp(0.01em, 0.5vw, 0.12em);
+          text-transform: uppercase;
+          transition: color 0.3s ease, text-shadow 0.3s ease;
+          white-space: nowrap;
+          flex-shrink: 0;
+          color: var(--premium-gold);
+        }
+        .nav-btn-contact:hover {
+          color: #FFF;
+          text-shadow: 0 0 10px rgba(216,175,58,0.8);
+        }
+      `}</style>
+
+      <div className="nav-menu-container">
+        {islandsList.map((island) => (
+          <button
+            key={island.id}
+            className={[
+              'nav-btn-item',
+              targetId === island.id ? 'is-active' : '',
+              targetId && targetId !== island.id ? 'is-dimmed' : '',
+            ].join(' ')}
+            onClick={() => gameState.setTargetWaypoint(island.id, island.pos.x, island.pos.z)}
+          >
+            {island.title}
+            <div className="nav-underline" />
+          </button>
+        ))}
+
+        {/* Séparateur très fin */}
+        <div className="nav-separator" style={{ width: "1px", height: "14px", background: "rgba(216,175,58,0.2)", flexShrink: 0 }} />
+
+        {/* Bouton Contact */}
         <button
-          key={island.id}
-          className="nav-btn-premium"
-          onClick={() => gameState.setTargetWaypoint(island.id, island.pos.x, island.pos.z)}
-          style={{
-            position: "relative",
-            padding: "6px 0",
-            background: "transparent",
-            color: targetId === island.id ? "var(--premium-gold)" : "var(--premium-text)",
-            border: "none",
-            cursor: "pointer",
-            fontFamily: "var(--font-sans)",
-            fontWeight: targetId === island.id ? "500" : "400",
-            fontSize: "clamp(7px, 2.2vw, 11px)",
-            letterSpacing: "clamp(0.01em, 0.5vw, 0.12em)",
-            textTransform: "uppercase",
-            transition: "all 0.4s ease",
-            opacity: targetId && targetId !== island.id ? 0.5 : 1,
-            whiteSpace: "nowrap",
-            flexShrink: 0
-          }}
-          onMouseEnter={(e) => {
-            if (targetId !== island.id) {
-              e.currentTarget.style.color = "var(--premium-gold-light)";
-              const underline = e.currentTarget.querySelector('.nav-underline') as HTMLElement;
-              if (underline) underline.style.width = "100%";
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (targetId !== island.id) {
-              e.currentTarget.style.color = "var(--premium-text)";
-              const underline = e.currentTarget.querySelector('.nav-underline') as HTMLElement;
-              if (underline) underline.style.width = "0%";
-            }
-          }}
+          className="nav-btn-contact"
+          onClick={() => setIsContactOpen(true)}
         >
-          {island.title}
-          
-          <div className="nav-underline" style={{
-            position: "absolute",
-            bottom: 0,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: targetId === island.id ? "100%" : "0%",
-            height: "1px",
-            background: "var(--premium-gold)",
-            transition: "width 300ms ease-in-out"
-          }} />
+          Contact
         </button>
-      ))}
-
-      {/* Séparateur très fin */}
-      <div className="nav-separator" style={{ width: "1px", height: "14px", background: "rgba(216,175,58,0.2)", flexShrink: 0 }} />
-
-      {/* Bouton Contact */}
-      <button
-        className="nav-btn-premium"
-        onClick={() => setIsContactOpen(true)}
-        style={{
-          position: "relative",
-          padding: "clamp(4px, 1vw, 6px) 0",
-          background: "transparent",
-          color: "var(--premium-gold)",
-          border: "none",
-          cursor: "pointer",
-          fontFamily: "var(--font-sans)",
-          fontWeight: "600",
-          fontSize: "clamp(7px, 2.2vw, 11px)",
-          letterSpacing: "clamp(0.01em, 0.5vw, 0.12em)",
-          textTransform: "uppercase",
-          transition: "all 0.4s ease",
-          whiteSpace: "nowrap",
-          flexShrink: 0
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = "#FFF";
-          e.currentTarget.style.textShadow = "0 0 10px rgba(216,175,58,0.8)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = "var(--premium-gold)";
-          e.currentTarget.style.textShadow = "none";
-        }}
-      >
-        Contact
-      </button>
-    </div>
-    <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      </div>
+      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
     </>
   );
 };

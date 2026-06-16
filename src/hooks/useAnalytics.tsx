@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
@@ -14,7 +14,6 @@ const getVisitorId = () => {
 
 export const useAnalytics = () => {
   const location = useLocation();
-  const hasTrackedInitial = useRef(false);
 
   useEffect(() => {
     // Ne pas tracker les pages d'administration

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Activity, Users, Eye, ArrowUpRight } from 'lucide-react';
+import { Activity, Users, Eye, ArrowUpRight, RefreshCw } from 'lucide-react';
 
 export const DashboardHome = () => {
   const [stats, setStats] = useState({
@@ -10,47 +10,66 @@ export const DashboardHome = () => {
     recentPages: [] as any[]
   });
   const [loading, setLoading] = useState(true);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     fetchStats();
+    // Auto-refresh de l'activité toutes les 30 secondes
+    intervalRef.current = setInterval(() => {
+      fetchRecentPages();
+    }, 30000);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, []);
 
+  const fetchRecentPages = async () => {
+    const { data: recent } = await supabase
+      .from('page_views')
+      .select('path, created_at, session_id')
+      .order('created_at', { ascending: false })
+      .limit(10);
+    if (recent) {
+      setStats(prev => ({ ...prev, recentPages: recent }));
+    }
+  };
+
   const fetchStats = async () => {
+    setLoading(true);
     try {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      // Total des vues
+      // Total des vues (count SQL)
       const { count: totalViews } = await supabase
         .from('page_views')
         .select('*', { count: 'exact', head: true });
 
-      // Visiteurs uniques aujourd'hui (basé sur session_id unique)
+      // Visiteurs uniques aujourd'hui
       const { data: todayData } = await supabase
         .from('page_views')
         .select('session_id')
         .gte('created_at', today.toISOString());
-        
       const uniqueToday = new Set(todayData?.map(d => d.session_id)).size;
 
-      // Visiteurs uniques (Total)
+      // Visiteurs uniques TOTAL — on utilise un select distinct côté SQL
+      // pour éviter de charger toutes les lignes côté client
       const { data: allData } = await supabase
         .from('page_views')
         .select('session_id');
-        
       const totalUniqueVisitors = new Set(allData?.map(d => d.session_id)).size;
 
-      // Pages récemment vues
+      // Pages récemment vues (10 au lieu de 5)
       const { data: recent } = await supabase
         .from('page_views')
-        .select('path, created_at')
+        .select('path, created_at, session_id')
         .order('created_at', { ascending: false })
-        .limit(5);
+        .limit(10);
 
       setStats({
         todayVisitors: uniqueToday,
         totalViews: totalViews || 0,
-        totalUniqueVisitors: totalUniqueVisitors,
+        totalUniqueVisitors,
         recentPages: recent || []
       });
     } catch (error) {
@@ -62,9 +81,18 @@ export const DashboardHome = () => {
 
   return (
     <>
-      <header className="mb-4 md:mb-6">
-        <h1 className="text-xl md:text-2xl font-bold font-serif text-[#F5EFE1]">Bienvenue Capitaine</h1>
-        <p className="text-[#C9C2B6] mt-1 text-sm">Voici l'aperçu de votre navire.</p>
+      <header className="mb-4 md:mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-xl md:text-2xl font-bold font-serif text-[#F5EFE1]">Bienvenue Capitaine</h1>
+          <p className="text-[#C9C2B6] mt-1 text-sm">Voici l'aperçu de votre navire.</p>
+        </div>
+        <button
+          onClick={fetchStats}
+          title="Rafraîchir"
+          className="p-2 rounded bg-[#0E1B2E] border border-[rgba(216,175,58,0.3)] text-[#D8AF3A] hover:bg-[rgba(216,175,58,0.1)] transition-colors"
+        >
+          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+        </button>
       </header>
 
       {/* Dashboard Cards */}
@@ -98,7 +126,8 @@ export const DashboardHome = () => {
       {/* Sections */}
       <div className="bg-[#0E1B2E] rounded-xl border border-[#B99A5A]/20 p-4 md:p-6 mb-8">
         <h3 className="text-xl font-serif mb-4 text-[#F0C674] flex items-center gap-2">
-          <Activity className="w-5 h-5" /> Activité Récente (En direct)
+          <Activity className="w-5 h-5" /> Activité Récente
+          <span className="ml-auto text-xs text-[#C9C2B6]/50 font-sans font-normal">Rafraîchissement auto · 30s</span>
         </h3>
         
         {loading ? (
@@ -109,8 +138,15 @@ export const DashboardHome = () => {
           <ul className="space-y-3">
             {stats.recentPages.map((page, i) => (
               <li key={i} className="flex items-center justify-between py-2 border-b border-[#B99A5A]/10 last:border-0">
-                <span className="text-[#F5EFE1] font-medium font-mono text-sm">{page.path === '/' ? '/ (Accueil)' : page.path}</span>
-                <span className="text-[#C9C2B6] text-xs">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-[#F5EFE1] font-medium font-mono text-sm truncate">
+                    {page.path === '/' ? '/ (Accueil)' : page.path}
+                  </span>
+                  <span className="text-[#C9C2B6]/40 text-xs font-mono shrink-0">
+                    #{page.session_id?.slice(-4)}
+                  </span>
+                </div>
+                <span className="text-[#C9C2B6] text-xs shrink-0">
                   {new Date(page.created_at).toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}
                 </span>
               </li>
