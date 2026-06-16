@@ -64,8 +64,15 @@ export async function callGemini(prompt: string, options: CallLLMOptions) {
 }
 
 export async function callLLM(prompt: string, options: CallLLMOptions) {
-  if (options.provider === 'gemini') {
-    return callGemini(prompt, options);
+  const provider = options.provider || 'gemini'; // Force Gemini as default
+
+  if (provider === 'gemini') {
+    try {
+      return await callGemini(prompt, options);
+    } catch (e: any) {
+      console.warn("Gemini failed, falling back to Groq:", e?.message);
+      return await callGroq(prompt, { ...options, provider: 'groq' });
+    }
   }
 
   try {
