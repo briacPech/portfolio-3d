@@ -52,18 +52,20 @@ Entreprise : ${job.company}
 Plateforme : ${job.platform}
 Description : ${job.job_description?.slice(0, 1500) || 'Non fournie'}
 
-Donne un score de 1 à 5, une note lettre (A-F), un verdict (POSTULER|GARDER EN VEILLE|PASSER) et une phrase d'explication (why_one_line).
-Les postes de développeur pur (Java, C++, .NET, backend) doivent avoir un score < 2.5 et verdict PASSER. Rédige aussi un pourquoi (why_one_line) très direct.
+- RÈGLE ABSOLUE : Une offre purement commerciale (Vente, SDR, Closer) est une EXCELLENTE opportunité. NE PÉNALISE SURTOUT PAS une offre commerciale sous prétexte qu'elle ne mentionne pas le No-Code ou l'IA. Le No-Code est un bonus, pas un pré-requis pour les offres Sales.
+- Tu dois valoriser en priorité : Le profil hybride (Commercial + Tech/No-code), MAIS AUSSI le profil Commercial pur (SDR, Closer, Account Executive).
+- Tu dois écarter d'office (score < 2.5) : Les postes de développeur pur (programmation traditionnelle, backend pur, C++, Java, Mobile natif).
+- Les textes d'analyse DOIVENT être longs et détaillés (plusieurs phrases).
 
 Tu dois UNIQUEMENT retourner du JSON strict avec EXACTEMENT cette structure (ne change pas les clés) :
 {
   "score": 0,
-  "grade": "string",
-  "verdict": "string",
-  "why_one_line": "string",
-  "profile_fit": "string",
-  "contract_fit": "string",
-  "remote_fit": "string"
+  "grade": "lettre (A-F, A étant le meilleur)",
+  "verdict": "POSTULER, GARDER EN VEILLE, ou PASSER",
+  "why_one_line": "Rédige une phrase choc et très percutante expliquant exactement le pourquoi de la note (très précis)",
+  "profile_fit": "Analyse détaillée de l'adéquation profil (2-3 phrases)",
+  "contract_fit": "Analyse du type de contrat (1-2 phrases)",
+  "remote_fit": "Analyse des conditions de remote (1-2 phrases)"
 }
 
 Aucune phrase d'intro, uniquement le JSON.`;

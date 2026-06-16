@@ -30,17 +30,15 @@ Le candidat est Briac, possédant un profil hybride expert "Commercial + No-Code
 Son projet phare de référence est "Festival Connect", un système complet d'administration, logistique et de coordination d'événements et festivals conçu par lui en assemblant Bubble, Airtable, et Make, prouvant ses compétences réelles de constructeur produit (Product Builder) et d'intégrateur de flux.
 
 Tu dois donc valoriser en priorité :
-- La conception de solutions métiers / Product Builder,
-- L'automatisation complète de workflows de process,
-- La structuration de bases de données relationnelles complexes (Airtable),
-- Les intégrations d'APIs et outils SaaS,
-- Le profil hybride commercial (négo, pragmatisme métier, communication, relation client) combiné au No-code.
+- Le profil Commercial B2B pur (SDR, Closer, Account Executive, Business Developer) : Briac excelle en vente, prospection et négociation. C'est son cœur de métier initial.
+- La conception de solutions métiers / Product Builder et l'automatisation de workflows.
+- Le profil hybride (Commercial + Tech/No-code).
 
-RÈGLES D'ORIENTATION & DE SCORING (CRITIQUES / MAILLONS FORTS DE TRI) :
-1. Ne jamais mélanger les offres no-code / product / ops avec les postes de développeur pur (programmation traditionnelle, backend pur, mobile natif, DevOps infrastructure, administration système).
-2. Catégories idéales et très valorisées : No-Code, Product Builder, Automation, Ops, Digital, CRM.
-3. Catégories à écarter d'office ou pénaliser sévèrement (note < 2.5/5 ou verdict 'ÉCARTER') : Backend pur, programmation C++/Rust/Java, Mobile natif, DevOps infrastructure matérielle pure.
-4. Si la note globale calculée / 5 est inférieure à 3/5 (French equivalency 12/20), le verdict DOIT être 'ÉCARTER' (ou 'PASSER'), sauf raison d'opportunité extraordinaire. Recommande d'écarter si score < 3/5.
+RÈGLES D'ORIENTATION & DE SCORING (CRITIQUES) :
+1. REGLE ABSOLUE : Une offre purement commerciale (Vente, SDR, Closer) est une EXCELLENTE opportunité. NE PÉNALISE SURTOUT PAS une offre commerciale sous prétexte qu'elle ne mentionne pas le No-Code, l'IA ou l'automatisation. Le No-Code est un bonus, pas un pré-requis pour les offres Sales.
+2. Catégories idéales (Score 4 ou 5) : Vente B2B, SDR, Closer, Account Executive, No-Code, Product Builder, Ops.
+3. Catégories à écarter d'office (Score < 2.5) : Backend pur, C++/Java, Mobile natif.
+4. Les champs texte de ta réponse JSON (jobSummary, strengths, weaknesses, reasoning) DOIVENT être longs, très détaillés et argumentés (plusieurs phrases). Ne fais pas de réponses courtes.
 
 Voici le CV actuel du candidat :
 ${profile.cvText}
@@ -66,24 +64,24 @@ Rédige un conseil stratégique personnalisé pour postuler.
 
 Tu dois UNIQUEMENT retourner du JSON strict avec EXACTEMENT cette structure (ne change pas les clés) :
 {
-  "jobSummary": "string",
+  "jobSummary": "Rédige un résumé très détaillé et argumenté de 3 à 4 phrases expliquant le rationnel derrière ce score et l'analyse du poste.",
   "dimensions": [
     {
-      "name": "string",
+      "name": "Nom de la dimension",
       "weight": 0,
       "score": 0,
-      "grade": "string",
-      "reasoning": "string"
+      "grade": "lettre",
+      "reasoning": "Justification très précise et détaillée"
     }
   ],
   "globalScore": 0,
-  "globalGrade": "string",
-  "verdict": "string",
-  "strengths": ["string"],
-  "weaknesses": ["string"],
-  "atsKeywords": ["string"],
-  "festivalConnectArgument": "string",
-  "applicationAdvice": "string",
+  "globalGrade": "A-F",
+  "verdict": "POSTULER, GARDER EN VEILLE, ou ÉCARTER",
+  "strengths": ["Point fort 1 très détaillé (1-2 phrases)", "Point fort 2 très détaillé"],
+  "weaknesses": ["Point faible 1 très détaillé (1-2 phrases)", "Point faible 2 très détaillé"],
+  "atsKeywords": ["mot1", "mot2"],
+  "festivalConnectArgument": "Argumentaire solide de 2-3 phrases",
+  "applicationAdvice": "Conseil d'approche ultra-personnalisé et stratégique",
   "expired": false
 }
 
