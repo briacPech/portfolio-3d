@@ -15,22 +15,31 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const profile = await getCandidateProfile();
 
-    const prompt = `Voici le profil du candidat :
+    const prompt = `Rédige une lettre de motivation française hautement professionnelle et adaptée au profil d'un expert "No-Code / IA / Product Builder" (formation Maestro) pour :
+Entreprise : ${companyName}
+Poste : ${role}
+
+Description du poste :
+${jobText || 'Non fournis'}
+
+Profil du candidat :
 ${profile.cvText}
 
-Voici l'offre d'emploi cible :
-Rôle: ${role}
-Entreprise: ${companyName}
-Détails de l'offre: ${jobText || 'Non fournis'}
+Règles de génération expertes pour éviter le style robotique d'IA :
+- PAS d'expressions clichées ou ampoulées comme "Je vous écris ce jour pour exprimer mon enthousiasme débordant", "titulaire d'un master, dynamique, motivé et rigoureux".
+- Style : Pro, percutant, authentique, humble mais assuré. Valorise l'approche "Product Builder" pragmatique : concevoir des solutions métiers adaptées rapidement, automatiser au maximum avec des outils comme Make ou n8n, structurer proprement les données métier sans code inutile.
+- Strictement 3 paragraphes principaux :
+  1. Accroche personnalisée (VOUS) : pourquoi cette entreprise spécifique et son actualité ou sa mission, son besoin d'automatisation ou d'outils fluides, lien immédiat de pertinence avec le poste.
+  2. Valeur ajoutée (MOI) : mes réalisations concrètes d'automatisation ou de conception de produits (ex: Festival Connect), compétences d'intégration IA & outils applicables directement à leurs enjeux opérationnels, sans jamais mentir ni inventer d'expérience.
+  3. Projection et action (NOUS) : perspectives d'optimisation de leurs opérations/produits, proposition d'un échange direct.
+- Formule de politesse finale distinguée et moderne.
+- Mets en évidence ton hybridité : tu n'es pas qu'un tech, tu es aussi un commercial capable de comprendre les enjeux métiers et de négocier.
 
-Rédige une lettre de motivation ou un message de prospection percutant (selon ce qui est le plus adapté).
-Le ton doit être direct, professionnel, légèrement audacieux, et mettre en valeur le côté hybride (produit/business) et pragmatique du profil.
-
-Tu dois UNIQUEMENT retourner du JSON strict avec EXACTEMENT cette structure (ne change pas les clés) :
+Tu dois UNIQUEMENT retourner du JSON strict avec cette structure :
 {
-  "subject": "string",
-  "letter": "string",
-  "tone": "string"
+  "subject": "Objet clair et percutant de la lettre",
+  "letter": "Le contenu complet de la lettre de motivation (avec retours à la ligne)",
+  "tone": "Description courte du ton utilisé (ex: Direct, pragmatique, orienté ROI)"
 }
 
 Aucune phrase d'intro, uniquement le JSON.`;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Briefcase, FileText, Mail, Save, Loader2, Zap, X, User, Search, FolderOpen, Trash2 } from 'lucide-react';
+import { Briefcase, FileText, Mail, Save, Loader2, Zap, X, User, Search, FolderOpen, Trash2, MessageCircle, BrainCircuit } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
 import { CvPdfDocument } from '../../components/career/CvPdfDocument';
@@ -25,10 +25,12 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
   const [adaptResult, setAdaptResult] = useState<any>(null);
   const [cvTemplate, setCvTemplate] = useState<'classic' | 'premium' | 'corporate'>('premium');
 
-  // States for Lettre
+  // States for Lettre / Contacto / Interview
   const [companyName, setCompanyName] = useState('');
   const [roleName, setRoleName] = useState('');
   const [lmResult, setLmResult] = useState<any>(null);
+  const [contactoResult, setContactoResult] = useState<any>(null);
+  const [interviewResult, setInterviewResult] = useState<any>(null);
 
   // States for Profil
   const [profileData, setProfileData] = useState<any>(null);
@@ -122,22 +124,78 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
 
   const handleGenerateLM = async () => {
     setLoading(true);
-    setLmResult(null);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
       const res = await fetch('/api/career-lm', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ companyName, role: roleName, jobText, isPremium })
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : ''
+        },
+        body: JSON.stringify({
+          companyName,
+          role: roleName,
+          jobText,
+          isPremium
+        })
       });
-      if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(errText);
-      }
       const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
       setLmResult(data);
     } catch (err: any) {
-      console.error(err);
-      alert("Erreur LM: " + err.message);
+      alert('Erreur: ' + err.message);
+    }
+    setLoading(false);
+  };
+
+  const handleGenerateContacto = async () => {
+    setLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      const res = await fetch('/api/career-contacto', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : ''
+        },
+        body: JSON.stringify({
+          companyName,
+          role: roleName,
+          jobText
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setContactoResult(data.message);
+    } catch (err: any) {
+      alert('Erreur: ' + err.message);
+    }
+    setLoading(false);
+  };
+
+  const handleGenerateInterview = async () => {
+    setLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      const res = await fetch('/api/career-interview', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : ''
+        },
+        body: JSON.stringify({
+          role: roleName,
+          jobText
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setInterviewResult(data.questions);
+    } catch (err: any) {
+      alert('Erreur: ' + err.message);
     }
     setLoading(false);
   };
@@ -225,6 +283,14 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
         <button onClick={() => setActiveTab('lm')} className={"flex-1 p-3 text-sm font-medium transition-colors " + (activeTab === 'lm' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
           <Mail className="w-4 h-4 mx-auto mb-1" />
           LM
+        </button>
+        <button onClick={() => setActiveTab('contacto')} className={"flex-1 p-3 text-sm font-medium transition-colors " + (activeTab === 'contacto' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
+          <MessageCircle className="w-4 h-4 mx-auto mb-1" />
+          Message
+        </button>
+        <button onClick={() => setActiveTab('interview')} className={"flex-1 p-3 text-sm font-medium transition-colors " + (activeTab === 'interview' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
+          <BrainCircuit className="w-4 h-4 mx-auto mb-1" />
+          Entretien
         </button>
         <button onClick={() => setActiveTab('profil')} className={"flex-1 p-3 text-sm font-medium transition-colors " + (activeTab === 'profil' ? 'text-[#F0C674] border-b-2 border-[#D8AF3A] bg-[#152642]' : 'hover:bg-[#0E1B2E]')}>
           <User className="w-4 h-4 mx-auto mb-1" />
@@ -455,6 +521,71 @@ export function CareerOpsManager({ initialJobText, onClearPending }: Props) {
                 <div className="prose prose-invert prose-p:text-justify max-w-none">
                   <ReactMarkdown>{lmResult.letter || lmResult.letterMarkdown || ''}</ReactMarkdown>
                 </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB: CONTACTO */}
+        {activeTab === 'contacto' && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-serif text-[#F0C674]">Icebreaker LinkedIn (Contacto)</h2>
+            <p className="text-sm text-[#C9C2B6]/70">Générez un message d'approche direct et percutant pour un recruteur.</p>
+            <div className="flex gap-4">
+              <input type="text" placeholder="Nom de l'entreprise" value={companyName} onChange={e => setCompanyName(e.target.value)} className="flex-1 bg-[#0A1424] border border-[#B99A5A]/30 rounded p-3 text-[#F5EFE1] outline-none" />
+              <input type="text" placeholder="Intitulé du poste" value={roleName} onChange={e => setRoleName(e.target.value)} className="flex-1 bg-[#0A1424] border border-[#B99A5A]/30 rounded p-3 text-[#F5EFE1] outline-none" />
+            </div>
+            <button onClick={handleGenerateContacto} disabled={loading || !companyName || !roleName} className="bg-[#D8AF3A] hover:bg-[#F0C674] text-[#050B14] font-bold py-2 px-6 rounded transition-colors flex items-center gap-2">
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
+              Générer Icebreaker
+            </button>
+            {contactoResult && (
+              <div className="mt-6 p-6 bg-[#0A1424] border border-[#B99A5A]/30 rounded-lg relative">
+                <div className="absolute top-4 right-4">
+                  <button 
+                    onClick={() => navigator.clipboard.writeText(contactoResult)}
+                    className="text-xs bg-[#152642] hover:bg-[#D8AF3A]/20 text-[#D8AF3A] px-3 py-1.5 rounded transition-colors"
+                  >
+                    Copier
+                  </button>
+                </div>
+                <div className="whitespace-pre-wrap text-[#F5EFE1]">{contactoResult}</div>
+                <p className="text-xs text-[#B99A5A] mt-4 text-right">{contactoResult.length} caractères / 300</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB: INTERVIEW */}
+        {activeTab === 'interview' && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-serif text-[#F0C674]">Préparation d'Entretien (STAR)</h2>
+            <p className="text-sm text-[#C9C2B6]/70">Générez 5 questions d'entretien probables basées sur l'offre d'emploi, avec des réponses idéales.</p>
+            <div className="flex gap-4">
+              <input type="text" placeholder="Intitulé du poste" value={roleName} onChange={e => setRoleName(e.target.value)} className="flex-1 bg-[#0A1424] border border-[#B99A5A]/30 rounded p-3 text-[#F5EFE1] outline-none" />
+            </div>
+            <button onClick={handleGenerateInterview} disabled={loading || !roleName} className="bg-[#D8AF3A] hover:bg-[#F0C674] text-[#050B14] font-bold py-2 px-6 rounded transition-colors flex items-center gap-2">
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <BrainCircuit className="w-5 h-5" />}
+              Générer Questions
+            </button>
+            {interviewResult && (
+              <div className="mt-6 space-y-4">
+                {interviewResult.map((q: any, i: number) => (
+                  <div key={i} className="p-5 bg-[#0A1424] border border-[#B99A5A]/30 rounded-lg">
+                    <div className="flex items-start justify-between gap-4 mb-3">
+                      <h3 className="text-lg font-bold text-[#F0C674]">Q{i+1}. {q.question}</h3>
+                      <span className="text-xs font-medium px-2 py-1 bg-[#152642] text-[#D8AF3A] rounded whitespace-nowrap">{q.type}</span>
+                    </div>
+                    <div className="bg-[#152642] p-4 rounded text-sm text-[#F5EFE1] mb-3 leading-relaxed whitespace-pre-wrap">
+                      <strong className="text-blue-400">Ma réponse idéale (STAR) :</strong><br/>
+                      {q.starAnswer}
+                    </div>
+                    <div className="text-xs text-[#B99A5A] flex gap-2 items-start">
+                      <Zap className="w-4 h-4 shrink-0" />
+                      <p><strong>Conseil :</strong> {q.advice}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>

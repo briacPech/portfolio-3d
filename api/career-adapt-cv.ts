@@ -15,33 +15,50 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const profile = await getCandidateProfile();
 
-    const prompt = `Voici le profil du candidat :
+    const prompt = `Tu es un expert CV pour le marché français, spécialisé dans les profils No-Code / IA / Automatisation.
+
+PROFIL CANDIDAT
+- Spécialiste No-Code / IA / Automatisation, mais avec une forte casquette Commerciale/Closer.
+- Formation Maestro No Code.
+- Outils maîtrisés : Airtable, Make, Notion, Zapier, n8n, Softr, Bubble.
+- Compétences : automatisation de workflows, CRM, bases de données, intégrations d'API, prototypage rapide, vente complexe, relation client.
+- Pas un développeur pur.
+
+Voici son CV actuel (généré depuis sa base de données) :
 ${profile.cvText}
 
-Voici l'offre d'emploi cible :
+MISSION
+Adapte le CV du candidat à l'offre d'emploi ci-dessous.
+Offre cible :
 ${jobTextOrUrl}
 
-Adapte le CV pour maximiser l'impact sur cette offre.
-Ne mens pas sur les expériences, mais :
-1. Reformule les intitulés et bullet points pour faire écho au vocabulaire de l'offre.
-2. Mets en avant les compétences (hard et soft) demandées.
-3. Propose une accroche percutante.
-4. Structure rigoureusement la réponse selon le schéma JSON demandé, adapté pour un export PDF propre.
+VÉRIFICATION DE SÉCURITÉ DU RÔLE (CRITIQUE) :
+Vérifie si le poste est orienté "Dev Pur" (développement traditionnel backend, fullstack coding avec langages comme C++, Java, Swift, Rust, DevOps hardware/infrastructure). Si oui, définis isPureDevDetected à true et rédige un avertissement (pureDevWarning) expliquant que le profil de Briac (Product Builder / No Code) ne matche pas. Sinon, isPureDevDetected doit être false.
 
-Tu dois UNIQUEMENT retourner du JSON strict avec EXACTEMENT cette structure (ne change pas les clés) :
+RÈGLES D'ADAPTATION DU CV
+- Valorise en priorité les expériences pertinentes pour l'offre (no-code, automatisation, ou vente selon l'offre).
+- Ne fabrique jamais d'expérience ou de compétence absente (conserve l'intégrité exacte du profil original).
+- Injecte les mots-clés ATS de l'offre récoltés de manière naturelle dans les bullet points.
+- Mets en évidence (si le poste s'y prête) le côté hybride unique de Briac : capable de vendre ET de construire la solution technique.
+
+Tu dois UNIQUEMENT retourner du JSON strict qui respecte EXACTEMENT cette structure :
 {
-  "tailoredHook": "string",
-  "adaptedExperiences": [
-    {
-      "company": "string",
-      "role": "string",
-      "duration": "string",
-      "bullets": ["string"]
-    }
+  "identity": { "name": "Briac Pécheur", "contact": "...", "location": "..." },
+  "title": "Titre du profil adapté à l'offre",
+  "summary": "Résumé percutant de 3-4 lignes (l'Accroche)",
+  "skills": { "hard": ["compétence 1", "compétence 2"], "soft": ["soft skill 1"] },
+  "experience": [
+    { "company": "...", "role": "...", "duration": "...", "bullets": ["point d'impact 1", "point d'impact 2"] }
   ],
-  "adaptedSkills": ["string"],
-  "pureDevWarning": "string",
-  "isPureDevDetected": false
+  "projects": [
+    { "name": "Festival Connect", "description": "...", "technologies": ["Bubble", "Make", "Airtable"] }
+  ],
+  "education": [
+    { "degree": "...", "school": "...", "date": "..." }
+  ],
+  "tools": ["Airtable", "Make", "n8n", "Bubble"],
+  "isPureDevDetected": false,
+  "pureDevWarning": ""
 }
 
 Aucune phrase d'intro, uniquement le JSON.`;
