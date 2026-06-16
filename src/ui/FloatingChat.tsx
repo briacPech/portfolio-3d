@@ -44,11 +44,11 @@ export function FloatingChat({
 
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({ api: apiPath }),
-    onFinish: async (message) => {
+    onFinish: async ({ message: assistantMessage }) => {
       // Logging côté client — fiable car exécuté dans le navigateur (pas d'Edge runtime)
       const userMsg = messages[messages.length - 1];
       const userText = userMsg?.role === 'user' ? getMessageText(userMsg.parts as any) : '';
-      const assistantText = getMessageText(message.parts as any);
+      const assistantText = getMessageText(assistantMessage.parts as any);
       if (userText) {
         await supabase.from('chat_logs').insert({ role: 'user', content: userText });
       }
