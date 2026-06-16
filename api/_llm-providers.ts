@@ -2,7 +2,7 @@ import { createGroq } from '@ai-sdk/groq';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { generateObject, generateText } from 'ai';
 import type { ZodSchema } from 'zod';
-import { PREMIUM_MODEL } from './llm-models.js';
+import { PREMIUM_MODEL } from './_llm-models';
 
 const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });
 const google = createGoogleGenerativeAI({ apiKey: process.env.GEMINI_API_KEY });

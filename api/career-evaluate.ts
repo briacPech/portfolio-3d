@@ -1,8 +1,8 @@
-import { getCandidateProfile, CAREER_OPS_SYSTEM } from './career-utils.js';
+import { getCandidateProfile, CAREER_OPS_SYSTEM } from './_career-utils';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { z } from 'zod';
-import { callLLM } from './llm-providers.js';
-import { PREMIUM_MODEL, JOB_SCORING_MODEL } from './llm-models.js';
+import { callLLM } from './_llm-providers';
+import { PREMIUM_MODEL, JOB_SCORING_MODEL } from './_llm-models';
 
 export const maxDuration = 60;
 
