@@ -11,8 +11,8 @@ def build_pdf(filename):
     doc = SimpleDocTemplate(
         filename,
         pagesize=A4,
-        rightMargin=30,
-        leftMargin=30,
+        rightMargin=28,
+        leftMargin=28,
         topMargin=22,
         bottomMargin=22
     )
@@ -41,7 +41,7 @@ def build_pdf(filename):
         'CVTagline',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=10.5,
+        fontSize=10,
         leading=13,
         textColor=GOLD,
         spaceAfter=2
@@ -124,15 +124,15 @@ def build_pdf(filename):
     header_data = [
         [
             Paragraph("BRIAC PÉCHEUR", style_name),
-            Paragraph("Nantes, France  |  +33 6 64 35 10 54", style_contact)
+            Paragraph("3 Avenue Richelieu, 44100 Nantes  |  +33 6 64 35 10 54", style_contact)
         ],
         [
             Paragraph("Product Builder / Forward Deployed Engineer & Commercial B2B", style_tagline),
-            Paragraph("briac.pech@gmail.com  |  linkedin.com/in/briac-pecheur/", style_contact)
+            Paragraph("briac.pech@gmail.com  |  linkedin.com/in/briac-p-571676114/", style_contact)
         ]
     ]
 
-    header_table = Table(header_data, colWidths=[330, 205])
+    header_table = Table(header_data, colWidths=[320, 219])
     header_table.setStyle(TableStyle([
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('BOTTOMPADDING', (0,0), (-1,-1), 0),
@@ -145,7 +145,7 @@ def build_pdf(filename):
     # --- PROFIL ---
     story.append(Paragraph("PROFIL PROFESSIONNEL", style_sec_title))
     story.append(Paragraph(
-        "Commercial B2B expérimenté (+15 ans grands comptes & agroalimentaire) reconverti dans le <b>Product Building, No-Code et l'IA (Certification RNCP Niveau 6)</b>. Double compétence métier : compréhension fine du terrain et des besoins clients, conception et prototypage de solutions digitales (Make, Supabase, React, LLMs) et pilotage commercial.",
+        "Commercial dans le secteur agroalimentaire et les produits de la mer, avec une expertise confirmée (+15 ans) dans la gestion de portefeuilles clients (GMS, grossistes, comptes clés), la négociation et le développement stratégique. Reconverti avec succès dans le <b>Product Building, le No-Code et l'IA (Certification RNCP Niveau 6)</b> : capacité unique à faire le lien entre les besoins métier du terrain et la création de solutions digitales automatisées.",
         style_body
     ))
     story.append(Spacer(1, 3))
@@ -157,88 +157,88 @@ def build_pdf(filename):
         ]
 
     # --- EXPÉRIENCES ---
-    story.extend(section_header("Expérience Professionnelle"))
+    story.extend(section_header("Parcours Professionnel"))
 
     # Maestro No Code
     t_maestro = Table([
         [Paragraph("Product Builder / Forward Deployed Engineer", style_job_title), Paragraph("2026 – Présent", style_job_date)],
         [Paragraph("Maestro No Code — Certification RNCP41143 (Niveau 6)", style_job_sub), Paragraph("", style_job_date)]
-    ], colWidths=[395, 140])
+    ], colWidths=[399, 140])
     t_maestro.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'TOP'), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
     
     story.append(KeepTogether([
         t_maestro,
         Spacer(1, 1),
-        Paragraph("• <b>Conception & Architecture :</b> Modélisation de bases de données relationnelles et création de produits digitaux complets.", style_bullet),
-        Paragraph("• <b>Automatisation & Workflows :</b> Connexion d'API et automatisation de processus métiers complexes (Make, Zapier, Airtable).", style_bullet),
+        Paragraph("• <b>Conception & Architecture :</b> Modélisation de bases de données relationnelles et création de produits digitaux sur-mesure.", style_bullet),
+        Paragraph("• <b>Automatisation & Workflows :</b> Connexion d'API et automatisation de processus métiers complexes avec Make, Zapier & Airtable.", style_bullet),
         Paragraph("• <b>IA & Vibe Coding :</b> Prototypage d'applications web (React, Supabase, LLMs/Ollama/Gemini) et intégration de CRM intelligents.", style_bullet),
         Spacer(1, 3)
     ]))
 
     # Elafood
     t_elafood = Table([
-        [Paragraph("Commercial / Gestion Opérationnelle GMS & Grossistes", style_job_title), Paragraph("11/2023 – 07/2025", style_job_date)],
+        [Paragraph("Commercial Import/Export — GMS & Grossistes (CDI)", style_job_title), Paragraph("11/2023 – 07/2025", style_job_date)],
         [Paragraph("Elafood — Nantes (CA géré : 20 M€)", style_job_sub), Paragraph("", style_job_date)]
-    ], colWidths=[395, 140])
+    ], colWidths=[399, 140])
     t_elafood.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'TOP'), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
 
     story.append(KeepTogether([
         t_elafood,
         Spacer(1, 1),
-        Paragraph("• <b>Gestion Commerciale :</b> Pilotage d'un portefeuille grands comptes GMS et grossistes (CA 20 M€).", style_bullet),
-        Paragraph("• <b>Achats Internationaux :</b> Sourcing et approvisionnement (Islande, Norvège, USA), suivi logistique et qualité (QHSE).", style_bullet),
-        Paragraph("• <b>Litiges & Négociation :</b> Négociation de contrats, facturation et résolution des litiges commerciaux complexes.", style_bullet),
+        Paragraph("• <b>Gestion Commerciale & Grands Comptes :</b> Pilotage d'un portefeuille clients GMS & Grossistes (CA 20 M€). Prospection et closing.", style_bullet),
+        Paragraph("• <b>Achats & Supply Chain :</b> Achats internationaux (Islande, Norvège, USA), suivi des approvisionnements, logistique et qualité (QHSE).", style_bullet),
+        Paragraph("• <b>Négociation & Litiges :</b> Négociation des conditions de vente, contrats et résolution rapide des litiges commerciaux.", style_bullet),
         Spacer(1, 3)
     ]))
 
     # Les Viviers de Noirmoutier
     t_viviers = Table([
-        [Paragraph("Commercial — Produits de la Mer Frais d'Exception", style_job_title), Paragraph("01/2021 – 08/2023", style_job_date)],
+        [Paragraph("Commercial — Produits de la Mer Frais d'Exception (CDI)", style_job_title), Paragraph("01/2021 – 08/2023", style_job_date)],
         [Paragraph("Les Viviers de Noirmoutier — Saint-Gilles-Croix-de-Vie", style_job_sub), Paragraph("", style_job_date)]
-    ], colWidths=[395, 140])
+    ], colWidths=[399, 140])
     t_viviers.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'TOP'), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
 
     story.append(KeepTogether([
         t_viviers,
         Spacer(1, 1),
-        Paragraph("• Vente & Closing auprès de grands comptes GMS, grossistes et export pour des produits de la mer d'exception.", style_bullet),
-        Paragraph("• Développement du portefeuille et service client haut de gamme personnalisé.", style_bullet),
+        Paragraph("• Développement des relations commerciales pour le commerce de gros, l'export et la GMS pour des produits d'exception.", style_bullet),
+        Paragraph("• Suivi des comptes clés, gestion des réclamations clients et solutions adaptées à la politique commerciale.", style_bullet),
         Spacer(1, 3)
     ]))
 
     # Pomona Terre Azur
     t_pomona1 = Table([
-        [Paragraph("Commercial GMS — Produits de la Mer", style_job_title), Paragraph("11/2017 – 01/2021", style_job_date)],
+        [Paragraph("Commercial GMS — Produits de la Mer (CDI)", style_job_title), Paragraph("11/2017 – 01/2021", style_job_date)],
         [Paragraph("Pomona Terre Azur — Nantes (CA géré : 2,8 M€)", style_job_sub), Paragraph("", style_job_date)]
-    ], colWidths=[395, 140])
+    ], colWidths=[399, 140])
     t_pomona1.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'TOP'), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
 
     story.append(KeepTogether([
         t_pomona1,
         Spacer(1, 1),
-        Paragraph("• Gestion et développement d'un secteur hypermarchés et supermarchés. Analyse de marché et suivi d'objectifs.", style_bullet),
+        Paragraph("• Gestion et développement d'un portefeuille d'hypermarchés et supermarchés. Analyse du marché et propositions adaptées.", style_bullet),
         Spacer(1, 3)
     ]))
 
     # Pomona Passion Froid
     t_pomona2 = Table([
-        [Paragraph("Commercial RHD — Produits Agroalimentaires Haut de Gamme", style_job_title), Paragraph("10/2014 – 07/2017", style_job_date)],
-        [Paragraph("Pomona Passion Froid — Aix-en-Provence / Riviera", style_job_sub), Paragraph("", style_job_date)]
-    ], colWidths=[395, 140])
+        [Paragraph("Commercial RHD — Produits Agroalimentaires (CDI)", style_job_title), Paragraph("10/2014 – 07/2017", style_job_date)],
+        [Paragraph("Pomona Passion Froid — Aix-en-Provence", style_job_sub), Paragraph("", style_job_date)]
+    ], colWidths=[399, 140])
     t_pomona2.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'TOP'), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
 
     story.append(KeepTogether([
         t_pomona2,
         Spacer(1, 1),
-        Paragraph("• Développement du portefeuille RHD haut de gamme sur les secteurs de Saint-Tropez et de la Riviera.", style_bullet),
+        Paragraph("• Développement du portefeuille client en restauration hors domicile (RHD). Négociation de contrats et suivi des commandes.", style_bullet),
         Spacer(1, 3)
     ]))
 
-    # Autres exps
+    # Les Pêcheries Océane & Socavi
     t_autres = Table([
-        [Paragraph("Commercial GMS — Les Pêcheries Océane (CA : 1,8 M€)", style_job_title), Paragraph("01/2009 – 10/2014", style_job_date)],
+        [Paragraph("Commercial GMS — Les Pêcheries Océane (Nantes, CA : 1,8 M€)", style_job_title), Paragraph("01/2009 – 10/2014", style_job_date)],
         [Paragraph("Chef de Secteur GMS (Apprentissage) — Socavi (Groupe Unicopa)", style_job_title), Paragraph("09/2006 – 10/2008", style_job_date)]
-    ], colWidths=[395, 140])
+    ], colWidths=[399, 140])
     t_autres.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'TOP'), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
     story.append(t_autres)
     story.append(Spacer(1, 4))
@@ -248,11 +248,11 @@ def build_pdf(filename):
 
     edu_data = [
         [Paragraph("<b>Concepteur de solution No-code (RNCP41143 - Niveau 6)</b>", style_body), Paragraph("<b>LION / Maestro (2026)</b>", style_job_sub)],
-        [Paragraph("Master 1 CC2A (Cadre Commercial Agroalimentaire)", style_body), Paragraph("SUP'T G Niort (2006–2008)", style_contact)],
+        [Paragraph("Master 1 CC2A (Cadre Commercial pour l'Agroalimentaire)", style_body), Paragraph("SUP'TG Niort (2006–2008)", style_contact)],
         [Paragraph("BTS Industries Agroalimentaires", style_body), Paragraph("Lycée Agricole Laval (2005–2006)", style_contact)],
-        [Paragraph("Baccalauréat STAE (Sciences & Tech. Agroalimentaires)", style_body), Paragraph("Lycée Jules Rieffel (2002–2004)", style_contact)],
+        [Paragraph("Baccalauréat STAE (Sciences & Tech. Agronomie & Environnement)", style_body), Paragraph("Lycée Jules Rieffel (2002–2004)", style_contact)],
     ]
-    t_edu = Table(edu_data, colWidths=[365, 170])
+    t_edu = Table(edu_data, colWidths=[369, 170])
     t_edu.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'MIDDLE'), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
     story.append(t_edu)
     story.append(Spacer(1, 3))
@@ -268,14 +268,14 @@ def build_pdf(filename):
     skills_table_data = [
         [
             Paragraph("<b>Commercial & Opérations :</b>", style_body),
-            Paragraph("Prospection B2B, Closing, Négociation grands comptes, Achats internationaux, Supply Chain, Litiges, Projets.", style_body)
+            Paragraph("Négociation commerciale, Prospection B2B, Closing grands comptes, Achats internationaux, QHSE, Merchandising, CRM & Reporting.", style_body)
         ],
         [
             Paragraph("<b>No-Code, Dev & IA :</b>", style_body),
             Paragraph("Make, Zapier, Airtable, Softr, React, Supabase, Tailwind, Prompt Engineering, Agents IA (Ollama, Gemini, Groq), REST APIs, SQL.", style_body)
         ]
     ]
-    t_skills = Table(skills_table_data, colWidths=[135, 400])
+    t_skills = Table(skills_table_data, colWidths=[135, 404])
     t_skills.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'TOP'), ('BOTTOMPADDING', (0,0), (-1,-1), 1)]))
     story.append(t_skills)
 
