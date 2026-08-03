@@ -22,7 +22,7 @@ const INITIAL_SKILLS = [
 ];
 
 const INITIAL_EXPERIENCES = [
-  { job_title: "Product Builder No-Code x IA", company: "Maestro No Code", start_date: "Formation", end_date: "d'excellence", description: "Création de bases de données et automatisation de workflows complexes.\nConstruction de CRM personnalisés et prototypage de produits digitaux.\nMaîtrise d'outils de pointe : Airtable, Make et Softr.", display_order: 1 },
+  { job_title: "Product Builder / Forward Deployed Engineer", company: "Maestro No Code", start_date: "Formation", end_date: "d'excellence", description: "Création de bases de données et automatisation de workflows complexes.\nConstruction de CRM personnalisés et prototypage de produits digitaux.\nMaîtrise d'outils de pointe : Airtable, Make et Softr.", display_order: 1 },
   { job_title: "Commercial / Gestion opérationnelle GMS & Grossistes", company: "Elafood – Nantes", start_date: "11/2023", end_date: "07/2025", description: "Gestion d'un portefeuille de clients GMS & grossistes représentant un CA de 20 M€ au sein d'une équipe de 4 personnes.\nAchats internationaux (Islande, Norvège, USA) : suivi des approvisionnements, coordination logistique et qualité.\nFacturation, suivi des commandes clients/fournisseurs et résolution des litiges.", display_order: 2 },
   { job_title: "Commercial - Produits de la Mer Frais d'Exception", company: "Les Viviers de Noirmoutier", start_date: "01/2021", end_date: "08/2023", description: "Vente et closing auprès de comptes clés en GMS, commerce de gros et export pour des produits premium.\nSuivi des comptes clés et service client haut de gamme.", display_order: 3 },
   { job_title: "Commercial GMS - Produits de la Mer", company: "Pomona Terre Azur", start_date: "11/2017", end_date: "01/2021", description: "Gestion et développement d'un portefeuille d'hypermarchés et supermarchés (CA : 2,8 M€).\nAnalyse de marché et recommandations adaptées aux besoins clients.", display_order: 4 },
@@ -31,6 +31,7 @@ const INITIAL_EXPERIENCES = [
   { job_title: "Chef de Secteur GMS - Apprentissage", company: "Socavi (Groupe Unicopa)", start_date: "09/2006", end_date: "10/2008", description: "Développement de la stratégie commerciale, merchandising sur le terrain et accompagnement clients.\nSupervision des accords nationaux et optimisation du référencement produits.", display_order: 7 },
   
   // Educations
+  { job_title: "Concepteur de solution No-code (RNCP41143 - Niveau 6)", company: "🎓 LION / Maestro", start_date: "2026", end_date: "2026", description: "Certification professionnelle de niveau 6 enregistrée au RNCP (Code NSF 326 : Informatique, traitement de l'information, réseaux de transmission).", display_order: 7.5 },
   { job_title: "Prompt Engineering pour ChatGPT", company: "🎓 Vanderbilt University", start_date: "", end_date: "", description: "Certification en ingénierie de prompts.", display_order: 8 },
   { job_title: "Google Sheets : Analyse et automatisation", company: "🎓 Google Cloud", start_date: "", end_date: "", description: "Certification en analyse de données.", display_order: 9 },
   { job_title: "High Perf. Collaboration: Leadership & Teamwork", company: "🎓 Northwestern University", start_date: "", end_date: "", description: "Certification en leadership.", display_order: 10 },

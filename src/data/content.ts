@@ -1,7 +1,7 @@
 export const portfolioData = {
   profile: {
     name: "Briac Pecheur",
-    title: "Builder No-Code & IA | Commercial Terrain",
+    title: "Product Builder / Forward Deployed Engineer | Commercial Terrain",
     tagline: "Naviguer entre le terrain et les systèmes automatisés.",
   },
   skills: [

@@ -1,0 +1,300 @@
+{
+  "profile": {
+    "id": 1,
+    "name": "Briac Pécheur",
+    "title": "Commercial B2B & Solutions Digitales",
+    "short_description": "Commercial B2B expérimenté avec plus de 20 ans d'expérience...",
+    "bio": "<p>Commercial&nbsp;B2B&nbsp;expérimenté&nbsp;avec&nbsp;plus&nbsp;de&nbsp;20&nbsp;ans&nbsp;d&#39;expérience&nbsp;dans&nbsp;la&nbsp;gestion&nbsp;de&nbsp;portefeuilles,&nbsp;je&nbsp;mets&nbsp;aujourd&#39;hui&nbsp;mon&nbsp;sens&nbsp;du&nbsp;commerce&nbsp;et&nbsp;ma&nbsp;compréhension&nbsp;des&nbsp;besoins&nbsp;métier&nbsp;au&nbsp;service&nbsp;de&nbsp;solutions&nbsp;digitales&nbsp;concrètes.&nbsp;Entre&nbsp;agroalimentaire,&nbsp;développement&nbsp;commercial,&nbsp;no-code,&nbsp;et&nbsp;IA&nbsp;,&nbsp;je&nbsp;sais&nbsp;vendre,&nbsp;comprendre&nbsp;et&nbsp;créer&nbsp;pour&nbsp;aider&nbsp;les&nbsp;entreprises&nbsp;à&nbsp;gagner&nbsp;du&nbsp;temps&nbsp;et&nbsp;mieux&nbsp;s&#39;organiser.</p>",
+    "avatar_url": null,
+    "github_url": "https://github.com/briacPech",
+    "linkedin_url": "https://github.com/briacPech",
+    "cta_text": "Me contacter",
+    "contact_email": "briac.pech@gmail.com",
+    "is_contact_form_active": true,
+    "updated_at": "2026-06-14T09:30:29.890767+00:00"
+  },
+  "projects": [
+    {
+      "id": "e0aea714-6132-489b-adbb-cbd0d5a5b8de",
+      "title": "Festival Connect",
+      "short_description": "CRM Global & Hub d'Opérations Terrain",
+      "long_description": "<p>🚨&nbsp;Le&nbsp;Problème&nbsp;:&nbsp;Les&nbsp;organisations&nbsp;gèrent&nbsp;souvent&nbsp;leurs&nbsp;contacts,&nbsp;leurs&nbsp;ventes,&nbsp;leurs&nbsp;plannings&nbsp;et&nbsp;leurs&nbsp;communications&nbsp;dans&nbsp;une&nbsp;multitude&nbsp;d&#39;outils&nbsp;séparés&nbsp;(tableurs,&nbsp;mails,&nbsp;SMS),&nbsp;ce&nbsp;qui&nbsp;fragmente&nbsp;l&#39;information&nbsp;et&nbsp;ralentit&nbsp;les&nbsp;équipes.&nbsp;</p><p></p><p>💡Solution&nbsp;:&nbsp;Une&nbsp;application&nbsp;web&nbsp;moderne&nbsp;et&nbsp;centralisée&nbsp;qui&nbsp;regroupe&nbsp;toutes&nbsp;les&nbsp;opérations&nbsp;au&nbsp;même&nbsp;endroit&nbsp;(contacts,&nbsp;suivi&nbsp;des&nbsp;partenaires/sponsors,&nbsp;billetterie,&nbsp;gestion&nbsp;logistique&nbsp;et&nbsp;terrain).&nbsp;</p><p></p><p>🎯Mon&nbsp;Rôle&nbsp;:&nbsp;Conception&nbsp;fonctionnelle,&nbsp;logique&nbsp;du&nbsp;produit,&nbsp;organisation&nbsp;de&nbsp;la&nbsp;base&nbsp;de&nbsp;données&nbsp;PostgreSQL&nbsp;et&nbsp;structuration&nbsp;globale&nbsp;du&nbsp;projet&nbsp;pour&nbsp;répondre&nbsp;fidèlement&nbsp;aux&nbsp;usages&nbsp;concrets&nbsp;du&nbsp;terrain.</p>",
+      "image_url": "https://ajwvgqpfmtlpntgdqfvn.supabase.co/storage/v1/object/public/portfolio-media/63c3i9tg4s6_1781433082037.png",
+      "link_url": "https://festivalconnect.vercel.app",
+      "tags": null,
+      "status": "published",
+      "display_order": 1,
+      "created_at": "2026-06-15T11:51:16.128628+00:00",
+      "secondary_link_text": "📄 Présentation détaillée (Notion)",
+      "secondary_link_url": "https://www.notion.so/364eed8c5232806e922ce200ea22c437?v=364eed8c523280a3a5d6000c4294edb1"
+    },
+    {
+      "id": "8ab682c7-e5ef-41a9-bd70-a9dc858e34fc",
+      "title": "Jarvis - Assistant IA Vocal & Local",
+      "short_description": "Assistant vocal autonome hybride, doté de STT/TTS local, mémoire RAG, routage intelligent Ollama/Groq et pilotage Windows.",
+      "long_description": "<p>🚨&nbsp;Le&nbsp;Problème</p><p>Les&nbsp;assistants&nbsp;vocaux&nbsp;(Siri,&nbsp;Alexa)&nbsp;soulèvent&nbsp;de&nbsp;forts&nbsp;enjeux&nbsp;de&nbsp;confidentialité&nbsp;des&nbsp;données.&nbsp;Les&nbsp;API&nbsp;cloud&nbsp;(OpenAI)&nbsp;sont&nbsp;coûteuses&nbsp;pour&nbsp;une&nbsp;utilisation&nbsp;24/7.&nbsp;De&nbsp;plus,&nbsp;les&nbsp;assistants&nbsp;actuels&nbsp;manquent&nbsp;d&#39;une&nbsp;véritable&nbsp;mémoire&nbsp;long&nbsp;terme&nbsp;et&nbsp;ne&nbsp;sont&nbsp;pas&nbsp;programmables&nbsp;pour&nbsp;des&nbsp;actions&nbsp;locales&nbsp;poussées.</p><p>💡&nbsp;La&nbsp;Solution</p><p>Développement&nbsp;de&nbsp;<strong>Jarvis</strong>,&nbsp;une&nbsp;IA&nbsp;personnelle&nbsp;100%&nbsp;autonome&nbsp;et&nbsp;hybride&nbsp;:</p><ul><li><strong>Routage&nbsp;Local/Cloud&nbsp;intelligent&nbsp;:</strong>&nbsp;Modèle&nbsp;local&nbsp;(Ollama/Qwen&nbsp;3B)&nbsp;pour&nbsp;les&nbsp;tâches&nbsp;simples&nbsp;avec&nbsp;bascule&nbsp;sur&nbsp;le&nbsp;Cloud&nbsp;(Groq)&nbsp;pour&nbsp;les&nbsp;requêtes&nbsp;complexes,&nbsp;assurant&nbsp;rapidité&nbsp;et&nbsp;économie.</li><li><strong>Mémoire&nbsp;&amp;&nbsp;RAG&nbsp;:</strong>&nbsp;Mémoire&nbsp;persistante&nbsp;SQLite&nbsp;+&nbsp;ChromaDB&nbsp;permettant&nbsp;à&nbsp;l&#39;assistant&nbsp;de&nbsp;retenir&nbsp;des&nbsp;faits&nbsp;et&nbsp;le&nbsp;contexte&nbsp;des&nbsp;conversations&nbsp;passées.</li><li><strong>100%&nbsp;Vocal&nbsp;:</strong>&nbsp;Détection&nbsp;de&nbsp;mot&nbsp;d&#39;éveil&nbsp;hors-ligne&nbsp;(&quot;Salut&nbsp;Jarvis&quot;)&nbsp;et&nbsp;Text-To-Speech&nbsp;(Piper).</li><li><strong>Interface&nbsp;&amp;&nbsp;Système&nbsp;:</strong>&nbsp;Backend&nbsp;FastAPI&nbsp;robuste,&nbsp;pilotage&nbsp;du&nbsp;système&nbsp;local&nbsp;(volume,&nbsp;musique&nbsp;via&nbsp;Tidal)&nbsp;et&nbsp;interface&nbsp;Web.</li></ul><p>🎯&nbsp;Mon&nbsp;Rôle</p><p>Ingénieur&nbsp;IA&nbsp;&amp;&nbsp;Développeur&nbsp;Backend&nbsp;(Python)&nbsp;:&nbsp;Architecture&nbsp;système,&nbsp;implémentation&nbsp;des&nbsp;algorithmes&nbsp;d&#39;IA&nbsp;(RAG,&nbsp;routage),&nbsp;développement&nbsp;du&nbsp;backend&nbsp;API,&nbsp;et&nbsp;optimisation&nbsp;de&nbsp;la&nbsp;stack&nbsp;pour&nbsp;GPU&nbsp;modeste&nbsp;(GTX&nbsp;1650&nbsp;4Go).</p>",
+      "image_url": "https://ajwvgqpfmtlpntgdqfvn.supabase.co/storage/v1/object/public/portfolio-media/smdspyh34x_1781524255265.png",
+      "link_url": "https://github.com/briacPech/jarvis-assistant",
+      "tags": [
+        "Python",
+        "FastAPI",
+        "Ollama",
+        "Groq",
+        "ChromaDB",
+        "SQLite",
+        "Piper TTS"
+      ],
+      "status": "published",
+      "display_order": 3,
+      "created_at": "2026-06-15T11:51:16.289138+00:00",
+      "secondary_link_text": null,
+      "secondary_link_url": null
+    },
+    {
+      "id": "745427ff-6739-4b88-8860-ad6a0dedfaeb",
+      "title": "AutoPoster Pro - IA pour Artisans",
+      "short_description": "Application SaaS pour générer des annonces via l'IA et récolter des prospects (CRM intégré).",
+      "long_description": "<p>🚨&nbsp;Le&nbsp;Problème</p><p>Les&nbsp;professionnels&nbsp;de&nbsp;l&#39;artisanat&nbsp;manquent&nbsp;de&nbsp;temps&nbsp;et&nbsp;de&nbsp;compétences&nbsp;en&nbsp;marketing&nbsp;digital&nbsp;pour&nbsp;créer&nbsp;des&nbsp;annonces&nbsp;accrocheuses,&nbsp;gérer&nbsp;des&nbsp;Landing&nbsp;Pages&nbsp;et&nbsp;suivre&nbsp;efficacement&nbsp;les&nbsp;demandes&nbsp;de&nbsp;devis&nbsp;entrants.</p><p>💡&nbsp;La&nbsp;Solution</p><p>Développement&nbsp;de&nbsp;<strong>AutoPoster&nbsp;Pro</strong>,&nbsp;une&nbsp;solution&nbsp;SaaS&nbsp;:</p><ul><li><strong>Génération&nbsp;IA&nbsp;:</strong>&nbsp;Création&nbsp;automatique&nbsp;d&#39;annonces&nbsp;optimisées&nbsp;via&nbsp;Google&nbsp;Gemini.</li><li><strong>CRM&nbsp;&amp;&nbsp;Leads&nbsp;:</strong>&nbsp;Centralisation&nbsp;et&nbsp;traitement&nbsp;des&nbsp;demandes&nbsp;de&nbsp;devis.</li><li><strong>Landing&nbsp;Page&nbsp;:</strong>&nbsp;Page&nbsp;vitrine&nbsp;générée&nbsp;automatiquement,&nbsp;optimisée&nbsp;SEO&nbsp;local.</li></ul><p>🎯&nbsp;Mon&nbsp;Rôle</p><p>Développeur&nbsp;Full-Stack&nbsp;&amp;&nbsp;Intégrateur&nbsp;IA&nbsp;:&nbsp;React/Zustand&nbsp;pour&nbsp;l&#39;interface,&nbsp;Node/Express&nbsp;pour&nbsp;le&nbsp;backend,&nbsp;et&nbsp;prompt&nbsp;engineering&nbsp;sur&nbsp;l&#39;API&nbsp;Gemini.</p>",
+      "image_url": "https://ajwvgqpfmtlpntgdqfvn.supabase.co/storage/v1/object/public/portfolio-media/ChatGPT%20Image%204%20juin%202026,%2008_15_36.png",
+      "link_url": "https://autoposter-pro-446484502627.europe-west2.run.app/artisan/artisan-fbna-001",
+      "tags": [
+        "React 19",
+        "TypeScript",
+        "Node.js",
+        "Express",
+        "Google Gemini AI",
+        "Zustand"
+      ],
+      "status": "published",
+      "display_order": 4,
+      "created_at": "2026-06-15T11:51:16.347255+00:00",
+      "secondary_link_text": null,
+      "secondary_link_url": null
+    },
+    {
+      "id": "7acf4045-41e1-4388-9c9a-b4a12bc16aa3",
+      "title": "Portfolio Immersif 3D & Career Ops IA",
+      "short_description": "Application web 3D interactive agissant comme une carte de visite, dotée d'un Closer IA et d'un Job Spy automatique.",
+      "long_description": "<p>🚨&nbsp;Le&nbsp;Problème</p><p>Les&nbsp;CV&nbsp;traditionnels&nbsp;et&nbsp;portfolios&nbsp;classiques&nbsp;peinent&nbsp;à&nbsp;démontrer&nbsp;concrètement&nbsp;des&nbsp;compétences&nbsp;transverses&nbsp;(Vente,&nbsp;Tech,&nbsp;IA).&nbsp;De&nbsp;plus,&nbsp;la&nbsp;veille&nbsp;d&#39;offres&nbsp;et&nbsp;les&nbsp;candidatures&nbsp;prennent&nbsp;un&nbsp;temps&nbsp;considérable,&nbsp;et&nbsp;les&nbsp;recruteurs&nbsp;manquent&nbsp;d&#39;un&nbsp;moyen&nbsp;de&nbsp;conversion&nbsp;direct&nbsp;sur&nbsp;un&nbsp;profil.</p><p>💡&nbsp;La&nbsp;Solution</p><p>Développement&nbsp;de&nbsp;bout&nbsp;en&nbsp;bout&nbsp;d&#39;une&nbsp;web&nbsp;app&nbsp;:</p><ul><li><strong>Portfolio&nbsp;Immersif&nbsp;3D&nbsp;:</strong>&nbsp;Interface&nbsp;React&nbsp;.</li><li><strong>Assistant&nbsp;&quot;Closer&quot;&nbsp;IA&nbsp;:</strong>&nbsp;Agent&nbsp;conversationnel&nbsp;entraîné&nbsp;pour&nbsp;pitcher&nbsp;le&nbsp;profil&nbsp;et&nbsp;convertir&nbsp;en&nbsp;rendez-vous.</li><li><strong>Career&nbsp;Ops&nbsp;(Job&nbsp;Spy)&nbsp;:</strong>&nbsp;Back-office&nbsp;sécurisé&nbsp;avec&nbsp;scraping&nbsp;quotidien&nbsp;et&nbsp;automatique&nbsp;d&#39;offres,&nbsp;scoring&nbsp;IA&nbsp;et&nbsp;génération&nbsp;de&nbsp;CV.</li><li><strong>AEO&nbsp;:</strong>&nbsp;Fichier&nbsp;llms.txt&nbsp;dynamique&nbsp;pour&nbsp;optimiser&nbsp;l&#39;indexation&nbsp;par&nbsp;ChatGPT/Perplexity.</li></ul><p>🎯&nbsp;Mon&nbsp;Rôle</p><p>Product&nbsp;Builder&nbsp;&amp;&nbsp;Commercial&nbsp;:&nbsp;Conception&nbsp;de&nbsp;A&nbsp;à&nbsp;Z&nbsp;(Front/Back/DB),&nbsp;ingénierie&nbsp;de&nbsp;prompt,&nbsp;automatisation&nbsp;des&nbsp;flux,&nbsp;et&nbsp;UX&nbsp;orientée&nbsp;conversion.</p>",
+      "image_url": "https://ajwvgqpfmtlpntgdqfvn.supabase.co/storage/v1/object/public/portfolio-media/feu22mdhoqq_1781524126063.png",
+      "link_url": "https://github.com/briacPech/portfolio-3d",
+      "tags": [
+        "React",
+        "Three.js",
+        "Supabase",
+        "Edge Functions",
+        "IA / LLMs",
+        "TailwindCSS"
+      ],
+      "status": "published",
+      "display_order": 2,
+      "created_at": "2026-06-15T11:51:16.231087+00:00",
+      "secondary_link_text": "Aperçu en ligne",
+      "secondary_link_url": "https://briac-pecheur.vercel.app/"
+    }
+  ],
+  "experiences": [
+    {
+      "id": "e43bab6d-582a-4a9a-bde3-7376cf84f753",
+      "job_title": "Commercial - Produits de la Mer Frais d'Exception",
+      "company": "Les Viviers de Noirmoutier",
+      "start_date": "01/2021",
+      "end_date": "08/2023",
+      "description": "Vente et closing auprès de comptes clés en GMS, commerce de gros et export pour des produits premium.\nSuivi des comptes clés et service client haut de gamme.",
+      "logo_url": null,
+      "display_order": 3
+    },
+    {
+      "id": "1964f1ca-9101-4ab9-b665-d02128f185a6",
+      "job_title": "Commercial GMS - Produits de la Mer",
+      "company": "Les Pêcheries Océane",
+      "start_date": "01/2009",
+      "end_date": "10/2014",
+      "description": "Gestion d'un portefeuille de clients RHD (CA : 1,8 M€) et analyse du marché.",
+      "logo_url": null,
+      "display_order": 6
+    },
+    {
+      "id": "033317de-c665-49b9-8a18-12399473d174",
+      "job_title": "Google Sheets : Analyse et automatisation",
+      "company": "🎓 Google Cloud",
+      "start_date": "",
+      "end_date": "",
+      "description": "Certification en analyse de données.",
+      "logo_url": null,
+      "display_order": 9
+    },
+    {
+      "id": "e4f81a2b-91c0-4321-b876-123456789abc",
+      "job_title": "Concepteur de solution No-code (RNCP41143 - Niveau 6)",
+      "company": "🎓 LION / Maestro",
+      "start_date": "2026",
+      "end_date": "2026",
+      "description": "Certification professionnelle de niveau 6 enregistrée au RNCP (Code NSF 326 : Informatique, traitement de l'information, réseaux de transmission). Décernée le 30/07/2026 par LION.",
+      "logo_url": null,
+      "display_order": 8
+    },
+    {
+      "id": "6ac0edfd-6936-43e1-8a4b-6142354ed02c",
+      "job_title": "Master 1 CC2A (Cadre Commercial Agroalimentaire)",
+      "company": "🎓 SUP'T G Niort",
+      "start_date": "2006",
+      "end_date": "2008",
+      "description": "Diplôme initial.",
+      "logo_url": null,
+      "display_order": 13
+    },
+    {
+      "id": "0e1cfb86-9a8d-4336-9261-9563386e3d2f",
+      "job_title": "Commercial GMS - Produits de la Mer",
+      "company": "Pomona Terre Azur",
+      "start_date": "11/2017",
+      "end_date": "01/2021",
+      "description": "Gestion et développement d'un portefeuille d'hypermarchés et supermarchés (CA : 2,8 M€).\nAnalyse de marché et recommandations adaptées aux besoins clients.",
+      "logo_url": null,
+      "display_order": 4
+    },
+    {
+      "id": "2b37b55e-ffd8-4696-bfce-0451509a1e0e",
+      "job_title": "Chef de Secteur GMS - Apprentissage",
+      "company": "Socavi (Groupe Unicopa)",
+      "start_date": "09/2006",
+      "end_date": "10/2008",
+      "description": "Développement de la stratégie commerciale, merchandising sur le terrain et accompagnement clients.\nSupervision des accords nationaux et optimisation du référencement produits.",
+      "logo_url": null,
+      "display_order": 7
+    },
+    {
+      "id": "64040710-8cf5-462e-9a6e-760bbe251bc6",
+      "job_title": "High Perf. Collaboration: Leadership & Teamwork",
+      "company": "🎓 Northwestern University",
+      "start_date": "",
+      "end_date": "",
+      "description": "Certification en leadership.",
+      "logo_url": null,
+      "display_order": 10
+    },
+    {
+      "id": "560bc23a-8004-4abe-b111-721ff6f546dd",
+      "job_title": "Intro à l'analyse d'entreprise avec tableurs",
+      "company": "🎓 Coursera Project Network",
+      "start_date": "",
+      "end_date": "",
+      "description": "Certification en analyse d'entreprise.",
+      "logo_url": null,
+      "display_order": 11
+    },
+    {
+      "id": "3f67f341-0430-45d2-8d63-1787b9bf6d18",
+      "job_title": "BTS Industries Agroalimentaires",
+      "company": "🎓 Lycée Agricole Laval",
+      "start_date": "2005",
+      "end_date": "2006",
+      "description": "Diplôme initial.",
+      "logo_url": null,
+      "display_order": 14
+    },
+    {
+      "id": "7c4736ae-b4b1-426a-a799-7f9b3d658721",
+      "job_title": "Product Builder / Forward Deployed Engineer",
+      "company": "Maestro No Code",
+      "start_date": "Juin 2026",
+      "end_date": "",
+      "description": "<p>Création&nbsp;de&nbsp;bases&nbsp;de&nbsp;données&nbsp;et&nbsp;automatisation&nbsp;de&nbsp;workflows&nbsp;complexes.&nbsp;Construction&nbsp;de&nbsp;CRM&nbsp;personnalisés&nbsp;et&nbsp;prototypage&nbsp;de&nbsp;produits&nbsp;digitaux.&nbsp;Maîtrise&nbsp;d&#39;outils&nbsp;de&nbsp;pointe&nbsp;:&nbsp;Airtable,&nbsp;Make&nbsp;et&nbsp;Softr.</p>",
+      "logo_url": null,
+      "display_order": 1
+    },
+    {
+      "id": "f809150e-be44-4ec4-a923-16defee5b733",
+      "job_title": "Commercial / Gestion opérationnelle GMS & Grossistes",
+      "company": "Elafood – Nantes",
+      "start_date": "11/2023",
+      "end_date": "07/2025",
+      "description": "Gestion d'un portefeuille de clients GMS & grossistes représentant un CA de 20 M€ au sein d'une équipe de 4 personnes.\nAchats internationaux (Islande, Norvège, USA) : suivi des approvisionnements, coordination logistique et qualité.\nFacturation, suivi des commandes clients/fournisseurs et résolution des litiges.",
+      "logo_url": null,
+      "display_order": 2
+    },
+    {
+      "id": "c19934de-897b-43a4-ac69-1d85984c929c",
+      "job_title": "Commercial RHD - Produits Agroalimentaires Haut de Gamme",
+      "company": "Pomona Passion Froid",
+      "start_date": "10/2014",
+      "end_date": "07/2017",
+      "description": "Développement du portefeuille RHD haut de gamme sur les secteurs compétitifs de Saint-Tropez et de la Riviera.\nVente de produits premium, suivi client personnalisé et négociation de contrats.",
+      "logo_url": null,
+      "display_order": 5
+    },
+    {
+      "id": "324e6abf-1325-4dfe-b5c9-e7bf2fd0706b",
+      "job_title": "Prompt Engineering pour ChatGPT",
+      "company": "🎓 Vanderbilt University",
+      "start_date": "",
+      "end_date": "",
+      "description": "Certification en ingénierie de prompts.",
+      "logo_url": null,
+      "display_order": 8
+    },
+    {
+      "id": "1eae1acc-a343-4fdf-b330-65b135f121ed",
+      "job_title": "Foundations: Data, Data, Everywhere",
+      "company": "🎓 Google / Coursera",
+      "start_date": "",
+      "end_date": "",
+      "description": "Certification data.",
+      "logo_url": null,
+      "display_order": 12
+    },
+    {
+      "id": "137a2dfb-1c77-4e37-ad28-ce35c72475c2",
+      "job_title": "Baccalauréat STAE",
+      "company": "🎓 Lycée Jules Rieffel",
+      "start_date": "2002",
+      "end_date": "2004",
+      "description": "Diplôme initial.",
+      "logo_url": null,
+      "display_order": 15
+    }
+  ],
+  "skills": [
+    {
+      "id": "92b212b5-accb-4dcc-b723-116db0de97f9",
+      "name": "Nouvelle Compétence",
+      "level": 50,
+      "category": "Frontend",
+      "icon_name": null,
+      "display_order": 0
+    },
+    {
+      "id": "a70ad058-9112-4588-a79f-c29c942edb56",
+      "name": "Nouvelle Compétence",
+      "level": 50,
+      "category": "Frontend",
+      "icon_name": null,
+      "display_order": 0
+    },
+    {
+      "id": "32bce46d-c33c-4d9d-8076-8e7eb497c3c3",
+      "name": "Nouvelle Compétence",
+      "level": 50,
+      "category": "Frontend",
+      "icon_name": null,
+      "display_order": 0
+    },
+    {
+      "id": "bde8cdff-a810-4402-bc21-f9258d93481f",
+      "name": "Nouvelle Compétence",
+      "level": 50,
+      "category": "Frontend",
+      "icon_name": null,
+      "display_order": 0
+    },
+    {
+      "id": "3502ed09-183f-4b33-b2f6-a883270b361b",
+      "name": "Nouvelle Compétence",
+      "level": 50,
+      "category": "Frontend",
+      "icon_name": null,
+      "display_order": 0
+    }
+  ]
+}
