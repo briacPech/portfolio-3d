@@ -85,6 +85,18 @@ const INITIAL_PROJECTS: any[] = [
     image_url: "",
     status: "published",
     display_order: 4
+  },
+  {
+    title: "Projet Hackathon - Maestro No-Code",
+    short_description: "Projet de conception digitale & d'automatisation conçu lors du Hackathon Maestro No-Code.",
+    long_description: "<h3>🚨 Le Problème</h3><p>Concevoir, modéliser et prototyper une application digitale fonctionnelle complète répondant à un besoin métier complexe sous contrainte de temps extrême.</p><h3>💡 La Solution</h3><p>Création d'une solution No-Code / IA intégrée : architecture de base de données relationnelle, automatisation de workflows avec Make & Airtable, et interface utilisateur interactive.</p><h3>🎯 Mon Rôle</h3><p>Product Builder & Conception Fonctionnelle : Cadrage besoin, modélisation des données, automatisation des scénarios et présentation synthétique du projet.</p>",
+    link_url: "https://app.notion.com/p/Projet-hackathon-Briac-P-f5beed8c52328351bfbd81bbe09e52a4?source=copy_link",
+    secondary_link_text: "📄 Présentation détaillée (Notion)",
+    secondary_link_url: "https://app.notion.com/p/Projet-hackathon-Briac-P-f5beed8c52328351bfbd81bbe09e52a4?source=copy_link",
+    tags: ["No-Code", "Make", "Airtable", "Prototypage IA", "Hackathon"],
+    image_url: "",
+    status: "published",
+    display_order: 5
   }
 ];
 
