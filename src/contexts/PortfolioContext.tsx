@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import type { Profile, SeoSettings, IslandData, Skill, Experience, Project } from '../types';
+import { INITIAL_EXPERIENCES, INITIAL_PROJECTS } from '../data/initialData';
 
 type PortfolioData = {
   profile: Profile | null;
@@ -52,13 +53,35 @@ export const PortfolioProvider = ({ children }: { children: React.ReactNode }) =
           return acc;
         }, {});
 
+        // Merge fetched experiences with initial data defaults to guarantee newest entries like RNCP41143 & Maestro title
+        let fetchedExps: any[] = experiencesRes.data && experiencesRes.data.length > 0 ? experiencesRes.data : INITIAL_EXPERIENCES;
+        for (const initExp of INITIAL_EXPERIENCES) {
+          const matchIndex = fetchedExps.findIndex(e => e.company?.includes("Maestro") && initExp.company?.includes("Maestro"));
+          if (matchIndex >= 0 && initExp.job_title?.includes("Forward Deployed")) {
+            fetchedExps[matchIndex] = { ...fetchedExps[matchIndex], job_title: initExp.job_title };
+          }
+          const hasCert = fetchedExps.some(e => e.job_title?.includes("RNCP41143"));
+          if (!hasCert && initExp.job_title?.includes("RNCP41143")) {
+            fetchedExps.push(initExp);
+          }
+        }
+
+        // Merge fetched projects with initial data defaults to guarantee newest entries like Hackathon
+        let fetchedProjects: any[] = projectsRes.data && projectsRes.data.length > 0 ? projectsRes.data : INITIAL_PROJECTS;
+        for (const initProj of INITIAL_PROJECTS) {
+          const exists = fetchedProjects.some(p => p.title?.toLowerCase().includes(initProj.title.toLowerCase().slice(0, 10)));
+          if (!exists) {
+            fetchedProjects.push(initProj);
+          }
+        }
+
         setData({
           profile: profileRes.data || {},
           seoSettings: seoRes.data || null,
           islands: islandsMap,
           skills: skillsRes.data || [],
-          experiences: experiencesRes.data || [],
-          projects: projectsRes.data || [],
+          experiences: fetchedExps,
+          projects: fetchedProjects,
           loading: false,
         });
       } catch (error) {
