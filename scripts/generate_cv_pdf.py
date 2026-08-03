@@ -41,11 +41,20 @@ def build_pdf(filename):
 
     story = []
 
-    # Image handling
-    img_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "photo_extracted.jpeg")
+    # Image handling - check root directory and scripts directory
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(script_dir)
+    
+    img_path = os.path.join(root_dir, "photo_extracted.jpeg")
+    if not os.path.exists(img_path):
+        img_path = os.path.join(script_dir, "photo_extracted.jpeg")
+
     img_flowable = None
     if os.path.exists(img_path):
         img_flowable = Image(img_path, width=58, height=68)
+        print(f"Found photo at: {img_path}")
+    else:
+        print(f"WARNING: Photo NOT found at {img_path}")
 
     # --- HEADER WITH PHOTO ---
     header_text_block = [
@@ -197,10 +206,12 @@ def build_pdf(filename):
     story.append(Paragraph("• <b>Événementiel & Centres d'intérêt :</b> créateur/organisateur festival Les Plages Musicales Damgan · kitesurf · voile · pêche · musique · voyages · BAFA.", style_bullet))
 
     doc.build(story)
-    print(f"PDF successfully generated with photo: {filename}")
+    print(f"PDF successfully generated: {filename}")
 
 if __name__ == '__main__':
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
     cv_root = os.path.join(root_dir, "CV BRIAC.pdf")
     cv_public = os.path.join(root_dir, "public", "CV_Briac_Pecheur.pdf")
     cv_public_alt = os.path.join(root_dir, "public", "CV BRIAC.pdf")
